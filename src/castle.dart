@@ -3,8 +3,8 @@ import 'hero.dart';
 
 class Castle {
   final String name;
-  final int x;
-  final int y;
+  int x;
+  int y;
   Set<Hero> heroes = new Set();
 
   Castle({this.name, this.x: 5, this.y: 5}) {}
