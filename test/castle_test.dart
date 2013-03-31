@@ -11,6 +11,7 @@ void main() {
     test('x size defaults to 5', () => expect(5, castle.x));
     test('y size defaults to 5', () => expect(5, castle.y));
     test('dimensions is x * y', () => expect(25, castle.dimensions));
+    test('has no heroes', () => expect(true, castle.heroes.isEmpty));
 
   });
 
@@ -20,13 +21,13 @@ void main() {
 
     test('hire', () {
       castle.hire(hero);
-      expect(castle.heroes.contains(hero), true);
+      expect(true, castle.heroes.contains(hero));
     });
 
     test('dismiss', () {
       castle.hire(hero);
       castle.dismiss(hero);
-      expect(castle.heroes.contains(hero), false);
+      expect(false, castle.heroes.contains(hero));
     });
 
   });

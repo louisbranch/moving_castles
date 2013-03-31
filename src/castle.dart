@@ -5,11 +5,9 @@ class Castle {
   final String name;
   final int x;
   final int y;
-  Set<Hero> heroes;
+  Set<Hero> heroes = new Set();
 
-  Castle({this.name, this.x: 5, this.y: 5}) {
-    this.heroes = new Set();
-  }
+  Castle({this.name, this.x: 5, this.y: 5}) {}
 
   int get dimensions => this.x * this.y;
 
