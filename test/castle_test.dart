@@ -12,6 +12,7 @@ void main() {
     test('y size defaults to 5', () => expect(5, castle.y));
     test('dimensions is x * y', () => expect(25, castle.dimensions));
     test('has no heroes', () => expect(true, castle.heroes.isEmpty));
+    test('has no rooms', () => expect(true, castle.rooms.isEmpty));
 
   });
 
