@@ -1,7 +1,8 @@
 library app;
 import 'castle.dart';
+import 'hero.dart';
 
 void main() {
   var castle = new Castle();
-  print(castle);
+  var hero = new Hero();
 }

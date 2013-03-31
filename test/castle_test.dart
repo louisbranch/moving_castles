@@ -20,13 +20,13 @@ void main() {
 
     test('hire', () {
       castle.hire(hero);
-      expect(castle.heroes.first, hero);
+      expect(castle.heroes.contains(hero), true);
     });
 
     test('dismiss', () {
       castle.hire(hero);
       castle.dismiss(hero);
-      expect(castle.heroes.isEmpty, true);
+      expect(castle.heroes.contains(hero), false);
     });
 
   });
