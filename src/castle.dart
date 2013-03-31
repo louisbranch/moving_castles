@@ -11,9 +11,7 @@ class Castle {
     this.heroes = new Set();
   }
 
-  int dimensions() {
-    return this.x * this.y;
-  }
+  int get dimensions => this.x * this.y;
 
   void hire(Hero hero) {
     this.heroes.add(hero);

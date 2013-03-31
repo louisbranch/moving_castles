@@ -10,7 +10,7 @@ void main() {
     test('has a name', () => expect('Baldurs Gate', castle.name));
     test('x size defaults to 5', () => expect(5, castle.x));
     test('y size defaults to 5', () => expect(5, castle.y));
-    test('dimensions is x * y', () => expect(25, castle.dimensions()));
+    test('dimensions is x * y', () => expect(25, castle.dimensions));
 
   });
 
