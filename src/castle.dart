@@ -5,9 +5,6 @@ class Castle {
   int x;
   int y;
 
-  Castle({name, x: 5, y: 5}) {
-    this.name = name;
-    this.x = x;
-    this.y = y;
-  }
+  Castle({this.name, this.x: 5, this.y: 5}) {}
+
 }
