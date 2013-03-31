@@ -1,6 +1,7 @@
 import 'package:unittest/unittest.dart';
 import '../src/castle.dart';
 import '../src/hero.dart';
+import '../src/room.dart';
 
 void main() {
 
@@ -29,6 +30,17 @@ void main() {
       castle.hire(hero);
       castle.dismiss(hero);
       expect(false, castle.heroes.contains(hero));
+    });
+
+  });
+
+  group('Castle rooms', () {
+    var castle = new Castle();
+    var room = new Room();
+
+    test('build', () {
+      castle.build(room);
+      expect(true, castle.rooms.contains(room));
     });
 
   });

@@ -16,4 +16,6 @@ class Castle {
   void hire(Hero h) => heroes.add(h);
   bool dismiss(Hero h) => heroes.remove(h);
 
+  void build(Room r) => rooms.add(r);
+
 }
