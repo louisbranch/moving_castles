@@ -43,6 +43,12 @@ void main() {
       expect(castle.rooms, contains(room));
     });
 
+    test('rase', () {
+      castle.build(room);
+      castle.rase(room);
+      expect(castle.rooms, isNot(contains(room)));
+    });
+
   });
 
 }

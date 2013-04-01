@@ -7,7 +7,7 @@ class Castle {
   int x;
   int y;
   Set<Hero> heroes = new Set();
-  List<Room> rooms = [];
+  Set<Room> rooms = new Set();
 
   Castle({this.name, this.x: 5, this.y: 5}) {}
 
@@ -17,5 +17,6 @@ class Castle {
   bool dismiss(Hero h) => heroes.remove(h);
 
   void build(Room r) => rooms.add(r);
+  bool rase(Room r) => rooms.remove(r);
 
 }
