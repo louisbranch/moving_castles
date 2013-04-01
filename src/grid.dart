@@ -1,18 +1,18 @@
 library grid;
-import 'dart:html';
+import 'tile.dart';
 
-void plot(int dimensions, String matcher) {
-  var root = document.query(matcher);
-  var el = new DivElement();
+class Grid {
+  List tiles;
+  int rows;
+  int columns;
 
-  while(dimensions > 0) {
-    var unit = new DivElement();
-    unit.classes.add('grid-1x1');
-    el.children.add(unit);
-    dimensions--;
+  Grid (this.rows, this.columns) {
+    tiles = [];
+    for (var i = 0; i < rows; i++) {
+      tiles.add([]);
+      for (var j = 0; j < columns; j++) {
+        tiles[i].add(new Tile());
+      }
+    }
   }
-
-  print(el.children);
-
-  root.children.add(el);
 }

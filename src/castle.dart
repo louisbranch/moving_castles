@@ -1,6 +1,7 @@
 library castle;
 import 'hero.dart';
 import 'building.dart';
+import 'grid.dart';
 
 class Castle {
   final String name;
@@ -8,8 +9,11 @@ class Castle {
   int y;
   Set<Hero> heroes = new Set();
   Set<Building> buildings = new Set();
+  Grid grid;
 
-  Castle({this.name, this.x: 5, this.y: 5}) {}
+  Castle({this.name, this.x: 5, this.y: 5}) {
+    grid = new Grid(x, y);
+  }
 
   int get dimensions => this.x * this.y;
 
