@@ -1,8 +1,8 @@
 library app;
 import 'castle.dart';
-import 'hero.dart';
+import 'grid.dart' as grid;
 
 void main() {
   var castle = new Castle();
-  var hero = new Hero();
+  grid.plot(castle.dimensions, 'body');
 }
