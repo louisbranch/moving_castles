@@ -23,13 +23,13 @@ void main() {
 
     test('hire', () {
       castle.hire(hero);
-      expect(true, castle.heroes.contains(hero));
+      expect(castle.heroes, contains(hero));
     });
 
     test('dismiss', () {
       castle.hire(hero);
       castle.dismiss(hero);
-      expect(false, castle.heroes.contains(hero));
+      expect(castle.heroes, isNot(contains(hero)));
     });
 
   });
@@ -40,7 +40,7 @@ void main() {
 
     test('build', () {
       castle.build(room);
-      expect(true, castle.rooms.contains(room));
+      expect(castle.rooms, contains(room));
     });
 
   });
