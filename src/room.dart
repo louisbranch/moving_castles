@@ -1,4 +1,0 @@
-library room;
-
-class Room {
-}
