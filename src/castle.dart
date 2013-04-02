@@ -1,7 +1,6 @@
 library castle;
 import 'hero.dart';
 import 'building.dart';
-import 'grid.dart';
 
 class Castle {
   final String name;
@@ -9,13 +8,20 @@ class Castle {
   int y;
   Set<Hero> heroes = new Set();
   Set<Building> buildings = new Set();
-  Grid grid;
+  List tiles = [];
 
   Castle({this.name, this.x: 5, this.y: 5}) {
-    grid = new Grid(x, y);
+    _buildTiles();
   }
 
-  int get dimensions => this.x * this.y;
+  List _buildTiles () {
+    for (var i = 0; i < x; i++) {
+      tiles.add([]);
+      for (var j = 0; j < y; j++) {
+        tiles[i].add('new Tile()');
+      }
+    }
+  }
 
   void hire(Hero h) => heroes.add(h);
   bool dismiss(Hero h) => heroes.remove(h);

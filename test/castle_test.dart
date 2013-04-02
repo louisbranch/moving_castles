@@ -11,10 +11,16 @@ void main() {
     test('has a name', () => expect('Baldurs Gate', castle.name));
     test('x size defaults to 5', () => expect(5, castle.x));
     test('y size defaults to 5', () => expect(5, castle.y));
-    test('dimensions is x * y', () => expect(25, castle.dimensions));
     test('has no heroes', () => expect(true, castle.heroes.isEmpty));
     test('has no buildings', () => expect(true, castle.buildings.isEmpty));
 
+  });
+
+  group('Castle Tiles', () {
+    var castle = new Castle(x: 1, y: 1);
+    test('builds tiles matrix', () {
+      expect([['new Tile()']], castle.tiles);
+    });
   });
 
   group('Castle heroes', () {
