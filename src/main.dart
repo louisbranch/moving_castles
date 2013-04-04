@@ -3,5 +3,5 @@ import 'castle.dart';
 
 void main() {
   var castle = new Castle();
-  print(castle.grid.tiles);
+  print(castle.tiles);
 }
