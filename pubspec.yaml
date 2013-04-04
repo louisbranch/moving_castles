@@ -2,6 +2,6 @@ name: moving_castles
 version: 0.0.1
 author: Luiz Branco <me@luizbranco.com>
 dependencies:
+  web_ui: any
   unittest: any
   browser: any
-  web_ui: '>=0.4.1 <0.4.2'
