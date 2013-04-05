@@ -17,19 +17,7 @@
   </head>
   <body>
     <h1>Moving Castles!</h1>
-    <element name='tiles-list' constructor='Grid' extends='div'>
-      <template>
-      {{tiles}}
-      <div template iterate='row in tiles' class='grid-row'>
-        <div template iterate='tile in row' class='grid-1x1'>
-          1x1
-        </div>
-      </div>
-      </template>
-    </element>
-
     <script type='application/dart' src='src/main.dart'></script>
     <script src="packages/browser/dart.js"></script>
-    <div is="tiles-list" count="{{tiles}}"></div>
   </body>
 </html>
