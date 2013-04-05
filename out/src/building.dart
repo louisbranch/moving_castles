@@ -1,0 +1,4 @@
+library building;
+
+class Building {
+}
