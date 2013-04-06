@@ -17,7 +17,24 @@
   </head>
   <body>
     <h1>Moving Castles!</h1>
+    <element name='x-grid' constructor='Grid' extends='div'>
+      <template>
+      <div template iterate='row in tiles' class='grid-row'>
+        <div template iterate='tile in row' class='grid-1x1'>
+          {{tile}}
+        </div>
+      </div>
+      </template>
+      <script type='application/dart'>
+        import 'package:web_ui/web_ui.dart';
+        class Grid extends WebComponent {
+          var tiles = [[1], [2]];
+        }
+      </script>
+    </element>
+
     <script type='application/dart' src='src/main.dart'></script>
     <script src="packages/browser/dart.js"></script>
+    <div is="x-grid"></div>
   </body>
 </html>
