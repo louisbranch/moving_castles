@@ -16,10 +16,10 @@ class Castle {
   }
 
   List _buildTiles () {
-    for (var i = 0; i < x; i++) {
+    for (int i = 0; i < x; i++) {
       tiles.add([]);
-      for (var j = 0; j < y; j++) {
-        var tile = new Tile(x: i, y: j);
+      for (int j = 0; j < y; j++) {
+        Tile tile = new Tile(x: i, y: j);
         tiles[i].add(tile);
       }
     }
