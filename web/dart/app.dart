@@ -1,6 +1,3 @@
 library app;
-import 'castle.dart';
 
-void main() {
-  var castle = new Castle();
-}
+void main() {}
