@@ -1,5 +1,5 @@
 #!/bin/bash
-FILES=test/*_test.dart
+FILES=**/*_test.dart
 for f in $FILES
 do
   dart --checked $f
