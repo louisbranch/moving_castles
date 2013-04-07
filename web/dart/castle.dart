@@ -1,6 +1,7 @@
 library castle;
 import 'hero.dart';
 import 'building.dart';
+import 'tile.dart';
 
 class Castle {
   final String name;
@@ -18,7 +19,8 @@ class Castle {
     for (var i = 0; i < x; i++) {
       tiles.add([]);
       for (var j = 0; j < y; j++) {
-        tiles[i].add('new Tile()');
+        var tile = new Tile(x: i, y: j);
+        tiles[i].add(tile);
       }
     }
   }
