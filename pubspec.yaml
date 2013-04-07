@@ -4,3 +4,4 @@ author: Luiz Branco <me@luizbranco.com>
 dependencies:
   unittest: any
   browser: any
+  web_ui: any
