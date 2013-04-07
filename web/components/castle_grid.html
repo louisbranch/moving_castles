@@ -6,7 +6,7 @@
       <template>
         <div template iterate='row in tiles'>
           <div template iterate='tile in row' class='grid-row'>
-            <div class='grid-1x1'>{{tile.coordinates}}</div>
+            <div class='grid-1x1' on-click='tile.select()'>{{tile.coordinates}}</div>
           </div>
         </div>
       </template>

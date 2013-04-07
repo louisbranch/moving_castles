@@ -9,4 +9,8 @@ class Tile {
     coordinates = '$x:$y';
   }
 
+  void select() {
+    print(coordinates);
+  }
+
 }
