@@ -1,7 +1,8 @@
 import 'package:unittest/unittest.dart';
-import '../src/castle.dart';
-import '../src/hero.dart';
-import '../src/building.dart';
+import '../web/dart/castle.dart';
+import '../web/dart/hero.dart';
+import '../web/dart/building.dart';
+import '../web/dart/tile.dart';
 
 void main() {
 
@@ -19,7 +20,7 @@ void main() {
   group('Castle Tiles', () {
     var castle = new Castle(x: 1, y: 1);
     test('builds tiles matrix', () {
-      expect([['new Tile()']], castle.tiles);
+      expect(castle.tiles[0][0], new isInstanceOf<Tile>());
     });
   });
 

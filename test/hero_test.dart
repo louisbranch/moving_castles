@@ -1,5 +1,5 @@
 import 'package:unittest/unittest.dart';
-import '../src/hero.dart';
+import '../web/dart/hero.dart';
 
 void main() {
 
