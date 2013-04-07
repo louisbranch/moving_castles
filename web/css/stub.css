@@ -8,5 +8,13 @@
   float: left;
   border: 1px solid white;
   background-color: grey;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.grid-1x1:hover,
+.grid-1x1:active {
+  background-color: yellow;
 }
 
