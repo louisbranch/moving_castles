@@ -9,20 +9,10 @@ class Castle {
   int y;
   Set<Hero> heroes = new Set();
   Set<Building> buildings = new Set();
-  List tiles = [];
+  List tiles;
 
   Castle({this.name, this.x: 5, this.y: 5}) {
-    _buildTiles();
-  }
-
-  List _buildTiles () {
-    for (int i = 0; i < x; i++) {
-      tiles.add([]);
-      for (int j = 0; j < y; j++) {
-        Tile tile = new Tile(x: i, y: j);
-        tiles[i].add(tile);
-      }
-    }
+    tiles = Tile.build(x, y);
   }
 
   void hire(Hero h) => heroes.add(h);
