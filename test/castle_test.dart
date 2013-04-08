@@ -5,7 +5,7 @@ import '../web/dart/building.dart';
 
 void main() {
 
-  group('New Castle', () {
+  group('New Castle:', () {
     var castle = new Castle(name: 'Baldurs Gate');
 
     test('has a name', () => expect('Baldurs Gate', castle.name));
@@ -17,16 +17,16 @@ void main() {
 
   });
 
-  group('Castle heroes', () {
+  group('Castle heroes:', () {
     var castle = new Castle();
     var hero = new Hero();
 
-    test('hire', () {
+    test('hires a hero', () {
       castle.hire(hero);
       expect(castle.heroes, contains(hero));
     });
 
-    test('dismiss', () {
+    test('dismisses a hero', () {
       castle.hire(hero);
       castle.dismiss(hero);
       expect(castle.heroes, isNot(contains(hero)));
@@ -34,16 +34,16 @@ void main() {
 
   });
 
-  group('Castle buildings', () {
+  group('Castle buildings:', () {
     var castle = new Castle();
     var building = new Building();
 
-    test('construct', () {
+    test('constructs a building', () {
       castle.construct(building);
       expect(castle.buildings, contains(building));
     });
 
-    test('rase', () {
+    test('rases a building', () {
       castle.construct(building);
       castle.rase(building);
       expect(castle.buildings, isNot(contains(building)));
