@@ -1,8 +1,8 @@
 library tile;
 
 class Tile {
-  int x;
-  int y;
+  final int x;
+  final int y;
   String coordinates;
 
   Tile ({this.x, this.y}) {

@@ -2,7 +2,6 @@ import 'package:unittest/unittest.dart';
 import '../web/dart/castle.dart';
 import '../web/dart/hero.dart';
 import '../web/dart/building.dart';
-import '../web/dart/tile.dart';
 
 void main() {
 
@@ -14,14 +13,8 @@ void main() {
     test('y size defaults to 5', () => expect(5, castle.y));
     test('has no heroes', () => expect(true, castle.heroes.isEmpty));
     test('has no buildings', () => expect(true, castle.buildings.isEmpty));
+    test('has a tiles list', () => expect(castle.tiles.length, 5));
 
-  });
-
-  group('Castle Tiles', () {
-    var castle = new Castle(x: 1, y: 1);
-    test('builds tiles matrix', () {
-      expect(castle.tiles[0][0], new isInstanceOf<Tile>());
-    });
   });
 
   group('Castle heroes', () {
