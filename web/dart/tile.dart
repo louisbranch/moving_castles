@@ -1,13 +1,12 @@
 library tile;
 
 class Tile {
-  final int x;
-  final int y;
-  String coordinates;
+  final int x, y;
+  String image_path;
 
-  Tile ({this.x, this.y}) {
-    coordinates = '$x:$y';
-  }
+  Tile ({this.x, this.y});
+
+  get coordinates => '$x:$y';
 
   void select() {
     print(coordinates);
