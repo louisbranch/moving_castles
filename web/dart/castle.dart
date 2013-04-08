@@ -4,12 +4,11 @@ import 'building.dart';
 import 'tile.dart';
 
 class Castle {
+  final int x, y;
   final String name;
-  int x;
-  int y;
   Set<Hero> heroes = new Set();
   Set<Building> buildings = new Set();
-  List tiles;
+  List<Tile> tiles;
 
   Castle({this.name, this.x: 5, this.y: 5}) {
     tiles = Tile.build(x, y);
