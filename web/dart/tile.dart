@@ -2,11 +2,25 @@ library tile;
 
 class Tile {
   final int x, y;
-  String image_path;
+  String _img;
+  Tile _layer;
 
-  Tile ({this.x, this.y});
+  Tile ({this.x, this.y, img: '/default_path.png'}) {
+    _img = img;
+  }
 
   get coordinates => '$x:$y';
+
+  get layer => _layer;
+  set layer(tile) => _layer = tile;
+
+  get img {
+    if (layer == null) {
+      return _img;
+    } else {
+      return layer.img;
+    }
+  }
 
   void select() {
     print(coordinates);
@@ -23,6 +37,5 @@ class Tile {
     }
     return tiles;
   }
-
 
 }
