@@ -4,7 +4,7 @@ import '../web/dart/hero.dart';
 void main() {
 
   group('New Hero:', () {
-    var hero = new Hero(name: 'Minsc');
+    var hero = new Hero('Minsc');
 
     test('has a name', () => expect('Minsc', hero.name));
     test('level defaults to 1', () => expect(1, hero.level));

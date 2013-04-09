@@ -5,7 +5,7 @@ class Tile {
   String _img;
   Tile _layer;
 
-  Tile ({this.x, this.y, img: '/default_path.png'}) {
+  Tile (this.x, this.y, {img: '/default_path.png'}) {
     _img = img;
   }
 
@@ -31,7 +31,7 @@ class Tile {
     for (int i = 0; i < x; i++) {
       tiles.add([]);
       for (int j = 0; j < y; j++) {
-        Tile tile = new Tile(x: i, y: j);
+        Tile tile = new Tile(i, j);
         tiles[i].add(tile);
       }
     }

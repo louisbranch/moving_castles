@@ -6,7 +6,7 @@ import '../web/dart/building.dart';
 void main() {
 
   group('New Castle:', () {
-    var castle = new Castle(name: 'Baldurs Gate');
+    var castle = new Castle('Baldurs Gate');
 
     test('has a name', () => expect('Baldurs Gate', castle.name));
     test('x size defaults to 5', () => expect(5, castle.x));
@@ -18,8 +18,8 @@ void main() {
   });
 
   group('Castle heroes:', () {
-    var castle = new Castle();
-    var hero = new Hero();
+    var castle = new Castle('Baldurs Gate');
+    var hero = new Hero('Minsc');
 
     test('hires a hero', () {
       castle.hire(hero);
@@ -35,8 +35,8 @@ void main() {
   });
 
   group('Castle buildings:', () {
-    var castle = new Castle();
-    var building = new Building();
+    var castle = new Castle('Baldurs Gate');
+    var building = new Building('Forge');
 
     test('constructs a building', () {
       castle.construct(building);

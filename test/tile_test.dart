@@ -10,14 +10,14 @@ void main() {
   });
 
   group('New Tile:', () {
-    var tile = new Tile(x: 2, y: 2);
+    var tile = new Tile(2, 2);
     test('has coordinates', () => expect(tile.coordinates, '2:2'));
     test('has a default img', () => expect(tile.img, '/default_path.png'));
   });
 
   group('Tile layers:', () {
-    var tile = new Tile(x: 2, y: 2);
-    var tile2 = new Tile(x: 2, y: 2, img: '/another_path.png');
+    var tile = new Tile(2, 2);
+    var tile2 = new Tile(2, 2, img: '/another_path.png');
     tile.layer = tile2;
 
     test('sets a layer', () => expect(tile.layer, tile2));

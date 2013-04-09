@@ -10,7 +10,7 @@ class Castle {
   Set<Building> buildings = new Set();
   List<Tile> tiles;
 
-  Castle({this.name, this.x: 5, this.y: 5}) {
+  Castle(this.name, {this.x: 5, this.y: 5}) {
     tiles = Tile.build(x, y);
   }
 
