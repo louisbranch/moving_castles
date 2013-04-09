@@ -1,6 +1,6 @@
 #!/bin/bash
-FILES=**/*_test.dart
-for f in $FILES
+
+for f in $(find . -name '*_test.dart')
 do
   dart --checked $f
 done
