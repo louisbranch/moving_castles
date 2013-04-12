@@ -1,15 +1,8 @@
 library building;
-import 'layer.dart';
+import 'structure.dart';
 
-class Building {
-  final String name;
-  final int width, height;
-  Set<Layer> _layers = new Set();
+class Building extends Structure {
 
-  Building(this.name, {this.width: 2, this.height: 2});
-
-  Building.fromJSON();
-
-  get layers => _layers;
+  Building(name, {width: 2, height: 2}) : super(name, width, height);
 
 }

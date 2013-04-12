@@ -1,15 +1,8 @@
 library castle;
-import 'layer.dart';
+import 'structure.dart';
 
-class Castle {
-  final String name;
-  final int width, height;
-  Set<Layer> _layers = new Set();
+class Castle extends Structure {
 
-  Castle(this.name, {this.width: 5, this.height: 5});
-
-  Castle.fromJSON();
-
-  get layers => _layers;
+  Castle(name, {width: 5, height: 5}) : super(name, width, height);
 
 }
