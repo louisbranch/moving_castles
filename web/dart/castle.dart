@@ -13,21 +13,3 @@ class Castle {
   get layers => _layers;
 
 }
-
-//castle = {
-//  name: 'Baldurs Gate',
-//  width: 5,
-//  height: 5,
-//  layers: [
-//    {
-//      name: 'xxx',
-//      tileset: 'xxxx',
-//      tiles: []
-//    }
-//    background: [],
-//    buildings: [],
-//    ...
-//  ],
-//  heroes: []
-//
-//}
