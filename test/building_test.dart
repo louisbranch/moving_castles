@@ -7,8 +7,9 @@ void main() {
     var building = new Building('Forge');
 
     test('has a name', () => expect('Forge', building.name));
-    test('x size defaults to 2', () => expect(2, building.x));
-    test('y size defaults to 2', () => expect(2, building.y));
+    test('width size defaults to 2', () => expect(2, building.width));
+    test('height size defaults to 2', () => expect(2, building.height));
+    test('has an empty layers set', () => expect(building.layers.isEmpty, true));
 
   });
 

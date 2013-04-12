@@ -1,11 +1,15 @@
 library building;
-import 'tile.dart';
+import 'layer.dart';
 
 class Building {
-  final int x, y;
   final String name;
-  List<Tile> tiles;
+  final int width, height;
+  Set<Layer> _layers = new Set();
 
-  Building(this.name, {this.x: 2, this.y: 2}) {
-  }
+  Building(this.name, {this.width: 2, this.height: 2});
+
+  Building.fromJSON();
+
+  get layers => _layers;
+
 }
