@@ -1,23 +1,33 @@
 library castle;
-import 'hero.dart';
-import 'building.dart';
-import 'tile.dart';
+import 'layer.dart';
 
 class Castle {
-  final int x, y;
   final String name;
-  Set<Hero> heroes = new Set();
-  Set<Building> buildings = new Set();
-  List<Tile> tiles;
+  final int width, height;
+  Set<Layer> _layers = new Set();
 
-  Castle(this.name, {this.x: 5, this.y: 5}) {
-    tiles = Tile.build(x, y);
-  }
+  Castle(this.name, {this.width: 5, this.height: 5});
 
-  void hire(Hero h) => heroes.add(h);
-  bool dismiss(Hero h) => heroes.remove(h);
+  Castle.fromJSON();
 
-  void construct(Building b) => buildings.add(b);
-  bool rase(Building b) => buildings.remove(b);
+  get layers => _layers;
 
 }
+
+//castle = {
+//  name: 'Baldurs Gate',
+//  width: 5,
+//  height: 5,
+//  layers: [
+//    {
+//      name: 'xxx',
+//      tileset: 'xxxx',
+//      tiles: []
+//    }
+//    background: [],
+//    buildings: [],
+//    ...
+//  ],
+//  heroes: []
+//
+//}
