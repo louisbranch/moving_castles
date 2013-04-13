@@ -1,17 +1,14 @@
 library grid;
+import 'package:web_ui/web_ui.dart';
+import 'lib/2d.dart' as twod;
 
-class Grid {
+class Grid extends WebComponent {
   List _layers = [];
 
   get layers => _layers;
 
-  void create2dList(layers, width, height) {
-    int offset = 0;
-    for(int i = 0; i < height; i++) {
-      var row = layers.sublist(offset, offset + width);
-      _layers.add(row);
-      offset += width;
-    }
+  void from(layers, width, height) {
+    _layers = twod.createGrid(layers, width, height);
   }
 
 }
