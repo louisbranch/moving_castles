@@ -5,13 +5,16 @@ module.exports = function(grunt) {
   grunt.initConfig({
     regarde: {
       app: {
-        files: ['web/**/*.dart', 'test/**/*_test.dart'],
+        files: ['web/dart/**/*.dart', 'test/**/*_test.dart'],
         tasks: ['exec']
       }
     },
     exec: {
       test: {
         cmd: './test/run.sh'
+      },
+      build: {
+        cmd: './build.sh'
       }
     }
   });
