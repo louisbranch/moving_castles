@@ -5,7 +5,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     regarde: {
       app: {
-        files: ['web/dart/**/*.dart', 'test/**/*_test.dart'],
+        files: ['web/dart/**/*.dart', 'test/**/*_test.dart', '!**/*.swp'],
         tasks: ['exec']
       }
     },
