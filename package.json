@@ -1,0 +1,14 @@
+{
+  "name": "moving_castles",
+  "version": "0.0.1",
+  "private": true,
+  "description": "",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "grunt": "> 0.4.0",
+    "grunt-contrib-watch": "> 0.1.4",
+    "grunt-regarde": "0.1.1",
+    "grunt-exec" : "*"
+  }
+}
