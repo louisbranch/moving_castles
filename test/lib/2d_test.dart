@@ -6,7 +6,7 @@ void main() {
   group('2D list', () {
     int width = 3;
     int height = 2;
-    Set layers = new Set.from([1,2,3,4,5,6]);
+    List layers = [1,2,3,4,5,6];
 
     var list = twod.createGrid(layers, width, height);
 

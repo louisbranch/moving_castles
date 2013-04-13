@@ -9,7 +9,7 @@ void main() {
     test('has a name', () => expect(castle.name, 'Baldurs Gate'));
     test('width size defaults to 5', () => expect(castle.width, 5));
     test('height size defaults to 5', () => expect(castle.height, 5));
-    test('has an empty layers set', () => expect(castle.layers.isEmpty, true));
+    test('has list of layers', () => expect(castle.layers.isEmpty, true));
 
   });
 
