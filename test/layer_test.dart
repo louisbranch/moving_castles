@@ -4,7 +4,7 @@ import '../web/dart/tile.dart';
 
 makeTiles(n) {
   List tiles = [];
-  while (tiles.length < n) { tiles.add(new Tile(1)); }
+  while (tiles.length < n) { tiles.add(new Tile(0,0)); }
   return tiles;
 }
 

@@ -1,8 +1,8 @@
 library tile;
 
 class Tile {
-  final int position;
-  final bool colision;
+  final int x_coord, y_coord;
+  final bool collision;
 
-  Tile(this.position, {this.colision: false});
+  Tile(this.x_coord, this.y_coord, {this.collision: false});
 }
