@@ -4,11 +4,9 @@ import 'layer.dart';
 abstract class Structure {
   final String name;
   final int width, height;
-  Set<Layer> _layers = new Set();
+  final List layers;
 
-  Structure(this.name, this.width, this.height);
-
-  get layers => _layers;
+  Structure(this.name, this.layers, this.width, this.height);
 
 }
 

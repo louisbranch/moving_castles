@@ -1,6 +1,7 @@
 library twod;
 
-List createGrid(list, width, height) {
+List createGrid(Set layers, width, height) {
+  var list = layers.toList();
   List temp = [];
   int offset = 0;
   for(int i = 0; i < height; i++) {

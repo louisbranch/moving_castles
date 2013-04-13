@@ -1,5 +1,6 @@
 library grid;
 import 'package:web_ui/web_ui.dart';
+import 'structure.dart';
 import 'lib/2d.dart' as twod;
 
 class Grid extends WebComponent {
@@ -7,8 +8,8 @@ class Grid extends WebComponent {
 
   get layers => _layers;
 
-  void from(layers, width, height) {
-    _layers = twod.createGrid(layers, width, height);
+  void from(Structure struct) {
+    _layers = twod.createGrid(struct.layers, struct.width, struct.height);
   }
 
 }

@@ -4,7 +4,7 @@ import '../web/dart/castle.dart';
 void main() {
 
   group('New Castle:', () {
-    var castle = new Castle('Baldurs Gate');
+    var castle = new Castle('Baldurs Gate', []);
 
     test('has a name', () => expect(castle.name, 'Baldurs Gate'));
     test('width size defaults to 5', () => expect(castle.width, 5));
