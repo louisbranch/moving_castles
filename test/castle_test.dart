@@ -13,4 +13,21 @@ void main() {
 
   });
 
+  group('Castle from Json:', () {
+    String json = '''
+      {
+        "name" : "Baldurs Gate",
+        "layers" : [],
+        "height": 0,
+        "width": 0
+      }
+    ''';
+
+    test('parse json string into new castle', () {
+      var castle = new Castle.fromJSON(json);
+      expect(castle.name, 'Baldurs Gate');
+    });
+
+  });
+
 }
