@@ -2,9 +2,9 @@ library layer;
 import 'tile.dart';
 
 class Layer {
-  final String name, tileset;
-  final int width, height;
-  final List<Tile> _tiles;
+  String name, tileset;
+  int width, height;
+  List<Tile> _tiles;
 
   Layer(this.name, this.tileset, this._tiles, this.width, this.height) {
     if (_tiles.length != width * height) {

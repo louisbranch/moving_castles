@@ -17,9 +17,20 @@ void main() {
     String json = '''
       {
         "name" : "Baldurs Gate",
-        "layers" : [],
-        "height": 0,
-        "width": 0
+        "layers" : [{
+          "name" : "background",
+          "tileset" : "castle.png",
+          "tiles" : [
+            { },
+            { },
+            { },
+            { }
+          ],
+          "width": 2,
+          "height" : 2
+        }],
+        "height": 2,
+        "width": 2
       }
     ''';
 
