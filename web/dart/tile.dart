@@ -6,5 +6,5 @@ class Tile {
   //bool buildable;
   //bool hasBuild;
 
-  Tile(this.x_coord, this.y_coord, {this.collision: false});
+  Tile(this.x_coord, this.y_coord, [this.collision = false]);
 }
