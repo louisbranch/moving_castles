@@ -9,7 +9,7 @@ void main() {
 
   group('Serialize castle from json', () {
     var json = fixtures.castle_json;
-    var castle = castleFromJson(json);
+    var castle = new Castle.fromJson(json);
     var layer = castle.layers.first;
     var tile = layer.tiles.first;
 

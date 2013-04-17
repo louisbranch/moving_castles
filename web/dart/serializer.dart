@@ -1,15 +1,9 @@
 library serializer;
 import 'dart:json';
-import 'castle.dart';
 import 'layer.dart';
 import 'tile.dart';
 
-Castle castleFromJson(String json) {
-  Map d = _fromJson(json);
-  return new Castle(d['name'], d['layers'], d['width'], d['height']);
-}
-
-Map _fromJson(String json) {
+Map fromJson(String json) {
   Map data = parse(json);
   data['layers'] = _mapLayers(data['layers']);
   return data;
