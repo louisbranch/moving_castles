@@ -21,5 +21,13 @@ void main() {
 
   });
 
+  group('Layer tiles:', () {
+    newLayer(n) => new Layer('Floor', '/floor.png', makeTiles(n), 3, 3);
+
+    test('throws if tiles < width * height', () => expect(() => newLayer(8), throws));
+    test('throws if tiles > width * height', () => expect(() => newLayer(10), throws));
+    test('passes if tiles == width * height', () => expect(() => newLayer(9), returnsNormally));
+  });
+
 }
 

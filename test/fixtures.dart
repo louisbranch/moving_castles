@@ -9,9 +9,13 @@ String castle_json = '''{
           "x" : 1,
           "y" : 1,
           "collision" : false
+        },
+        {
+          "x" : 1,
+          "y" : 1
         }
       ],
-      "width" : 2,
+      "width" : 1,
       "height" : 2
     }
   ],
