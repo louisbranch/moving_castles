@@ -3,30 +3,12 @@ import '../web/dart/serializer.dart';
 import '../web/dart/castle.dart';
 import '../web/dart/layer.dart';
 import '../web/dart/tile.dart';
+import 'fixtures.dart' as fixtures;
 
 void main() {
 
   group('Serialize castle from json', () {
-    String json = '''{
-      "name" : "Baldurs Gate",
-      "layers" : [
-        {
-          "name" : "background",
-          "tileset" : "castle.png",
-          "tiles" : [
-            {
-              "x" : 1,
-              "y" : 1,
-              "collision" : false
-            }
-          ],
-          "width" : 2,
-          "height" : 2
-        }
-      ],
-      "width" : 2,
-      "height" : 2
-    }''';
+    var json = fixtures.castle_json;
     var castle = castleFromJson(json);
     var layer = castle.layers.first;
     var tile = layer.tiles.first;
@@ -37,4 +19,3 @@ void main() {
   });
 
 }
-
