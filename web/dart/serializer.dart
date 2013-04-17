@@ -5,9 +5,14 @@ import 'layer.dart';
 import 'tile.dart';
 
 Castle castleFromJson(String json) {
-  Map d = parse(json);
-  List layers = _mapLayers(d['layers']);
-  return new Castle(d['name'], layers, d['width'], d['height']);
+  Map d = _fromJson(json);
+  return new Castle(d['name'], d['layers'], d['width'], d['height']);
+}
+
+Map _fromJson(String json) {
+  Map data = parse(json);
+  data['layers'] = _mapLayers(data['layers']);
+  return data;
 }
 
 List _mapLayers(List layers) {
