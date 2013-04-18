@@ -6,7 +6,7 @@ import 'castle_test.dart' as castle;
 import 'hero_test.dart' as hero;
 import 'layer_test.dart' as layer;
 import 'tile_test.dart' as tile;
-import 'serializer_test.dart' as serializer;
+import 'lib/serializer_test.dart' as serializer;
 import 'lib/2d_test.dart' as twod;
 
 main() {

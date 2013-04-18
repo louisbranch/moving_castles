@@ -1,7 +1,7 @@
 library serializer;
 import 'dart:json';
-import 'layer.dart';
-import 'tile.dart';
+import '../layer.dart';
+import '../tile.dart';
 
 Map fromJson(String json) {
   Map data = parse(json);

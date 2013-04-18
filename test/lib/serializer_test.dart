@@ -1,9 +1,9 @@
 import 'package:unittest/unittest.dart';
-import '../web/dart/serializer.dart';
-import '../web/dart/castle.dart';
-import '../web/dart/layer.dart';
-import '../web/dart/tile.dart';
-import 'fixtures.dart' as fixtures;
+import '../../web/dart/lib/serializer.dart';
+import '../../web/dart/castle.dart';
+import '../../web/dart/layer.dart';
+import '../../web/dart/tile.dart';
+import '../fixtures.dart' as fixtures;
 
 void main() {
 

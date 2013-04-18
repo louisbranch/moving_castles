@@ -1,5 +1,5 @@
 library structure;
-import 'serializer.dart' as serializer;
+import 'lib/serializer.dart' as serializer;
 import 'layer.dart';
 
 abstract class Structure {
