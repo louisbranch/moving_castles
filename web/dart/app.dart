@@ -8,7 +8,7 @@ void main() {
   var grid = new Grid()
     ..host = new DivElement();
 
-  var castle = new Castle('Baldurs Gate', [1,2,3,4,5,6], width: 3, height: 2);
+  var castle = new Castle('Baldurs Gate', [1,2,3,4,5,6], 3, 2);
   grid.from(castle);
 
   var lifecycleCaller = new ComponentItem(grid)..create();
