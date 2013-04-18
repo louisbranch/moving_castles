@@ -3,7 +3,7 @@ import '../web/dart/castle.dart';
 
 void main() {
 
-  group('New Castle:', () {
+  group('new', () {
     var castle = new Castle('Baldurs Gate', [], 5, 5);
 
     test('has a name', () => expect(castle.name, 'Baldurs Gate'));

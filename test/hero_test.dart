@@ -3,7 +3,7 @@ import '../web/dart/hero.dart';
 
 void main() {
 
-  group('New Hero:', () {
+  group('new', () {
     var hero = new Hero('Minsc');
 
     test('has a name', () => expect('Minsc', hero.name));

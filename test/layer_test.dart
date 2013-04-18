@@ -10,7 +10,7 @@ makeTiles(n) {
 
 void main() {
 
-  group('New Layer:', () {
+  group('new', () {
     var layer = new Layer('Floor', '/floor.png', makeTiles(2), 2, 1);
 
     test('has a name', () => expect(layer.name, 'Floor'));
@@ -21,7 +21,7 @@ void main() {
 
   });
 
-  group('Layer tiles:', () {
+  group('tiles', () {
     newLayer(n) => new Layer('Floor', '/floor.png', makeTiles(n), 3, 3);
 
     test('throws if tiles < width * height', () => expect(() => newLayer(8), throws));

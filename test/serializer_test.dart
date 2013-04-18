@@ -7,7 +7,7 @@ import 'fixtures.dart' as fixtures;
 
 void main() {
 
-  group('Serialize castle from json', () {
+  group('structure from json', () {
     var json = fixtures.castle_json;
     var castle = new Castle.fromJson(json);
     var layer = castle.layers.first;

@@ -4,7 +4,7 @@ import '../web/dart/building.dart';
 
 void main() {
 
-  group('New Building:', () {
+  group('new', () {
     var building = new Building('Forge', [], 2, 2);
 
     test('has a name', () => expect('Forge', building.name));
