@@ -1,3 +1,4 @@
+library building_test;
 import 'package:unittest/unittest.dart';
 import '../web/dart/building.dart';
 
