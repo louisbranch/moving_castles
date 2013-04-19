@@ -6,7 +6,7 @@
       <template>
         <div template repeat='row in layers' class='grid-row'>
           <div template repeat='tile in row' class='grid-1x1'>
-            {{tile}}
+            {{tile.x}}:{{tile.y}}
           </div>
         </div>
       </template>

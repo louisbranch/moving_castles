@@ -3,12 +3,13 @@ import 'package:web_ui/web_ui.dart';
 import 'dart:html';
 import 'grid.dart';
 import 'castle.dart';
+import 'scaffold.dart' as scaffold;
 
 void main() {
   var grid = new Grid()
     ..host = new DivElement();
 
-  var castle = new Castle('Baldurs Gate', [1,2,3,4,5,6], 3, 2);
+  var castle = new Castle.fromJson(scaffold.castle);
   grid.from(castle);
 
   var lifecycleCaller = new ComponentItem(grid)..create();
