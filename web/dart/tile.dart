@@ -1,10 +1,10 @@
 library tile;
 
 class Tile {
-  final int x_coord, y_coord;
+  final int x, y;
   final bool collision;
   //bool buildable;
   //bool hasBuild;
 
-  Tile(this.x_coord, this.y_coord, [this.collision = false]);
+  Tile(this.x, this.y, [this.collision = false]);
 }
