@@ -4,9 +4,11 @@
   <body>
     <element name='grid' constructor='Grid' extends='div'>
       <template>
-        <div template repeat='row in layers' class='grid-row'>
-          <div template repeat='tile in row' class='grid-1x1'>
-            {{tile.x}}:{{tile.y}}
+        <div template repeat='layer in layers' class='grid-layer'>
+          <div template repeat='row in layer' class='grid-row'>
+            <div template repeat='tile in row' class='grid-1x1'>
+              {{tile.x}}:{{tile.y}}
+            </div>
           </div>
         </div>
       </template>
