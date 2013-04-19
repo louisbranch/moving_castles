@@ -5,7 +5,7 @@ import '../../web/dart/tile.dart';
 
 void main() {
 
-  group('grid', () {
+  group('#createGrid', () {
 
     int width = 3;
     int height = 2;
@@ -17,13 +17,13 @@ void main() {
     var layer = new Layer('bg', 'bg.png', tiles, width, height);
     var grid = twod.createGrid([layer, layer]);
 
-    test('has a list of layers', () => expect(grid.length, 2));
+    test('generates a list of 2 dimensional layers', () => expect(grid.length, 2));
 
     group('layer', () {
       var layer = grid.first;
-      test('rows are equal to height', () => expect(layer.length, height));
-      test('columns are equal to width', () => expect(layer[0].length, width));
-      test('columns have elements in order', () => expect(layer[1], [tile1, tile2, tile3]));
+      test('has N rows equals to its height size', () => expect(layer.length, height));
+      test('rows have N tiles equal to its width size', () => expect(layer[0].length, width));
+      test('tiles are put in order inside the row', () => expect(layer[1], [tile1, tile2, tile3]));
     });
 
   });
