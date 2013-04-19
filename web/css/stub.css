@@ -3,12 +3,12 @@
 }
 
 .grid-1x1 {
-  width: 30px;
-  height: 30px;
+  width: 100px;
+  height: 100px;
   float: left;
   border: 1px solid white;
   background-color: grey;
-  line-height: 30px;
+  line-height: 100px;
   text-align: center;
   cursor: pointer;
 }
