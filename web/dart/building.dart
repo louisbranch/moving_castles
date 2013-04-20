@@ -1,9 +1,8 @@
 library building;
-import 'structure.dart';
 
-class Building extends Structure {
+class Building {
+  String name;
 
-  Building(name, layers, width, height) : super(name, layers, width, height);
+  Building(this.name);
 
-  Building.fromJson(String json) : super.fromJson(json);
 }
