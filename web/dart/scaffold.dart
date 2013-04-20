@@ -6,46 +6,16 @@ String castle = '''{
   "name" : "Baldurs Gate",
   "tiles" : [
     [
-      {
-        "x" : 3,
-        "y" : 2
-      },
-      {
-        "x" : 2,
-        "y" : 1
-      },
-      {
-        "x" : 1,
-        "y" : 1
-      }
+      { "disabled" : true },
+      { }, { }
     ],
     [
-      {
-        "x" : 3,
-        "y" : 2
-      },
-      {
-        "x" : 2,
-        "y" : 1
-      },
-      {
-        "x" : 1,
-        "y" : 1
-      }
+      { "disabled" : true },
+      { }, { }
     ],
     [
-      {
-        "x" : 2,
-        "y" : 1
-      },
-      {
-        "x" : 2,
-        "y" : 1
-      },
-      {
-        "x" : 1,
-        "y" : 1
-      }
+      { "disabled" : true },
+      { }, { }
     ]
   ],
   "tileset" : "castle.png"

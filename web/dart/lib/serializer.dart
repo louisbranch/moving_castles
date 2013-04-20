@@ -13,5 +13,10 @@ List _mapRows(List rows) {
 }
 
 List _mapColumns(List columns) {
-  return columns.map((t) => new Tile(disabled: t['disabled'])).toList();
+  return columns.map(_parseTile).toList();
+}
+
+Tile _parseTile(Map tile) {
+  bool disabled = tile['disabled'] == null ? false : tile['disabled'];
+  return new Tile(disabled: disabled);
 }
