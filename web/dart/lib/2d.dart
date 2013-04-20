@@ -1,14 +1,13 @@
 library twod;
+import '../castle.dart';
 
-List createGrid(List layers) => layers.map(_to2D).toList();
-
-List _to2D(layer) {
+List createGrid(Castle castle) {
   List grid = [];
   int offset = 0;
-  for(int i = 0; i < layer.height; i++) {
-    var row = layer.tiles.sublist(offset, offset + layer.width);
+  for(int i = 0; i < castle.height; i++) {
+    var row = castle.tiles.sublist(offset, offset + castle.width);
     grid.add(row);
-    offset += layer.width;
+    offset += castle.width;
   }
   return grid;
 }
