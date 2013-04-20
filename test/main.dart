@@ -6,7 +6,6 @@ import 'castle_test.dart' as castle;
 import 'hero_test.dart' as hero;
 import 'tile_test.dart' as tile;
 import 'lib/serializer_test.dart' as serializer;
-import 'lib/2d_test.dart' as twod;
 
 main() {
   group("bulding", building.main);
@@ -14,5 +13,4 @@ main() {
   group("hero", hero.main);
   group("tile", tile.main);
   group("serializer", serializer.main);
-  group("2D", twod.main);
 }
