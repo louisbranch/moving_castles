@@ -1,9 +1,19 @@
 library castle;
-import 'structure.dart';
+import 'lib/serializer.dart' as serializer;
 
-class Castle extends Structure {
+class Castle {
+  String name, tileset;
+  int width, height;
+  List<Tile> tiles;
 
-  Castle(name, layers, width, height) : super(name, layers, width, height);
+  Castle(this.name, this.tiles, this.width, this.height, [this.tileset]);
 
-  Castle.fromJson(String json) : super.fromJson(json);
+  Castle.fromJson(String json) {
+    Map data = serializer.fromJson(json);
+    name = data['name'];
+    tiles = data['tiles'];
+    width = data['width'];
+    height = data['height'];
+    tileset = data['tileset'];
+  }
 }
