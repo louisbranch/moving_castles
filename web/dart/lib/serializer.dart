@@ -4,11 +4,14 @@ import '../tile.dart';
 
 Map fromJson(String json) {
   Map data = parse(json);
-  data['tiles'] = _mapTiles(data['tiles']);
+  data['tiles'] = _mapRows(data['tiles']);
   return data;
 }
 
-List _mapTiles(List tiles) {
-  var map = tiles.map((t) => new Tile(t['x'], t['y'], t['collision']));
-  return map.toList();
+List _mapRows(List rows) {
+  return rows.map(_mapColumns).toList();
+}
+
+List _mapColumns(List columns) {
+  return columns.map((t) => new Tile(t['x'], t['y'], t['collision'])).toList();
 }

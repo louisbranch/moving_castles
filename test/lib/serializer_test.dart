@@ -9,10 +9,11 @@ void main() {
   group('structure from json', () {
     var json = fixtures.castle_json;
     var castle = new Castle.fromJson(json);
-    var tile = castle.tiles.first;
 
     test('creates a new castle', () => expect(castle is Castle, true));
-    test('castle has a list of tiles', () => expect(tile is Tile, true));
+    test('maps castle 2d tiles list to rows', () => expect(castle.tiles is List, true));
+    test('and columns', () => expect(castle.tiles.first is List, true));
+    test('each columns has tiles', () => expect(castle.tiles.first.first is Tile, true));
   });
 
 }

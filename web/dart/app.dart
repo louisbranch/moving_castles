@@ -10,7 +10,7 @@ void main() {
     ..host = new DivElement();
 
   var castle = new Castle.fromJson(scaffold.castle);
-  grid.from(castle);
+  grid.tiles = castle.tiles;
 
   var lifecycleCaller = new ComponentItem(grid)..create();
   document.body.nodes.add(grid.host);
