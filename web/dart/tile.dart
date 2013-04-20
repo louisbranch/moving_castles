@@ -5,5 +5,5 @@ class Tile {
   bool disabled;
   Bulding building;
 
-  Tile({this.disabled: false});
+  Tile({this.disabled: false, this.building});
 }
