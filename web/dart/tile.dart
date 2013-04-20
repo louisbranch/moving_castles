@@ -1,10 +1,9 @@
 library tile;
+import 'building.dart';
 
 class Tile {
-  final int x, y;
-  final bool collision;
-  //bool buildable;
-  //bool hasBuild;
+  bool disabled;
+  Bulding building;
 
-  Tile(this.x, this.y, [this.collision = false]);
+  Tile({this.disabled: false});
 }

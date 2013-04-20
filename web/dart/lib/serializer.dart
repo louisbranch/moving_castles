@@ -13,5 +13,5 @@ List _mapRows(List rows) {
 }
 
 List _mapColumns(List columns) {
-  return columns.map((t) => new Tile(t['x'], t['y'], t['collision'])).toList();
+  return columns.map((t) => new Tile(disabled: t['disabled'])).toList();
 }

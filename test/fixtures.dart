@@ -3,15 +3,11 @@ String castle_json = '''{
     "tiles" : [
       [
         {
-          "x" : 1,
-          "y" : 1,
-          "collision" : false
+          "disabled" : true
         }
       ],
       [
         {
-          "x" : 1,
-          "y" : 1
         }
       ]
     ],
