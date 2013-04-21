@@ -1,4 +1,6 @@
 library castle;
+import 'tile.dart';
+import 'building.dart';
 import 'lib/serializer.dart' as serializer;
 
 class Castle {
@@ -14,6 +16,13 @@ class Castle {
     tileset = data['tileset'];
   }
 
-  build(Tile tile, Building building) { }
+  bool build(Tile tile, Building building) {
+    if (tile.valid()) {
+      tile.building = building;
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 }
