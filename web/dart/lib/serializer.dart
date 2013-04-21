@@ -17,6 +17,6 @@ List _mapColumns(List columns) {
 }
 
 Tile _parseTile(Map tile) {
-  bool disabled = tile['disabled'] == null ? false : tile['disabled'];
-  return new Tile(disabled: disabled);
+  bool powered = tile['powered'] == null ? false : tile['powered'];
+  return new Tile(powered: powered);
 }

@@ -13,4 +13,7 @@ class Castle {
     tiles = data['tiles'];
     tileset = data['tileset'];
   }
+
+  build(Tile tile, Building building) { }
+
 }
