@@ -3,21 +3,28 @@ import '../web/dart/tile.dart';
 import '../web/dart/building.dart';
 
 void main() {
-  var building = new Building('Forge');
 
   test('can be powered', () {
     var tile = new Tile(powered: true);
     expect(tile.powered, true);
   });
 
+  group('when setting a building', () {
+    var building = new Building('Forge');
+    var tile = new Tile(building: building);
+    test('sets the building for the tile', () => expect(tile.building, same(building)));
+    test('sets the tile for the building', () => expect(building.tile, same(tile)));
+  });
+
   group('#isFree', () {
 
     test('is false when has a building', () {
+      var building = new Building('Forge');
       var tile = new Tile(building: building);
       expect(tile.isFree(), isFalse);
     });
 
-    test('is true when has a building', () {
+    test('is true when does not has a building', () {
       var tile = new Tile();
       expect(tile.isFree(), isTrue);
     });
@@ -27,6 +34,7 @@ void main() {
   group('#valid', () {
 
     group('when is not powered', () {
+      var building = new Building('Forge');
       var tile = new Tile(powered: false, building: building);
       bool result = tile.valid();
       test('returns false', () => expect(result, isFalse));
@@ -34,6 +42,7 @@ void main() {
     });
 
     group('when is already has a building', () {
+      var building = new Building('Forge');
       var tile = new Tile(powered: true, building: building);
       bool result = tile.valid();
       test('returns false', () => expect(result, isFalse));

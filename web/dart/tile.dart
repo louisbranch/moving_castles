@@ -3,10 +3,20 @@ import 'building.dart';
 
 class Tile {
   bool powered;
-  Building building;
+  Building _building;
   List<String> errors = [];
 
-  Tile({this.powered: false, this.building});
+  Tile({this.powered: false, building}) {
+    if (building != null) {
+      this.building = building;
+    }
+  }
+
+  get building => _building;
+  set building(Building struct) {
+    _building = struct;
+    struct.tile = this;
+  }
 
   bool isFree() => building == null;
 
