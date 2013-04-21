@@ -6,7 +6,7 @@
       <template>
         <div template repeat='row in tiles' class='grid-row'>
           <div template repeat='tile in row' class='grid-1x1'>
-            <template instantiate='if tile.disabled'>DISABLED</template>
+            <template instantiate='if !tile.valid()'>DISABLED</template>
           </div>
         </div>
       </template>

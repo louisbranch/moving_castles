@@ -5,18 +5,9 @@ library scaffold;
 String castle = '''{
   "name" : "Baldurs Gate",
   "tiles" : [
-    [
-      { "disabled" : true },
-      { }, { }
-    ],
-    [
-      { "disabled" : true },
-      { }, { }
-    ],
-    [
-      { "disabled" : true },
-      { }, { }
-    ]
+    [ { }, { }, { } ],
+    [ { }, { }, { } ],
+    [ { }, { }, { } ]
   ],
   "tileset" : "castle.png"
 }''';
