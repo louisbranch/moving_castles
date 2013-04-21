@@ -8,12 +8,12 @@ class Tile {
 
   Tile({this.powered: false, this.building});
 
-  bool isFree() => building != null;
+  bool isFree() => building == null;
 
   bool valid() {
     errors.clear();
     if (!powered) { errors.add('Not mana powered'); }
-    if (isFree()) { errors.add('Already has a building'); }
+    if (!isFree()) { errors.add('Already has a building'); }
     return errors.isEmpty;
   }
 

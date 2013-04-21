@@ -13,12 +13,12 @@ void main() {
   group('#isFree', () {
 
     test('is false when has a building', () {
-      var tile = new Tile();
+      var tile = new Tile(building: building);
       expect(tile.isFree(), isFalse);
     });
 
     test('is true when has a building', () {
-      var tile = new Tile(building: building);
+      var tile = new Tile();
       expect(tile.isFree(), isTrue);
     });
 
