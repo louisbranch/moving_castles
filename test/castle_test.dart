@@ -1,43 +1,26 @@
 import 'package:unittest/unittest.dart';
-import 'package:unittest/mock.dart';
 import '../web/dart/castle.dart';
-import '../web/dart/tile.dart';
-import '../web/dart/building.dart';
-
-class TileMock extends Mock implements Tile {}
+import 'fixtures.dart' as fixtures;
 
 void main() {
 
-  var castle = new Castle('Baldurs Gate', [[], []], 'castle.png');
+  group('[new castle]', () {
 
-  group('#new', () {
+    var castle = new Castle('Baldurs Gate', 2, 2, 'castle.png');
 
     test('has a name', () => expect(castle.name, 'Baldurs Gate'));
-    test('has 2 dimensional list of tiles', () => expect(castle.tiles[0], []));
     test('has a tileset path', () => expect(castle.tileset, 'castle.png'));
+    test('has a empty map of tiles', () => expect(castle.map.length, 4));
 
   });
 
-  group('#building', () {
-    var building = new Building('Forge');
+  group('[castle from json]', () {
 
-    group('when tile is valid', () {
-      Tile tile = new TileMock();
-      tile.when(callsTo('valid')).thenReturn(true);
-      bool result = castle.build(tile, building);
-      test('returns true', () => expect(result, isTrue));
-      test('sets tile\'s building', () {
-        //FIXME
-        //tile.getLogs(callsTo('building=', building)).verify(happenedOnce);
-      });
-    });
+    String json = fixtures.castle;
+    var castle = new Castle.fromJson(json);
 
-    group('when tile is invalid', () {
-      Tile tile = new TileMock();
-      tile.when(callsTo('valid')).thenReturn(false);
-      bool result = castle.build(tile, building);
-      test('returns false', () => expect(result, isFalse));
-    });
+    test('has a name', () => expect(castle.name, 'Baldurs Gate'));
+    test('has a tileset path', () => expect(castle.tileset, 'castle.png'));
 
   });
 

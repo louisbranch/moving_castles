@@ -1,5 +1,4 @@
-library building;
-import 'tile.dart';
+part of castle;
 
 class Building {
   String name;
