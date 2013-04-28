@@ -32,6 +32,35 @@ class Castle {
   // Returns a list of all buildings
   List<Building> get buildings => map.values;
 
-  // Returns a tile given x, y coordinates
-  Tile findTile(int x, int y) => tiles.firstWhere((t) => t.x == x && t.y == y);
+  // Returns a tile that matches a coordinate
+  // or else returns null
+  Tile findTile(int x, int y) => tiles.firstWhere((t) => t.x == x && t.y == y
+                                 , orElse: () => null);
+
+  /// Coordinates for surrounding tiles
+  final List _coordinates = [
+    [-1, -1], [-1, 0], [-1, +1],
+    [0, -1],           [+1, 0],
+    [+1, -1], [0, +1], [+1, +1]
+  ];
+
+  // Returns 8 surrounding tiles from a coordinate
+  List<Tile> surroundingTiles(Tile tile) {
+    List tiles = [];
+
+    _coordinates.forEach((coord) {
+      int x = tile.x + coord[0];
+      int y = tile.y + coord[1];
+
+      Tile surrounding = findTile(x, y);
+
+      if (surrounding != null) {
+        tiles.add(surrounding);
+      }
+
+    });
+
+    return tiles;
+  }
+
 }
