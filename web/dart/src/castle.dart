@@ -5,10 +5,10 @@ class Castle {
   Map<Tile, Building> map = {};
 
   // Create a castle with an empty tiles map equals to
-  // width * height
-  Castle(this.name, width, height, [this.tileset]) {
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
+  // its square size
+  Castle(this.name, size, [this.tileset]) {
+    for (int x = 0; x < size; x++) {
+      for (int y = 0; y < size; y++) {
         var tile = new Tile(x, y);
         map[tile] = null;
       }
@@ -16,8 +16,8 @@ class Castle {
   }
 
   // Create a castle from a json representation
-  Castle.fromJson(String json) {
-    Map data = Json.parse(json);
+  Castle.fromJson(String castle) {
+    Map data = json.parse(castle);
     name = data['name'];
     data['map'].forEach((t) {
       var tile = new Tile.fromMap(t);
@@ -27,10 +27,10 @@ class Castle {
   }
 
   // Returns a list of all tiles
-  List<Tile> get tiles => map.keys;
+  List<Tile> get tiles => map.keys.toList();
 
   // Returns a list of all buildings
-  List<Building> get buildings => map.values;
+  List<Building> get buildings => map.values.toList();
 
   // Returns a tile that matches a coordinate
   // or else returns null
@@ -61,6 +61,11 @@ class Castle {
     });
 
     return tiles;
+  }
+
+  // Create a 2 dimensional tile list using
+  // their coordinates
+  List toGrid() {
   }
 
 }

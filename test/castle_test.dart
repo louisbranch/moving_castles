@@ -6,7 +6,7 @@ void main() {
 
   group('[new castle]', () {
 
-    var castle = new Castle('Baldurs Gate', 2, 2, 'castle.png');
+    var castle = new Castle('Baldurs Gate', 2, 'castle.png');
 
     test('has a name', () => expect(castle.name, 'Baldurs Gate'));
     test('has a tileset path', () => expect(castle.tileset, 'castle.png'));
@@ -27,7 +27,7 @@ void main() {
 
   group('[castle map]', () {
 
-    var castle = new Castle('Baldurs Gate', 0, 0);
+    var castle = new Castle('Baldurs Gate', 0);
     var tile = new Tile(0, 0);
     var building = new Building('Forge');
     castle.map[tile] = building;
@@ -39,7 +39,7 @@ void main() {
 
   group('[find tiles]', () {
 
-    var castle = new Castle('Baldurs Gate', 0, 0);
+    var castle = new Castle('Baldurs Gate', 0);
     var tile = new Tile(0, 0);
     castle.map[tile] = null;
 
@@ -64,6 +64,9 @@ void main() {
 
     });
 
+  });
+
+  group('[tiles grid]', () {
   });
 
 }
