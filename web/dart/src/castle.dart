@@ -33,7 +33,8 @@ class Castle {
   // Returns a list of all buildings
   List<Building> get buildings => map.values.toList();
 
-  // Returns a cached 2d list of tiles
+  // Returns a cached 2d list of tiles and buildings
+  // as a map {'tile': <Tile>, 'building': <Building>}
   List<List> get grid {
     if (_grid == null) {
       _grid = _createGrid();
@@ -72,19 +73,16 @@ class Castle {
     return tiles;
   }
 
-  /// Create a 2 dimensional tile list using
-  /// their coordinates
+  /// Create a 2 dimensional tile/building list using
+  /// tiles coordinates
   List _createGrid() {
-    int count = 0;
-    int offset = 0;
-    int size = math.sqrt(tiles.length).toInt();
+    int size = math.sqrt(map.length).toInt();
     List grid = new List(size);
 
-    while (count < grid.length) {
-      grid[count] = tiles.sublist(offset, offset + size);
-      offset += size;
-      count++;
-    }
+    map.forEach((tile, building) {
+      if (grid[tile.x] == null) { grid[tile.x] = new List(size); }
+      grid[tile.x][tile.y] = { 'tile' : tile, 'building' : building };
+    });
 
     return grid;
   }

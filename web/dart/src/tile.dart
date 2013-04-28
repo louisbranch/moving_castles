@@ -13,8 +13,11 @@ class Tile {
     y = map['y'];
   }
 
+  // Return tile coordinates
   String toString() => '$x:$y';
 
+  // Check if tiles is powered
+  // Add an error to error list if isn't
   bool valid() {
     errors.clear();
     if (!powered) { errors.add('Not mana powered'); }

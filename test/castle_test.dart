@@ -67,11 +67,19 @@ void main() {
 
   group('[tiles grid]', () {
 
-    int size = 3;
+    int size = 2;
     var castle = new Castle('Baldurs Gate', size);
+    Tile tile1 = castle.findTile(0,0);
+    Tile tile2 = castle.findTile(0,1);
 
     test('generates a list equals to its size', () => expect(castle.grid, hasLength(size)));
-    test('each sublist has sorted tiles', () => expect(castle.grid.first, castle.tiles.sublist(0,size)));
+
+    test('each sublist has sorted tiles as a map {"tile": <Tile>, "building": <Building>}', () {
+      expect(castle.grid.first, [
+        {'tile': tile1, 'building': null},
+        {'tile': tile2, 'building': null}
+      ]);
+    });
 
   });
 
