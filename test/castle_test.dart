@@ -26,9 +26,13 @@ void main() {
   });
 
   group('[castle map]', () {
-    var castle = new Castle('Baldurs Gate', 1, 1, 'castle.png');
+    var castle = new Castle('Baldurs Gate', 0, 0, 'castle.png');
+    var tile = new Tile(0, 0);
+    var building = new Building('Forge');
+    castle.map[tile] = building;
 
-    test('has a list of tiles', () => expect(castle.tiles.first is Tile, isTrue));
+    test('has a list of tiles', () => expect(castle.tiles, contains(tile)));
+    test('has a list of buildings', () => expect(castle.buildings, contains(building)));
   });
 
 }
