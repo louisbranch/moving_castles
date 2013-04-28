@@ -87,4 +87,8 @@ class Castle {
     return grid;
   }
 
+  void select(Tile tile) {
+    print(tile);
+  }
+
 }

@@ -4,8 +4,8 @@
   <body>
     <element name='grid' constructor='Grid' extends='div'>
       <template>
-        <div template repeat='row in tiles' class='grid-row'>
-          <div template repeat='map in row' class='grid-1x1'>
+        <div template repeat='row in castle.grid' class='grid-row'>
+          <div template on-click='castle.select(map["tile"])' repeat='map in row' class='grid-1x1'>
             <template instantiate='if !map["tile"].valid()'>DISABLED</template>
           </div>
         </div>
