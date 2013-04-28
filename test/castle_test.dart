@@ -4,7 +4,7 @@ import 'fixtures.dart' as fixtures;
 
 void main() {
 
-  group('[new castle]', () {
+  group('[new]', () {
 
     var castle = new Castle('Baldurs Gate', 2, 'castle.png');
 
@@ -14,7 +14,7 @@ void main() {
 
   });
 
-  group('[castle from json]', () {
+  group('[from json]', () {
 
     String json = fixtures.castle;
     var castle = new Castle.fromJson(json);
@@ -25,7 +25,7 @@ void main() {
 
   });
 
-  group('[castle map]', () {
+  group('[map]', () {
 
     var castle = new Castle('Baldurs Gate', 0);
     var tile = new Tile(0, 0);
