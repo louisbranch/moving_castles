@@ -2,7 +2,7 @@ part of castle;
 
 class Castle {
   String name, tileset;
-  Map<Tile, Building> map = {};
+  Map<Tile, Building> map = new Map();
   List _grid;
 
   // Create a castle with an empty tiles map equals to
@@ -48,9 +48,9 @@ class Castle {
 
   /// Coordinates for surrounding tiles
   final List _coordinates = [
-    [-1, -1], [-1, 0], [-1, +1],
-    [0, -1],           [+1, 0],
-    [+1, -1], [0, +1], [+1, +1]
+    [-1, -1], [-1, 0], [-1, 1],
+    [0, -1],           [1, 0],
+    [1, -1],  [0, 1],  [1, 1]
   ];
 
   // Returns 8 surrounding tiles from a coordinate
