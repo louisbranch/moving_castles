@@ -8,7 +8,12 @@ class Tile {
   Tile(this.x, this.y, {this.powered: false});
 
   // Creates a tile from a map representation
-  Tile.fromMap(Map map);
+  Tile.fromMap(Map map) {
+    x = map['x'];
+    y = map['y'];
+  }
+
+  String toString() => '$x:$y';
 
   bool valid() {
     errors.clear();

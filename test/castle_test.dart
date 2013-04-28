@@ -21,7 +21,14 @@ void main() {
 
     test('has a name', () => expect(castle.name, 'Baldurs Gate'));
     test('has a tileset path', () => expect(castle.tileset, 'castle.png'));
+    test('has a map of tiles', () => expect(castle.map.keys.first is Tile, isTrue));
 
+  });
+
+  group('[castle map]', () {
+    var castle = new Castle('Baldurs Gate', 1, 1, 'castle.png');
+
+    test('has a list of tiles', () => expect(castle.tiles.first is Tile, isTrue));
   });
 
 }

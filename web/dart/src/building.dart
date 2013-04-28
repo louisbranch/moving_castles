@@ -2,8 +2,11 @@ part of castle;
 
 class Building {
   String name;
-  Tile tile;
+  Map cost;
+  int time;
 
   Building(this.name);
+
+  String toString() => name;
 
 }

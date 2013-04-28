@@ -26,8 +26,11 @@ class Castle {
     tileset = data['tileset'];
   }
 
-  get tiles => map.keys;
-  get buildings => map.values;
+  // Returns a list of all tiles
+  List<Tile> get tiles => map.keys;
+
+  // Returns a list of all buildings
+  List<Building> get buildings => map.values;
 
   // Assign a building to a tile on map
   bool build(Tile tile, Building building) {
