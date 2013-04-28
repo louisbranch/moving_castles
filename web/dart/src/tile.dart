@@ -5,7 +5,7 @@ class Tile {
   bool powered;
   List<String> errors = [];
 
-  Tile(this.x, this.y, {this.powered: false});
+  Tile(this.x, this.y);
 
   // Creates a tile from a map representation
   Tile.fromMap(Map map) {
