@@ -32,13 +32,6 @@ class Castle {
   // Returns a list of all buildings
   List<Building> get buildings => map.values;
 
-  // Assign a building to a tile on map
-  bool build(Tile tile, Building building) {
-    if (tile.valid()) {
-      tile.building = building;
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // Returns a tile given x, y coordinates
+  Tile findTile(int x, int y) => tiles.firstWhere((t) => t.x == x && t.y == y);
 }

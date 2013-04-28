@@ -35,4 +35,13 @@ void main() {
     test('has a list of buildings', () => expect(castle.buildings, contains(building)));
   });
 
+  group('[find tiles]', () {
+    var castle = new Castle('Baldurs Gate', 0, 0);
+    var tile = new Tile(0, 0);
+    castle.map[tile] = null;
+
+    test('returns the tile with the x, y coordinates', () => expect(castle.findTile(0,0), tile));
+    test('throws and error', () => expect(() => castle.findTile(1,0), throws));
+  });
+
 }
