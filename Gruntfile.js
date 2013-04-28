@@ -11,7 +11,7 @@ module.exports = function(grunt) {
     },
     exec: {
       test: {
-        cmd: './test/run.sh'
+        cmd: 'dart --checked test/castle_test.dart'
       },
       build: {
         cmd: './build.sh'
