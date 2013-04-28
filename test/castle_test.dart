@@ -10,7 +10,7 @@ void main() {
 
     test('has a name', () => expect(castle.name, 'Baldurs Gate'));
     test('has a tileset path', () => expect(castle.tileset, 'castle.png'));
-    test('has a empty map of tiles', () => expect(castle.map, hasLength(4)));
+    test('has a empty map of tiles equals to size ** 2', () => expect(castle.map, hasLength(4)));
 
   });
 
@@ -50,8 +50,7 @@ void main() {
 
   group('[surrounding tiles]', () {
 
-    String json = fixtures.castle;
-    var castle = new Castle.fromJson(json);
+    var castle = new Castle('Baldurs Gate', 3);
     Tile tile = castle.findTile(1,1);
 
     test('returns 8 surrounding tiles', () => expect(castle.surroundingTiles(tile), hasLength(8)));
@@ -67,6 +66,13 @@ void main() {
   });
 
   group('[tiles grid]', () {
+
+    int size = 3;
+    var castle = new Castle('Baldurs Gate', size);
+
+    test('generates a list equals to its size', () => expect(castle.grid, hasLength(size)));
+    test('each sublist has sorted tiles', () => expect(castle.grid.first, castle.tiles.sublist(0,size)));
+
   });
 
 }

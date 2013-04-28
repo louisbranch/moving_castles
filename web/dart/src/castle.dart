@@ -3,6 +3,7 @@ part of castle;
 class Castle {
   String name, tileset;
   Map<Tile, Building> map = {};
+  List _grid;
 
   // Create a castle with an empty tiles map equals to
   // its square size
@@ -31,6 +32,14 @@ class Castle {
 
   // Returns a list of all buildings
   List<Building> get buildings => map.values.toList();
+
+  // Returns a cached 2d list of tiles
+  List<List> get grid {
+    if (_grid == null) {
+      _grid = _createGrid();
+    }
+    return _grid;
+  }
 
   // Returns a tile that matches a coordinate
   // or else returns null
@@ -63,9 +72,21 @@ class Castle {
     return tiles;
   }
 
-  // Create a 2 dimensional tile list using
-  // their coordinates
-  List toGrid() {
+  /// Create a 2 dimensional tile list using
+  /// their coordinates
+  List _createGrid() {
+    int count = 0;
+    int offset = 0;
+    int size = math.sqrt(tiles.length).toInt();
+    List grid = new List(size);
+
+    while (count < grid.length) {
+      grid[count] = tiles.sublist(offset, offset + size);
+      offset += size;
+      count++;
+    }
+
+    return grid;
   }
 
 }
