@@ -2,7 +2,7 @@ part of castle;
 
 class Tile {
   int x, y;
-  bool powered;
+  bool powered = false;
   List<String> errors = [];
 
   Tile(this.x, this.y);
