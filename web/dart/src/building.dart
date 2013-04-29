@@ -11,4 +11,18 @@ abstract class Building {
 
 class ManaSource extends Building {
   String name = 'Mana Source';
+
+  void powerOn(Castle castle, Tile tile) {
+    _selfTile(castle, tile);
+    _surroundingTiles(castle, tile);
+  }
+
+  void _selfTile(Castle castle, Tile tile) {
+    tile.powered = true;
+  }
+
+  void _surroundingTiles(Castle castle, Tile tile) {
+    castle.surroundingTiles(tile).forEach((t) => t.powered = true);
+  }
+
 }
