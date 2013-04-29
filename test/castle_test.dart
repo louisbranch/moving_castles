@@ -1,5 +1,6 @@
 import 'package:unittest/unittest.dart';
 import '../web/dart/castle.dart';
+import '../web/dart/building.dart';
 import 'fixtures.dart' as fixtures;
 
 void main() {
@@ -29,7 +30,7 @@ void main() {
 
     var castle = new Castle('Baldurs Gate', 0);
     var tile = new Tile(0, 0);
-    var building = new Building('Forge');
+    var building = new ManaSource();
     castle.map[tile] = building;
 
     test('has a list of tiles', () => expect(castle.tiles, contains(tile)));

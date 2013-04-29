@@ -1,12 +1,14 @@
-part of castle;
+part of building;
 
-class Building {
+abstract class Building {
   String name;
-  Map cost;
-  int time;
-
-  Building(this.name);
+  //int cost;
+  //int build_time;
 
   String toString() => name;
 
+}
+
+class ManaSource extends Building {
+  String name = 'Mana Source';
 }
