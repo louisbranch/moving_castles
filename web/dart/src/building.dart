@@ -12,13 +12,13 @@ abstract class Building {
 class ManaSource extends Building {
   String name = 'Mana Source';
 
-  /// Power tile built on and all surrounding tiles
+  /** Power tile built on and all surrounding tiles */
   void powerOn(Castle castle, Tile tile) {
     _selfTile(castle, tile, true);
     _surroundingTiles(castle, tile, true);
   }
 
-  /// Unpower tile built on and all surrounding tiles
+  /** Unpower tile built on and all surrounding tiles */
   void powerOff(Castle castle, Tile tile) {
     _selfTile(castle, tile, false);
     _surroundingTiles(castle, tile, false);

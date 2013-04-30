@@ -29,14 +29,16 @@ class Castle {
     tileset = data['tileset'];
   }
 
-  /// Returns a list of all tiles
+  /** Returns a list of all tiles */
   List<Tile> get tiles => map.keys.toList();
 
-  /// Returns a list of all buildings
+  /** Returns a list of all buildings */
   List<Building> get buildings => map.values.toList();
 
-  /// Returns a cached 2d list of tiles and buildings
-  /// as a map {'tile': <Tile>, 'building': <Building>}
+  /**
+    * Returns a cached 2d list of tiles and buildings
+    * as a map {'tile': <Tile>, 'building': <Building>}
+    */
   List<List> get grid {
     if (_grid == null) {
       _grid = _createGrid();
@@ -44,19 +46,21 @@ class Castle {
     return _grid;
   }
 
-  /// Returns a tile that matches a coordinate
-  /// or else returns null
+  /**
+    * Returns a tile that matches a coordinate
+    * or else returns null
+    */
   Tile findTile(int x, int y) => tiles.firstWhere((t) => t.x == x && t.y == y
                                  , orElse: () => null);
 
-  //// Coordinates for surrounding tiles
+  /** Coordinates for surrounding tiles */
   final List _coordinates = [
     [-1, -1], [-1, 0], [-1, 1],
     [0, -1],           [1, 0],
     [1, -1],  [0, 1],  [1, 1]
   ];
 
-  /// Returns 8 surrounding tiles from a coordinate
+  /** Returns 8 surrounding tiles from a coordinate */
   List<Tile> surroundingTiles(Tile tile) {
     List tiles = [];
 
@@ -75,8 +79,10 @@ class Castle {
     return tiles;
   }
 
-  /// Create a 2 dimensional tile/building list using
-  /// tiles coordinates
+  /**
+    * Create a 2 dimensional tile/building list using
+    * tiles coordinates
+    */
   List _createGrid() {
     int size = math.sqrt(map.length).toInt();
     List grid = new List(size);
