@@ -9,8 +9,8 @@ class Castle {
   List<String> errors = [];
 
   /**
-   * Create a castle with an empty tiles map equals to
-   * its square size
+   * Create a [castle] with an empty [tiles] map equals to
+   * its square [size]
    */
   Castle(this.name, size, [this.tileset]) {
     for (int x = 0; x < size; x++) {
@@ -21,7 +21,7 @@ class Castle {
     }
   }
 
-  /** Create a castle from a json representation */
+  /** Create a [castle] from a [json] representation */
   Castle.fromJson(String castle) {
     Map data = json.parse(castle);
     name = data['name'];
@@ -32,14 +32,14 @@ class Castle {
     tileset = data['tileset'];
   }
 
-  /** Returns a list of all tiles */
+  /** Returns a list of all [tiles] */
   List<Tile> get tiles => map.keys.toList();
 
   /** Returns a list of all buildings */
   List<Building> get buildings => map.values.toList();
 
   /**
-    * Returns a cached 2d list of tiles and buildings
+    * Returns a cached 2d list of [tiles] and [buildings]
     * as a map {'tile': <Tile>, 'building': <Building>}
     */
   List<List> get grid {
@@ -50,20 +50,20 @@ class Castle {
   }
 
   /**
-    * Returns a tile that matches a coordinate
+    * Returns a [tile] that matches a coordinate
     * or else returns null
     */
   Tile findTile(int x, int y) => tiles.firstWhere((t) => t.x == x && t.y == y
                                  , orElse: () => null);
 
-  /** Coordinates for surrounding tiles */
+  /** Coordinates for surrounding [tiles] */
   final List _coordinates = [
     [-1, -1], [-1, 0], [-1, 1],
     [0, -1],           [1, 0],
     [1, -1],  [0, 1],  [1, 1]
   ];
 
-  /** Returns 8 surrounding tiles from a coordinate */
+  /** Returns 8 surrounding [tiles] from a coordinate */
   List<Tile> surroundingTiles(Tile tile) {
     List tiles = [];
 
@@ -83,8 +83,8 @@ class Castle {
   }
 
   /**
-    * Create a 2 dimensional tile/building list using
-    * tiles coordinates
+    * Create a 2 dimensional [tile] : [building] list using
+    * [tiles] coordinates
     */
   List _createGrid() {
     int size = math.sqrt(map.length).toInt();
