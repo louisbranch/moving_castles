@@ -5,6 +5,9 @@ class Castle {
   Map<Tile, Building> map = new Map();
   List _grid;
 
+  /** List errors during validations */
+  List<String> errors = [];
+
   /**
    * Create a castle with an empty tiles map equals to
    * its square size
@@ -99,8 +102,19 @@ class Castle {
     print(tile);
   }
 
+  /**
+    * Check if [tile] is empty and is powered
+    * Add errors to error list if it isn't
+    * If no errors, assign the [building] to the [tile]
+    * and call powerOn on [building] passing the [castle]
+    * and the [tile]
+    */
   bool build(Building building, Tile tile) {
-    if (map[tile] == null && tile.powered) {
+    errors.clear();
+    if (map[tile] != null) { errors.add('Tile already has building'); }
+    if (!tile.powered) { errors.add('Not mana powered'); }
+
+    if (errors.isEmpty) {
       map[tile] = building;
       building.powerOn(this, tile);
       return true;
