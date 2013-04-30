@@ -84,4 +84,20 @@ void main() {
 
   });
 
+  group('[building]', () {
+
+    var castle = new Castle('Baldurs Gate', 0);
+    var building = new ManaSource();
+
+    group('[when tile is available]', () {
+      var tile = new Tile(0, 0);
+      tile.powered = true;
+      castle.map[tile] = null;
+      bool result = castle.build(building, tile);
+
+      test('returns true', () => expect(result, isTrue));
+    });
+
+  });
+
 }
