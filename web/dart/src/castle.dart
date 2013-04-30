@@ -111,7 +111,7 @@ class Castle {
     */
   bool build(Building building, Tile tile) {
     errors.clear();
-    if (map[tile] != null) { errors.add('Tile already has building'); }
+    if (map[tile] != null) { errors.add('Tile already has a building'); }
     if (!tile.powered) { errors.add('Not mana powered'); }
 
     if (errors.isEmpty) {
