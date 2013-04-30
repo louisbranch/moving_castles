@@ -1,0 +1,317 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ChangeRecord class / web_ui.observe.observable Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="web_ui.observe.observable" data-type="ChangeRecord">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../web_ui.observe.observable.html">web_ui.observe.observable</a> &rsaquo; <a href="../web_ui.observe.observable/ChangeRecord.html">ChangeRecord</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ChangeRecord</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Records a change to an <a class="crossref" href="../web_ui.observe.observable/Observable.html">Observable</a>. </p>
+<pre class="source">
+class ChangeRecord {
+ // Note: the target object is omitted because it makes it difficult
+ // to proxy change records if you're using an observable type to aid
+ // your implementation.
+ // However: if we allow one observer to get batched changes for multiple
+ // objects, we'll need to add target.
+
+ // Note: type values were chosen for easy masking in the observable expression
+ // implementation. However in [type] it will only have one value.
+
+ /** [type] denoting set of a field. */
+ static const FIELD = 1;
+
+ // TODO(jmesserly): this is conceptually a remove+insert?
+ /** [type] denoting an in-place update event using `[]=`. */
+ static const INDEX = 2;
+
+ /**
+  * [type] denoting an insertion into a list. Insertions prepend in front of
+  * the given index, so insert at 0 means an insertion at the beginning of the
+  * list. The index will be provided in [name].
+  */
+ static const INSERT = INDEX | 4;
+
+ /** [type] denoting a remove from a list. */
+ static const REMOVE = INDEX | 8;
+
+ /** Whether the change was a [FIELD], [INDEX], [INSERT], or [REMOVE]. */
+ final int type;
+
+ /**
+  * The key that changed. The value depends on the [type] of change:
+  *
+  * - [FIELD]: the field name that was set.
+  * - [INDEX], [INSERT], and [REMOVE]: the index or key that was changed.
+  *   This will be an integer for [ObservableList] but can be anything for
+  *   [ObservableMap] or [ObservableSet].
+  */
+ final key;
+
+ /** The previous value of the member. */
+ final oldValue;
+
+ /** The new value of the member. */
+ final newValue;
+
+ ChangeRecord(this.type, this.key, this.oldValue, this.newValue);
+
+ // Note: these two methods are here mainly to make testing easier.
+ bool operator ==(other) {
+   return other is ChangeRecord &amp;&amp; type == other.type &amp;&amp; key == other.key &amp;&amp;
+       oldValue == other.oldValue &amp;&amp; newValue == other.newValue;
+ }
+
+ int get hashCode =&gt; hash4(type, key, oldValue, newValue);
+
+ String toString() {
+   // TODO(jmesserly): const map would be nice here, but it must be string
+   // literal :(
+   String typeStr;
+   switch (type) {
+     case FIELD: typeStr = 'field'; break;
+     case INDEX: typeStr = 'index'; break;
+     case INSERT: typeStr = 'insert'; break;
+     case REMOVE: typeStr = 'remove'; break;
+   }
+   return '#&lt;ChangeRecord $typeStr $key from $oldValue to $newValue&gt;';
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Static Properties</h3>
+<div class="field"><h4 id="FIELD">
+<button class="show-code">Code</button>
+const         <strong>FIELD</strong> <a class="anchor-link"
+            href="#FIELD"
+            title="Permalink to ChangeRecord.FIELD">#</a>
+        </h4>
+        <div class="doc">
+<p><a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#type">type</a> denoting set of a field. </p>
+<pre class="source">
+static const FIELD = 1
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="INDEX">
+<button class="show-code">Code</button>
+const         <strong>INDEX</strong> <a class="anchor-link"
+            href="#INDEX"
+            title="Permalink to ChangeRecord.INDEX">#</a>
+        </h4>
+        <div class="doc">
+<p><a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#type">type</a> denoting an in-place update event using <code>[]=</code>. </p>
+<pre class="source">
+static const INDEX = 2
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="INSERT">
+<button class="show-code">Code</button>
+const         <strong>INSERT</strong> <a class="anchor-link"
+            href="#INSERT"
+            title="Permalink to ChangeRecord.INSERT">#</a>
+        </h4>
+        <div class="doc">
+<p><a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#type">type</a> denoting an insertion into a list. Insertions prepend in front of
+the given index, so insert at 0 means an insertion at the beginning of the
+list. The index will be provided in <code>name</code>.</p>
+<pre class="source">
+static const INSERT = INDEX | 4
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="REMOVE">
+<button class="show-code">Code</button>
+const         <strong>REMOVE</strong> <a class="anchor-link"
+            href="#REMOVE"
+            title="Permalink to ChangeRecord.REMOVE">#</a>
+        </h4>
+        <div class="doc">
+<p><a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#type">type</a> denoting a remove from a list. </p>
+<pre class="source">
+static const REMOVE = INDEX | 8
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="ChangeRecord">
+<button class="show-code">Code</button>
+new <strong>ChangeRecord</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> type, key, oldValue, newValue) <a class="anchor-link" href="#ChangeRecord"
+              title="Permalink to ChangeRecord.ChangeRecord">#</a></h4>
+<div class="doc">
+<pre class="source">
+ChangeRecord(this.type, this.key, this.oldValue, this.newValue);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="hashCode">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to ChangeRecord.hashCode">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#hashCode">hashCode</a> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+int get hashCode =&gt; hash4(type, key, oldValue, newValue);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="key">
+<button class="show-code">Code</button>
+final         <strong>key</strong> <a class="anchor-link"
+            href="#key"
+            title="Permalink to ChangeRecord.key">#</a>
+        </h4>
+        <div class="doc">
+<p>The key that changed. The value depends on the <a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#type">type</a> of change:</p><ul><li><a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#FIELD">FIELD</a>: the field name that was set.</li><li>
+<p><a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#INDEX">INDEX</a>, <a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#INSERT">INSERT</a>, and <a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#REMOVE">REMOVE</a>: the index or key that was changed.
+  This will be an integer for <code>ObservableList</code> but can be anything for
+  <code>ObservableMap</code> or <code>ObservableSet</code>.</p></li></ul>
+<pre class="source">
+final key
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="newValue">
+<button class="show-code">Code</button>
+final         <strong>newValue</strong> <a class="anchor-link"
+            href="#newValue"
+            title="Permalink to ChangeRecord.newValue">#</a>
+        </h4>
+        <div class="doc">
+<p>The new value of the member. </p>
+<pre class="source">
+final newValue
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="oldValue">
+<button class="show-code">Code</button>
+final         <strong>oldValue</strong> <a class="anchor-link"
+            href="#oldValue"
+            title="Permalink to ChangeRecord.oldValue">#</a>
+        </h4>
+        <div class="doc">
+<p>The previous value of the member. </p>
+<pre class="source">
+final oldValue
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="type">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>type</strong> <a class="anchor-link"
+            href="#type"
+            title="Permalink to ChangeRecord.type">#</a>
+        </h4>
+        <div class="doc">
+<p>Whether the change was a <a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#FIELD">FIELD</a>, <a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#INDEX">INDEX</a>, <a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#INSERT">INSERT</a>, or <a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#REMOVE">REMOVE</a>. </p>
+<pre class="source">
+final int type
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Operators</h3>
+<div class="method"><h4 id="==">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(other) <a class="anchor-link" href="#=="
+              title="Permalink to ChangeRecord.operator ==">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>The equality operator.</p>
+<p>The default behavior for all <code>Object</code>s is to return true if and
+only if <code>this</code> and 
+<span class="param">other</span> are the same object.</p>
+<p>If a subclass overrides the equality operator it should override
+the <a class="crossref" href="../web_ui.observe.observable/ChangeRecord.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+bool operator ==(other) {
+ return other is ChangeRecord &amp;&amp; type == other.type &amp;&amp; key == other.key &amp;&amp;
+     oldValue == other.oldValue &amp;&amp; newValue == other.newValue;
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to ChangeRecord.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+String toString() {
+ // TODO(jmesserly): const map would be nice here, but it must be string
+ // literal :(
+ String typeStr;
+ switch (type) {
+   case FIELD: typeStr = 'field'; break;
+   case INDEX: typeStr = 'index'; break;
+   case INSERT: typeStr = 'insert'; break;
+   case REMOVE: typeStr = 'remove'; break;
+ }
+ return '#&lt;ChangeRecord $typeStr $key from $oldValue to $newValue&gt;';
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:36.495</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

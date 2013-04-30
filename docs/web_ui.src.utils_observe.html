@@ -1,0 +1,115 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>web_ui.src.utils_observe Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="web_ui.src.utils_observe">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Dart Documentation</a>
+         &rsaquo; <a href="web_ui.src.utils_observe.html">web_ui.src.utils_observe</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>web_ui.src.utils_observe</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="setImmediate">
+<button class="show-code">Code</button>
+void <strong>setImmediate</strong>(void callback()) <a class="anchor-link" href="#setImmediate"
+              title="Permalink to setImmediate">#</a></h4>
+<div class="doc">
+<p>Adds an event to call 
+<span class="param">callback</span>, so the event loop will call this after the
+current stack has unwound.</p>
+<pre class="source">
+void setImmediate(void callback()) {
+ var port = new ReceivePort();
+ port.receive((msg, sendPort) {
+   port.close();
+   callback();
+ });
+ port.toSendPort().send(null);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="hash4">
+<button class="show-code">Code</button>
+dynamic <strong>hash4</strong>(w, x, y, z) <a class="anchor-link" href="#hash4"
+              title="Permalink to hash4">#</a></h4>
+<div class="doc">
+<pre class="source">
+hash4(w, x, y, z) =&gt; hash2(hash2(w, x), hash2(y, z));
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="hash3">
+<button class="show-code">Code</button>
+dynamic <strong>hash3</strong>(x, y, z) <a class="anchor-link" href="#hash3"
+              title="Permalink to hash3">#</a></h4>
+<div class="doc">
+<pre class="source">
+hash3(x, y, z) =&gt; hash2(hash2(x, y), z);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="hash2">
+<button class="show-code">Code</button>
+dynamic <strong>hash2</strong>(x, y) <a class="anchor-link" href="#hash2"
+              title="Permalink to hash2">#</a></h4>
+<div class="doc">
+<pre class="source">
+hash2(x, y) =&gt; x.hashCode * 31 + y.hashCode;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Abstract Classes</h3>
+          <div class="type">
+          <h4>
+            <a href="web_ui.src.utils_observe/IterableWorkaround.html"><strong>IterableWorkaround</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="web_ui.src.utils_observe/ListMixinWorkaround.html"><strong>ListMixinWorkaround</strong></a>
+          </h4>
+          </div>
+          
+</div>
+<div>
+<h3>Classes</h3>
+          <div class="type">
+          <h4>
+            <a href="web_ui.src.utils_observe/Arrays.html"><strong>Arrays</strong></a>
+          </h4>
+          </div>
+          
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:36.590</div>
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

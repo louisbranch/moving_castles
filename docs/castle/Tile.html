@@ -1,0 +1,179 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Tile class / castle Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="castle" data-type="Tile">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../castle.html">castle</a> &rsaquo; <a href="../castle/Tile.html">Tile</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Tile</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class Tile {
+ int x, y;
+ bool powered = false;
+ List&lt;String&gt; errors = [];
+
+ Tile(this.x, this.y);
+
+ /// Creates a tile from a map representation
+ Tile.fromMap(Map map) {
+   x = map['x'];
+   y = map['y'];
+ }
+
+ /// Return tile coordinates
+ String toString() =&gt; '$x:$y';
+
+ /// Check if tiles is powered
+ /// Add an error to error list if isn't
+ bool valid() {
+   errors.clear();
+   if (!powered) { errors.add('Not mana powered'); }
+   return errors.isEmpty;
+ }
+
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="Tile">
+<button class="show-code">Code</button>
+new <strong>Tile</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> x, <a href="http://api.dartlang.org/dart_core/int.html">int</a> y) <a class="anchor-link" href="#Tile"
+              title="Permalink to Tile.Tile">#</a></h4>
+<div class="doc">
+<pre class="source">
+Tile(this.x, this.y);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="Tile.fromMap">
+<button class="show-code">Code</button>
+new <strong>Tile.fromMap</strong>(<a href="http://api.dartlang.org/dart_core/Map.html">Map</a> map) <a class="anchor-link" href="#Tile.fromMap"
+              title="Permalink to Tile.Tile.fromMap">#</a></h4>
+<div class="doc">
+<p>Creates a tile from a map representation</p>
+<pre class="source">
+Tile.fromMap(Map map) {
+ x = map['x'];
+ y = map['y'];
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="errors">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt;         <strong>errors</strong> <a class="anchor-link"
+            href="#errors"
+            title="Permalink to Tile.errors">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+List&lt;String&gt; errors = []
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="powered">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>powered</strong> <a class="anchor-link"
+            href="#powered"
+            title="Permalink to Tile.powered">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+bool powered = false
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="x">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>x</strong> <a class="anchor-link"
+            href="#x"
+            title="Permalink to Tile.x">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+int x
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="y">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>y</strong> <a class="anchor-link"
+            href="#y"
+            title="Permalink to Tile.y">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+int x, y
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to Tile.toString">#</a></h4>
+<div class="doc">
+<p>Return tile coordinates</p>
+<pre class="source">
+String toString() =&gt; '$x:$y';
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="valid">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>valid</strong>() <a class="anchor-link" href="#valid"
+              title="Permalink to Tile.valid">#</a></h4>
+<div class="doc">
+<p>Check if tiles is powered
+Add an error to error list if isn't</p>
+<pre class="source">
+bool valid() {
+ errors.clear();
+ if (!powered) { errors.add('Not mana powered'); }
+ return errors.isEmpty;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:35.011</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

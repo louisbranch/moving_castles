@@ -1,0 +1,207 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ChangeNotification class / web_ui.observe.observable Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="web_ui.observe.observable" data-type="ChangeNotification">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../web_ui.observe.observable.html">web_ui.observe.observable</a> &rsaquo; <a href="../web_ui.observe.observable/ChangeNotification.html">ChangeNotification</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ChangeNotification</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A notification of a change to an <a class="crossref" href="../web_ui.observe.observable/ObservableExpression.html">ObservableExpression</a> that is passed to a
+<a class="crossref" href="../web_ui.observe.observable/ChangeObserver.html">ChangeObserver</a>.</p>
+<pre class="source">
+class ChangeNotification {
+
+ /** Previous value seen on the watched expression. */
+ final oldValue;
+
+ /** New value seen on the watched expression. */
+ final newValue;
+
+ /**
+  * Change records for this object, or null. This property will be non-null
+  * if [oldValue] and [newValue] are the same [Observable] object, but we
+  * observed changes to the value itself.
+  *
+  * These records can be used for more efficient updates. For example if
+  * updating a list of items, only new items can be rendered instead of
+  * generating all of the content again.
+  */
+ final List&lt;ChangeRecord&gt; changes;
+
+ ChangeNotification(this.oldValue, this.newValue, [this.changes]);
+
+ // Note: these two methods are here mainly to make testing easier.
+ bool operator ==(other) {
+   return other is ChangeNotification &amp;&amp; oldValue == other.oldValue &amp;&amp;
+       newValue == other.newValue &amp;&amp; changes == other.changes;
+ }
+
+ int get hashCode =&gt; hash3(oldValue, newValue, changes);
+
+ String toString() {
+   if (changes != null) return '#&lt;ChangeNotification to $newValue: $changes&gt;';
+   return '#&lt;ChangeNotification from $oldValue to $newValue&gt;';
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="ChangeNotification">
+<button class="show-code">Code</button>
+new <strong>ChangeNotification</strong>(oldValue, newValue, [<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.observable/ChangeRecord.html">ChangeRecord</a>&gt; changes]) <a class="anchor-link" href="#ChangeNotification"
+              title="Permalink to ChangeNotification.ChangeNotification">#</a></h4>
+<div class="doc">
+<pre class="source">
+ChangeNotification(this.oldValue, this.newValue, [this.changes]);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="changes">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.observable/ChangeRecord.html">ChangeRecord</a>&gt;         <strong>changes</strong> <a class="anchor-link"
+            href="#changes"
+            title="Permalink to ChangeNotification.changes">#</a>
+        </h4>
+        <div class="doc">
+<p>Change records for this object, or null. This property will be non-null
+if <a class="crossref" href="../web_ui.observe.observable/ChangeNotification.html#oldValue">oldValue</a> and <a class="crossref" href="../web_ui.observe.observable/ChangeNotification.html#newValue">newValue</a> are the same <a class="crossref" href="../web_ui.observe.observable/Observable.html">Observable</a> object, but we
+observed changes to the value itself.</p>
+<p>These records can be used for more efficient updates. For example if
+updating a list of items, only new items can be rendered instead of
+generating all of the content again.</p>
+<pre class="source">
+final List&lt;ChangeRecord&gt; changes
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="hashCode">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to ChangeNotification.hashCode">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <a class="crossref" href="../web_ui.observe.observable/ChangeNotification.html#hashCode">hashCode</a> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+int get hashCode =&gt; hash3(oldValue, newValue, changes);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="newValue">
+<button class="show-code">Code</button>
+final         <strong>newValue</strong> <a class="anchor-link"
+            href="#newValue"
+            title="Permalink to ChangeNotification.newValue">#</a>
+        </h4>
+        <div class="doc">
+<p>New value seen on the watched expression. </p>
+<pre class="source">
+final newValue
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="oldValue">
+<button class="show-code">Code</button>
+final         <strong>oldValue</strong> <a class="anchor-link"
+            href="#oldValue"
+            title="Permalink to ChangeNotification.oldValue">#</a>
+        </h4>
+        <div class="doc">
+<p>Previous value seen on the watched expression. </p>
+<pre class="source">
+final oldValue
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Operators</h3>
+<div class="method"><h4 id="==">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(other) <a class="anchor-link" href="#=="
+              title="Permalink to ChangeNotification.operator ==">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>The equality operator.</p>
+<p>The default behavior for all <code>Object</code>s is to return true if and
+only if <code>this</code> and 
+<span class="param">other</span> are the same object.</p>
+<p>If a subclass overrides the equality operator it should override
+the <a class="crossref" href="../web_ui.observe.observable/ChangeNotification.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+bool operator ==(other) {
+ return other is ChangeNotification &amp;&amp; oldValue == other.oldValue &amp;&amp;
+     newValue == other.newValue &amp;&amp; changes == other.changes;
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to ChangeNotification.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+String toString() {
+ if (changes != null) return '#&lt;ChangeNotification to $newValue: $changes&gt;';
+ return '#&lt;ChangeNotification from $oldValue to $newValue&gt;';
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:36.511</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

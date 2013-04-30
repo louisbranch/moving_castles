@@ -1,0 +1,193 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>LinkedListNode&lt;E&gt; class / linked_list Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="linked_list" data-type="LinkedListNode&amp;lt;E&amp;gt;">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../linked_list.html">linked_list</a> &rsaquo; <a href="../linked_list/LinkedListNode.html">LinkedListNode&lt;E&gt;</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>LinkedListNode&lt;E&gt;</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>An entry in a doubly linked list. It contains a pointer to the next
+entry, the previous entry, and the boxed value.</p>
+<pre class="source">
+class LinkedListNode&lt;E&gt; {
+ LinkedListNode&lt;E&gt; _previous;
+ LinkedListNode&lt;E&gt; _next;
+ LinkedList&lt;E&gt; _list;
+ E _value;
+
+ LinkedListNode._(E value, this._list) : _value = value {
+   if (_list != null) _list._length++;
+ }
+
+ LinkedListNode&lt;E&gt; get previous =&gt; _previous;
+
+ LinkedListNode&lt;E&gt; get next =&gt; _next;
+
+ E get value =&gt; _value;
+
+ set value(E e) =&gt; _value = e;
+
+ LinkedListNode&lt;E&gt; _link(LinkedListNode&lt;E&gt; p, LinkedListNode&lt;E&gt; n) {
+   _next = n;
+   _previous = p;
+   if (p != null) p._next = this;
+   if (n != null) n._previous = this;
+   return this;
+ }
+
+ LinkedListNode&lt;E&gt; append(E e) =&gt;
+     new LinkedListNode&lt;E&gt;._(e, _list)._link(this, _next);
+
+ LinkedListNode&lt;E&gt; prepend(E e) =&gt;
+     new LinkedListNode&lt;E&gt;._(e, _list)._link(_previous, this);
+
+ void remove() {
+   if (_list == null) return;
+
+   _list._length--;
+   if (_previous != null) {
+     _previous._next = _next;
+   } else {
+     _list._head = _next;
+   }
+   if (_next != null) {
+     _next._previous = _previous;
+   } else {
+     _list._tail = _previous;
+   }
+   _next = null;
+   _previous = null;
+   _list = null;
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="next">
+<button class="show-code">Code</button>
+final <a href="../linked_list/LinkedListNode.html">LinkedListNode</a>&lt;<a href="../linked_list/LinkedListNode.html">E</a>&gt;         <strong>next</strong> <a class="anchor-link"
+            href="#next"
+            title="Permalink to LinkedListNode&lt;E&gt;.next">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+LinkedListNode&lt;E&gt; get next =&gt; _next;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="previous">
+<button class="show-code">Code</button>
+final <a href="../linked_list/LinkedListNode.html">LinkedListNode</a>&lt;<a href="../linked_list/LinkedListNode.html">E</a>&gt;         <strong>previous</strong> <a class="anchor-link"
+            href="#previous"
+            title="Permalink to LinkedListNode&lt;E&gt;.previous">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+LinkedListNode&lt;E&gt; get previous =&gt; _previous;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="value">
+<button class="show-code">Code</button>
+<a href="../linked_list/LinkedListNode.html">E</a>         <strong>value</strong> <a class="anchor-link"
+            href="#value"
+            title="Permalink to LinkedListNode&lt;E&gt;.value">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+E get value =&gt; _value;
+</pre>
+<pre class="source">
+set value(E e) =&gt; _value = e;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="append">
+<button class="show-code">Code</button>
+<a href="../linked_list/LinkedListNode.html">LinkedListNode</a>&lt;<a href="../linked_list/LinkedListNode.html">E</a>&gt; <strong>append</strong>(<a href="../linked_list/LinkedListNode.html">E</a> e) <a class="anchor-link" href="#append"
+              title="Permalink to LinkedListNode&lt;E&gt;.append">#</a></h4>
+<div class="doc">
+<pre class="source">
+LinkedListNode&lt;E&gt; append(E e) =&gt;
+   new LinkedListNode&lt;E&gt;._(e, _list)._link(this, _next);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="prepend">
+<button class="show-code">Code</button>
+<a href="../linked_list/LinkedListNode.html">LinkedListNode</a>&lt;<a href="../linked_list/LinkedListNode.html">E</a>&gt; <strong>prepend</strong>(<a href="../linked_list/LinkedListNode.html">E</a> e) <a class="anchor-link" href="#prepend"
+              title="Permalink to LinkedListNode&lt;E&gt;.prepend">#</a></h4>
+<div class="doc">
+<pre class="source">
+LinkedListNode&lt;E&gt; prepend(E e) =&gt;
+   new LinkedListNode&lt;E&gt;._(e, _list)._link(_previous, this);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="remove">
+<button class="show-code">Code</button>
+void <strong>remove</strong>() <a class="anchor-link" href="#remove"
+              title="Permalink to LinkedListNode&lt;E&gt;.remove">#</a></h4>
+<div class="doc">
+<pre class="source">
+void remove() {
+ if (_list == null) return;
+
+ _list._length--;
+ if (_previous != null) {
+   _previous._next = _next;
+ } else {
+   _list._head = _next;
+ }
+ if (_next != null) {
+   _next._previous = _previous;
+ } else {
+   _list._tail = _previous;
+ }
+ _next = null;
+ _previous = null;
+ _list = null;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:35.845</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

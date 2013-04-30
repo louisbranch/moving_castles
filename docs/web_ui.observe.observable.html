@@ -1,0 +1,460 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>web_ui.observe.observable Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="web_ui.observe.observable">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Dart Documentation</a>
+         &rsaquo; <a href="web_ui.observe.observable.html">web_ui.observe.observable</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>web_ui.observe.observable</strong> library</h2>
+<div class="doc"><p>This library is used to implement <a class="crossref" href="web_ui.observe.observable/Observable.html">Observable</a> types.</p>
+<p>It exposes lower level functionality such as <a class="crossref" href="web_ui.observe.observable.html#hasObservers">hasObservers</a>, [observeReads]
+[notifyChange] and <a class="crossref" href="web_ui.observe.observable.html#notifyRead">notifyRead</a>.</p>
+<p>Unless you are mixing in <a class="crossref" href="web_ui.observe.observable/Observable.html">Observable</a>, it is usually better to write:</p>
+<pre><code>import 'package:web_ui/observe.dart';
+</code></pre></div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="circularNotifyLimit">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>circularNotifyLimit</strong> <a class="anchor-link"
+            href="#circularNotifyLimit"
+            title="Permalink to circularNotifyLimit">#</a>
+        </h4>
+        <div class="doc">
+<p>The limit of times we will attempt to deliver a set of pending changes.</p>
+<p><a class="crossref" href="web_ui.observe.observable.html#deliverChangesSync">deliverChangesSync</a> will attempt to deliver pending changes until there are
+no more. If one of the pending changes causes another batch of changes, it
+will iterate again and increment the iteration counter. Once it reaches
+this limit it will call <a class="crossref" href="web_ui.observe.observable.html#onCircularNotifyLimit">onCircularNotifyLimit</a>.</p>
+<p>Note that there is no limit to the number of changes per batch, only to the
+number of iterations.</p>
+<pre class="source">
+int circularNotifyLimit = 100
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="observable">
+<button class="show-code">Code</button>
+const         <strong>observable</strong> <a class="anchor-link"
+            href="#observable"
+            title="Permalink to observable">#</a>
+        </h4>
+        <div class="doc">
+<p>Use <code>@observable</code> to make a class observable. All fields in the class will
+be transformed to track changes. The overhead will be minimal unless they are
+actually being observed.</p>
+<pre class="source">
+const observable = const _ObservableAnnotation()
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="observeReads">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>observeReads</strong> <a class="anchor-link"
+            href="#observeReads"
+            title="Permalink to observeReads">#</a>
+        </h4>
+        <div class="doc">
+<p>True if we are observing reads. This should be checked before calling
+<a class="crossref" href="web_ui.observe.observable.html#notifyRead">notifyRead</a>.</p>
+<p>Note: this is used by objects implementing <a class="crossref" href="web_ui.observe.observable/Observable.html">Observable</a>.
+You should not need it if your type is marked <code>@observable</code>.</p>
+<pre class="source">
+bool get observeReads =&gt; _activeObserver != null;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="onCircularNotifyLimit">
+<button class="show-code">Code</button>
+<a href="web_ui.observe.observable/CircularNotifyLimitHandler.html">CircularNotifyLimitHandler</a>         <strong>onCircularNotifyLimit</strong> <a class="anchor-link"
+            href="#onCircularNotifyLimit"
+            title="Permalink to onCircularNotifyLimit">#</a>
+        </h4>
+        <div class="doc">
+<p>Function that is called when change notifications get stuck in a circular
+loop, which can happen if one <a class="crossref" href="web_ui.observe.observable/ChangeObserver.html">ChangeObserver</a> causes another change to
+happen, and that change causes another, etc.</p>
+<p>This is called when <a class="crossref" href="web_ui.observe.observable.html#circularNotifyLimit">circularNotifyLimit</a> is reached by
+<a class="crossref" href="web_ui.observe.observable.html#deliverChangesSync">deliverChangesSync</a>. Circular references are commonly the result of not
+correctly implementing equality for objects.</p>
+<p>The default behavior is to print the message.</p>
+<pre class="source">
+CircularNotifyLimitHandler onCircularNotifyLimit = (message) =&gt; print(message)
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="onObserveUnhandledError">
+<button class="show-code">Code</button>
+<a href="web_ui.observe.observable/ObserverErrorHandler.html">ObserverErrorHandler</a>         <strong>onObserveUnhandledError</strong> <a class="anchor-link"
+            href="#onObserveUnhandledError"
+            title="Permalink to onObserveUnhandledError">#</a>
+        </h4>
+        <div class="doc">
+<p>Callback to intercept unhandled errors in evaluating an observable.
+Includes the error, stack trace, and information about what caused the error.
+By default it will use <a class="crossref" href="web_ui.observe.observable.html#defaultObserveUnhandledError">defaultObserveUnhandledError</a>, which prints the
+error.</p>
+<pre class="source">
+ObserverErrorHandler onObserveUnhandledError = defaultObserveUnhandledError
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="defaultObserveUnhandledError">
+<button class="show-code">Code</button>
+void <strong>defaultObserveUnhandledError</strong>(error, trace, obj, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#defaultObserveUnhandledError"
+              title="Permalink to defaultObserveUnhandledError">#</a></h4>
+<div class="doc">
+<p>The default handler for <a class="crossref" href="web_ui.observe.observable.html#onObserveUnhandledError">onObserveUnhandledError</a>. Prints the error. </p>
+<pre class="source">
+void defaultObserveUnhandledError(error, trace, obj, String message) {
+ // TODO(jmesserly): using Logger seems better, but by default it doesn't do
+ // anything, which leads to unobserved errors.
+ // Ideally we could make this show up as an error in the browser's console.
+ print('web_ui.observe: unhandled error calling $obj $message.\n'
+     'error:\n$error\n\nstack trace:\n$trace');
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="deliverChangesSync">
+<button class="show-code">Code</button>
+void <strong>deliverChangesSync</strong>() <a class="anchor-link" href="#deliverChangesSync"
+              title="Permalink to deliverChangesSync">#</a></h4>
+<div class="doc">
+<p>Delivers observed changes immediately. Normally you should not call this
+directly, but it can be used to force synchronous delivery, which helps in
+certain cases like testing.</p>
+<p>Note: this will continue delivering changes as long as some are pending and
+<a class="crossref" href="web_ui.observe.observable.html#circularNotifyLimit">circularNotifyLimit</a> has not been reached.</p>
+<pre class="source">
+void deliverChangesSync() {
+ int iterations = 0;
+ while (_changedObjects != null || _changedExpressions != null) {
+   var changedObjects = _changedObjects;
+   _changedObjects = null;
+
+   var changedExpressions = _changedExpressions;
+   _changedExpressions = null;
+
+   if (iterations++ == circularNotifyLimit) {
+     _diagnoseCircularLimit(changedObjects, changedExpressions);
+     return;
+   }
+
+   if (changedObjects != null) {
+     for (var observable in changedObjects) {
+       // TODO(jmesserly): freeze the "changes" list?
+       // If one observer incorrectly mutates it, it will affect what future
+       // observers see, possibly leading to subtle bugs.
+       // OTOH, I don't want to add a defensive copy here. Maybe a wrapper that
+       // prevents mutation, or a ListBuilder of some sort than can be frozen.
+       var changes = observable.$_changes;
+       observable.$_changes = null;
+
+       for (var n = observable.$_observers.head; n != null; n = n.next) {
+         var observer = n.value;
+         try {
+           observer(changes);
+         } catch (error, trace) {
+           onObserveUnhandledError(error, trace, observer, 'from $observable');
+         }
+       }
+     }
+   }
+
+   if (changedExpressions != null) {
+     // TODO(jmesserly): we are avoiding SplayTreeMap.values because it
+     // performs an unnecessary copy. If that gets fixed we can use .values.
+     // https://code.google.com/p/dart/issues/detail?id=8516
+     changedExpressions.forEach((id, obs) { obs._deliver(); });
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="notifyChange">
+<button class="show-code">Code</button>
+void <strong>notifyChange</strong>(<a href="web_ui.observe.observable/Observable.html">Observable</a> self, <a href="http://api.dartlang.org/dart_core/int.html">int</a> type, key, <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> oldValue, <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> newValue) <a class="anchor-link" href="#notifyChange"
+              title="Permalink to notifyChange">#</a></h4>
+<div class="doc">
+<p>Notify that a 
+<span class="param">key</span> of 
+<span class="param">self</span> has been changed.</p>
+<p>The key can also represent a field or indexed value of the object or list.
+The 
+<span class="param">type</span> is one of the constants <a class="crossref" href="web_ui.observe.observable/ChangeRecord.html#INDEX">ChangeRecord.INDEX</a>,
+<a class="crossref" href="web_ui.observe.observable/ChangeRecord.html#FIELD">ChangeRecord.FIELD</a>, <a class="crossref" href="web_ui.observe.observable/ChangeRecord.html#INSERT">ChangeRecord.INSERT</a>, or <a class="crossref" href="web_ui.observe.observable/ChangeRecord.html#REMOVE">ChangeRecord.REMOVE</a>.</p>
+<p>The 
+<span class="param">oldValue</span> and 
+<span class="param">newValue</span> are also recorded. If the change wasn't an
+insert or remove, and the two values are equal, no change will be recorded.
+For INSERT, oldValue should be null. For REMOVE, newValue should be null.</p>
+<p>Note: this is used by objects implementing <a class="crossref" href="web_ui.observe.observable/Observable.html">Observable</a>.
+You should not need it if your type is marked <code>@observable</code>.</p>
+<pre class="source">
+void notifyChange(Observable self, int type, key,
+   Object oldValue, Object newValue) {
+
+ // If this is an assignment (and not insert/remove) then check if
+ // the value actually changed. If not don't signal a change event.
+ // This helps programmers avoid some common cases of cycles in their code.
+ if ((type &amp; (ChangeRecord.INSERT | ChangeRecord.REMOVE)) == 0) {
+   if (oldValue == newValue) return;
+ }
+
+ if (_changedObjects == null) {
+   _changedObjects = [];
+   setImmediate(deliverChangesSync);
+ }
+ if (self.$_changes == null) {
+   self.$_changes = [];
+   _changedObjects.add(self);
+ }
+ self.$_changes.add(new ChangeRecord(type, key, oldValue, newValue));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="notifyRead">
+<button class="show-code">Code</button>
+void <strong>notifyRead</strong>(<a href="web_ui.observe.observable/Observable.html">Observable</a> self, <a href="http://api.dartlang.org/dart_core/int.html">int</a> type, key) <a class="anchor-link" href="#notifyRead"
+              title="Permalink to notifyRead">#</a></h4>
+<div class="doc">
+<p>Notify that a 
+<span class="param">key</span> of 
+<span class="param">self</span> has been read. The key can also represent
+a field or indexed value of an the object or list.</p>
+<p>Note: this is used by objects implementing <a class="crossref" href="web_ui.observe.observable/Observable.html">Observable</a>.
+You should not need it if your type is marked <code>@observable</code>.</p>
+<pre class="source">
+void notifyRead(Observable self, int type, key) =&gt;
+   _activeObserver._addRead(self, type, key);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="hasObservers">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>hasObservers</strong>(<a href="web_ui.observe.observable/Observable.html">Observable</a> self) <a class="anchor-link" href="#hasObservers"
+              title="Permalink to hasObservers">#</a></h4>
+<div class="doc">
+<p>True if 
+<span class="param">self</span> has any observers, and should call <a class="crossref" href="web_ui.observe.observable.html#notifyChange">notifyChange</a> for
+changes.</p>
+<p>Note: this is used by objects implementing <a class="crossref" href="web_ui.observe.observable/Observable.html">Observable</a>.
+You should not need it if your type is marked <code>@observable</code>.</p>
+<pre class="source">
+bool hasObservers(Observable self) =&gt;
+   self.$_observers != null &amp;&amp; self.$_observers.head != null;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toObservable">
+<button class="show-code">Code</button>
+dynamic <strong>toObservable</strong>(value) <a class="anchor-link" href="#toObservable"
+              title="Permalink to toObservable">#</a></h4>
+<div class="doc">
+<p>Converts the <code>Iterable</code>, <code>Set</code> or <code>Map</code> to an <code>ObservableList</code>,
+<code>ObservableSet</code> or <code>ObservableMap</code> respectively.</p>
+<p>The resulting object will contain a shallow copy of the data.
+If 
+<span class="param">value</span> is not one of those collection types, it will be returned
+unmodified.</p>
+<p>If 
+<span class="param">value</span> is a <code>Map</code>, the resulting value will use the appropriate kind of
+backing map: either <code>HashMap</code>, <code>LinkedHashMap</code>, or <code>SplayTreeMap</code>.</p>
+<pre class="source">
+toObservable(value) {
+ if (value is Map) {
+   var createMap = null;
+   if (value is SplayTreeMap) {
+     createMap = () =&gt; new SplayTreeMap();
+   } else if (value is LinkedHashMap) {
+     createMap = () =&gt; new LinkedHashMap();
+   }
+   return new ObservableMap.from(value, createMap: createMap);
+ }
+ if (value is Set) return new ObservableSet.from(value);
+ if (value is Iterable) return new ObservableList.from(value);
+ return value;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="observeChanges">
+<button class="show-code">Code</button>
+<a href="web_ui.observe.observable/ChangeUnobserver.html">ChangeUnobserver</a> <strong>observeChanges</strong>(<a href="web_ui.observe.observable/Observable.html">Observable</a> obj, <a href="web_ui.observe.observable/ChangeRecordObserver.html">ChangeRecordObserver</a> observer) <a class="anchor-link" href="#observeChanges"
+              title="Permalink to observeChanges">#</a></h4>
+<div class="doc">
+<p>Observes the object and delivers asynchronous notifications of changes
+to the observer.</p>
+<p>Changes will be delivered when any field, index, or key changes its value.
+The field is considered to have changed if the values no longer compare
+equal via the equality operator.</p>
+<p>If you wish to observe a function, use <a class="crossref" href="web_ui.observe.observable.html#observe">observe</a> instead.</p>
+<p>Returns a function that can be used to stop observation.
+Calling this makes it possible for the garbage collector to reclaim memory
+associated with the observation and prevents further calls to <code>callback</code>.</p>
+<p>You can force a synchronous change delivery at any time by calling
+<a class="crossref" href="web_ui.observe.observable.html#deliverChangesSync">deliverChangesSync</a>. Calling this method if there are no changes has no
+effect. If changes are delivered by deliverChangesSync, they will not be
+delivered again asynchronously, unless the value is changed again.</p>
+<pre class="source">
+ChangeUnobserver observeChanges(Observable obj, ChangeRecordObserver observer) {
+ if (obj.$_observers == null) obj.$_observers = new LinkedList();
+ var node = obj.$_observers.add(observer);
+ return node.remove;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="observe">
+<button class="show-code">Code</button>
+<a href="web_ui.observe.observable/ChangeUnobserver.html">ChangeUnobserver</a> <strong>observe</strong>(value, <a href="web_ui.observe.observable/ChangeObserver.html">ChangeObserver</a> callback, [<a href="http://api.dartlang.org/dart_core/String.html">String</a> debugName]) <a class="anchor-link" href="#observe"
+              title="Permalink to observe">#</a></h4>
+<div class="doc">
+<p>Observes the value and delivers asynchronous notifications of changes
+to the 
+<span class="param">callback</span>.</p>
+<p>The 
+<span class="param">value</span> should be either an <a class="crossref" href="web_ui.observe.observable/ObservableExpression.html">ObservableExpression</a> or a <a class="crossref" href="web_ui.observe.observable/Observable.html">Observable</a>.</p>
+<p>If the value is an expression, it is considered to have changed if the result
+no longer compares equal via the equality operator. You can perform
+additional comparisons in the 
+<span class="param">callback</span> if desired, using
+<a class="crossref" href="web_ui.observe.observable/ChangeNotification.html#oldValue">ChangeNotification.oldValue</a> and <a class="crossref" href="web_ui.observe.observable/ChangeNotification.html#newValue">ChangeNotification.newValue</a>.</p>
+<p>If the value is <a class="crossref" href="web_ui.observe.observable/Observable.html">Observable</a> it will be observed, and considered to have
+changed if any change is signaled. In this case the oldValue and newValue
+will be the same. Use <a class="crossref" href="web_ui.observe.observable.html#observeChanges">observeChanges</a> instead if you want the list of
+<a class="crossref" href="web_ui.observe.observable/ChangeRecord.html">ChangeRecord</a>s for that object.</p>
+<p>This returns a function that can be used to stop observation.
+Calling this makes it possible for the garbage collector to reclaim memory
+associated with the observation and prevents further calls to 
+<span class="param">callback</span>.</p>
+<p>Because notifications are delivered asynchronously and batched, the callback
+will only be run once for all changes that were made since the last time it
+was run.</p>
+<p>You can force a synchronous change delivery at any time by calling
+<a class="crossref" href="web_ui.observe.observable.html#deliverChangesSync">deliverChangesSync</a>. Calling this method if there are no changes has no
+effect. If changes are delivered by deliverChangesSync, they will not be
+delivered again asynchronously, unless the value is changed again.</p>
+<p>Any errors thrown by <code>expression</code> and 
+<span class="param">callback</span> will be caught and sent to
+<a class="crossref" href="web_ui.observe.observable.html#onObserveUnhandledError">onObserveUnhandledError</a>.</p>
+<pre class="source">
+ChangeUnobserver observe(value, ChangeObserver callback, [String debugName]) {
+
+ // This is here mainly for symmetry.
+ if (value is Observable) {
+   Observable obs = value;
+   return observeChanges(obs, (changes) {
+     callback(new ChangeNotification(obs, obs, changes));
+   });
+ }
+
+ var exprObserver = new _ExpressionObserver(value, callback, debugName);
+ if (!exprObserver._observe()) {
+   // If we didn't actually read anything, return a pointer to a no-op
+   // function so the observer can be reclaimed immediately.
+   return _doNothing;
+ }
+
+ return exprObserver._unobserve;
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Classes</h3>
+          <div class="type">
+          <h4>
+            <a href="web_ui.observe.observable/ChangeNotification.html"><strong>ChangeNotification</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="web_ui.observe.observable/ChangeRecord.html"><strong>ChangeRecord</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="web_ui.observe.observable/Observable.html"><strong>Observable</strong></a>
+          </h4>
+          </div>
+          
+</div>
+<div>
+<h3>Typedefs</h3>
+          <div class="type">
+          <h4>
+            <a href="web_ui.observe.observable/ChangeObserver.html"><strong>ChangeObserver</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="web_ui.observe.observable/ChangeRecordObserver.html"><strong>ChangeRecordObserver</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="web_ui.observe.observable/ChangeUnobserver.html"><strong>ChangeUnobserver</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="web_ui.observe.observable/CircularNotifyLimitHandler.html"><strong>CircularNotifyLimitHandler</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="web_ui.observe.observable/ObservableExpression.html"><strong>ObservableExpression</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="web_ui.observe.observable/ObserverErrorHandler.html"><strong>ObserverErrorHandler</strong></a>
+          </h4>
+          </div>
+          
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:36.458</div>
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

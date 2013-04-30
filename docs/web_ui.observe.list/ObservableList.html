@@ -1,0 +1,1594 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ObservableList&lt;E&gt; class / web_ui.observe.list Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="web_ui.observe.list" data-type="ObservableList&amp;lt;E&amp;gt;">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../web_ui.observe.list.html">web_ui.observe.list</a> &rsaquo; <a href="../web_ui.observe.list/ObservableList.html">ObservableList&lt;E&gt;</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ObservableList&lt;E&gt;</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Represents an observable list of model values. If any items are added,
+removed, or replaced, then observers that are registered with
+<code>observe</code> will be notified.</p>
+<pre class="source">
+class ObservableList&lt;E&gt; extends ListMixinWorkaround with Observable
+   implements List&lt;E&gt; {
+
+ /** The inner [List&lt;E&gt;] with the actual storage. */
+ final List&lt;E&gt; _list;
+
+ /**
+  * Creates an observable list of the given [length].
+  *
+  * If no [length] argument is supplied an extendable list of
+  * length 0 is created.
+  *
+  * If a [length] argument is supplied, a fixed size list of that
+  * length is created.
+  */
+ ObservableList([int length])
+     : _list = length != null ? new List&lt;E&gt;(length) : &lt;E&gt;[];
+
+ /**
+  * Creates an observable list with the elements of [other]. The order in
+  * the list will be the order provided by the iterator of [other].
+  */
+ factory ObservableList.from(Iterable&lt;E&gt; other) =&gt;
+     new ObservableList&lt;E&gt;()..addAll(other);
+
+ int get length {
+   if (observeReads) notifyRead(this, ChangeRecord.FIELD, 'length');
+   return _list.length;
+ }
+
+ set length(int value) {
+   int len = _list.length;
+   if (len == value) return;
+
+   // Produce notifications if needed
+   if (hasObservers(this)) {
+     if (value &lt; len) {
+       // Remove items, then adjust length. Note the reverse order.
+       for (int i = len - 1; i &gt;= value; i--) {
+         notifyChange(this, ChangeRecord.REMOVE, i, _list[i], null);
+       }
+       notifyChange(this, ChangeRecord.FIELD, 'length', len, value);
+     } else {
+       // Adjust length then add items
+       notifyChange(this, ChangeRecord.FIELD, 'length', len, value);
+       for (int i = len; i &lt; value; i++) {
+         notifyChange(this, ChangeRecord.INSERT, i, null, null);
+       }
+     }
+   }
+
+   _list.length = value;
+ }
+
+ E operator [](int index) {
+   if (observeReads) notifyRead(this, ChangeRecord.INDEX, index);
+   return _list[index];
+ }
+
+ operator []=(int index, E value) {
+   var oldValue = _list[index];
+   if (hasObservers(this)) {
+     notifyChange(this, ChangeRecord.INDEX, index, oldValue, value);
+   }
+   _list[index] = value;
+ }
+
+ ObservableList&lt;E&gt; sublist(int start, [int end]) =&gt;
+   new ObservableList&lt;E&gt;.from(super.sublist(start, end));
+
+ // The following three methods (add, removeRange, insertRange) are here so
+ // that we can provide nice change events (insertions and removals). If we
+ // use the mixin implementation, we would only report changes on indices.
+
+ void add(E value) {
+   int len = _list.length;
+   if (hasObservers(this)) {
+     notifyChange(this, ChangeRecord.FIELD, 'length', len, len + 1);
+     notifyChange(this, ChangeRecord.INSERT, len, null, value);
+   }
+
+   _list.add(value);
+ }
+
+ // TODO(jmesserly): removeRange and insertRange will cause duplicate
+ // notifcations for insert/remove in the middle. The first will be for the
+ // insert/remove and the second will be for the array move. Also, setting
+ // length happens after the insert/remove notifcation. I think this is
+ // probably unavoidable because of how arrays work: if you insert/remove in
+ // the middle you effectively change elements throughout the array.
+ // Maybe we need a ChangeRecord.MOVE?
+
+ void removeRange(int start, int length) {
+   if (length == 0) return;
+
+   Arrays.rangeCheck(this, start, length);
+   if (hasObservers(this)) {
+     for (int i = start; i &lt; length; i++) {
+       notifyChange(this, ChangeRecord.REMOVE, i, this[i], null);
+     }
+   }
+   Arrays.copy(this, start + length, this, start,
+       this.length - length - start);
+
+   this.length = this.length - length;
+ }
+
+ void insertRange(int start, int length, [E initialValue]) {
+   if (length == 0) return;
+   if (length &lt; 0) {
+     throw new ArgumentError("invalid length specified $length");
+   }
+   if (start &lt; 0 || start &gt; this.length) throw new RangeError.value(start);
+
+   if (hasObservers(this)) {
+     for (int i = start; i &lt; length; i++) {
+       notifyChange(this, ChangeRecord.INSERT, i, null, initialValue);
+     }
+   }
+
+   var oldLength = this.length;
+   this.length = oldLength + length;  // Will expand if needed.
+   Arrays.copy(this, start, this, start + length, oldLength - start);
+   for (int i = start; i &lt; start + length; i++) {
+     this[i] = initialValue;
+   }
+ }
+
+ // TODO(sigmund): every method below should be in the mixin (dartbug.com/9869)
+
+ void insert(int index, E item) =&gt; insertRange(index, 1, item);
+
+ E removeAt(int index) {
+   E result = this[index];
+   removeRange(index, 1);
+   return result;
+ }
+
+ Iterable expand(Iterable f(E)) {
+   throw new UnimplementedError();
+   return null;
+ }
+
+ String toString() {
+   if (observeReads) {
+     for (int i = 0; i &lt; length; i++) {
+       notifyRead(this, ChangeRecord.INDEX, i);
+     }
+   }
+   return _list.toString();
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../dart_collection/ListMixin.html">ListMixin&lt;dynamic&gt;</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../web_ui.src.utils_observe/ListMixinWorkaround.html">ListMixinWorkaround</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../web_ui.observe.list/ListMixinWorkaround_Observable.html">ListMixinWorkaround_Observable</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>ObservableList&lt;E&gt;</strong></span></p>
+<h3>Implements</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../dart_core/List.html">List&lt;E&gt;</a></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="ObservableList">
+<button class="show-code">Code</button>
+new <strong>ObservableList</strong>([<a href="http://api.dartlang.org/dart_core/int.html">int</a> length]) <a class="anchor-link" href="#ObservableList"
+              title="Permalink to ObservableList&lt;E&gt;.ObservableList">#</a></h4>
+<div class="doc">
+<p>Creates an observable list of the given 
+<span class="param">length</span>.</p>
+<p>If no 
+<span class="param">length</span> argument is supplied an extendable list of
+length 0 is created.</p>
+<p>If a 
+<span class="param">length</span> argument is supplied, a fixed size list of that
+length is created.</p>
+<pre class="source">
+ObservableList([int length])
+   : _list = length != null ? new List&lt;E&gt;(length) : &lt;E&gt;[];
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="ObservableList.from">
+<button class="show-code">Code</button>
+factory <strong>ObservableList.from</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; other) <a class="anchor-link" href="#ObservableList.from"
+              title="Permalink to ObservableList&lt;E&gt;.ObservableList.from">#</a></h4>
+<div class="doc">
+<p>Creates an observable list with the elements of 
+<span class="param">other</span>. The order in
+the list will be the order provided by the iterator of 
+<span class="param">other</span>.</p>
+<pre class="source">
+factory ObservableList.from(Iterable&lt;E&gt; other) =&gt;
+   new ObservableList&lt;E&gt;()..addAll(other);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="$_changes">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.observable/ChangeRecord.html">ChangeRecord</a>&gt;         <strong>$_changes</strong> <a class="anchor-link"
+            href="#$_changes"
+            title="Permalink to ObservableList&lt;E&gt;.$_changes">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../web_ui.observe.list/ListMixinWorkaround_Observable.html">ListMixinWorkaround_Observable</a> </div><div class="doc">
+<p>Changes to this object since last batch was delivered. </p>
+<pre class="source">
+List&lt;ChangeRecord&gt; $_changes
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="$_observers">
+<button class="show-code">Code</button>
+var         <strong>$_observers</strong> <a class="anchor-link"
+            href="#$_observers"
+            title="Permalink to ObservableList&lt;E&gt;.$_observers">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../web_ui.observe.list/ListMixinWorkaround_Observable.html">ListMixinWorkaround_Observable</a> </div><div class="doc">
+<p>Observers for this object. Uses a linked-list for fast removal. </p>
+<pre class="source">
+var $_observers
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="first">
+<button class="show-code">Code</button>
+final <a href="../web_ui.observe.list/ObservableList.html">E</a>         <strong>first</strong> <a class="anchor-link"
+            href="#first"
+            title="Permalink to ObservableList&lt;E&gt;.first">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns the first element.</p>
+<p>If <code>this</code> is empty throws a <code>StateError</code>. Otherwise this method is
+equivalent to <code>this.elementAt(0)</code></p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E get first {
+ if (length == 0) throw new StateError("No elements");
+ return this[0];
+}
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="hashCode">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to ObservableList&lt;E&gt;.hashCode">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../web_ui.observe.list/ListMixinWorkaround_Observable.html">ListMixinWorkaround_Observable</a> </div><div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <code>hashCode</code> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+final int hashCode = ++Observable
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="isEmpty">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>isEmpty</strong> <a class="anchor-link"
+            href="#isEmpty"
+            title="Permalink to ObservableList&lt;E&gt;.isEmpty">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns true if there is no element in this collection.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+bool get isEmpty =&gt; length == 0;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="iterator">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/Iterator.html">Iterator</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt;         <strong>iterator</strong> <a class="anchor-link"
+            href="#iterator"
+            title="Permalink to ObservableList&lt;E&gt;.iterator">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns an <code>Iterator</code> that iterates over this <code>Iterable</code> object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Iterator&lt;E&gt; get iterator =&gt; new ListIterator&lt;E&gt;(this);
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="last">
+<button class="show-code">Code</button>
+final <a href="../web_ui.observe.list/ObservableList.html">E</a>         <strong>last</strong> <a class="anchor-link"
+            href="#last"
+            title="Permalink to ObservableList&lt;E&gt;.last">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns the last element.</p>
+<p>If <code>this</code> is empty throws a <code>StateError</code>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E get last {
+ if (length == 0) throw new StateError("No elements");
+ return this[length - 1];
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="length">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>get length</strong> <a class="anchor-link" href="#length"
+              title="Permalink to ObservableList&lt;E&gt;.get length">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns the number of elements in the list.</p>
+<p>The valid indices for a list are 0 through <code>length - 1</code>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+int get length {
+ if (observeReads) notifyRead(this, ChangeRecord.FIELD, 'length');
+ return _list.length;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="length=">
+<button class="show-code">Code</button>
+dynamic <strong>set length</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> value) <a class="anchor-link" href="#length="
+              title="Permalink to ObservableList&lt;E&gt;.set length">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Changes the length of the list. If <code>newLength</code> is greater than
+the current <a class="crossref" href="../web_ui.observe.list/ObservableList.html#length">length</a>, entries are initialized to <code>null</code>. Throws
+an <code>UnsupportedError</code> if the list is not extendable.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+set length(int value) {
+ int len = _list.length;
+ if (len == value) return;
+
+ // Produce notifications if needed
+ if (hasObservers(this)) {
+   if (value &lt; len) {
+     // Remove items, then adjust length. Note the reverse order.
+     for (int i = len - 1; i &gt;= value; i--) {
+       notifyChange(this, ChangeRecord.REMOVE, i, _list[i], null);
+     }
+     notifyChange(this, ChangeRecord.FIELD, 'length', len, value);
+   } else {
+     // Adjust length then add items
+     notifyChange(this, ChangeRecord.FIELD, 'length', len, value);
+     for (int i = len; i &lt; value; i++) {
+       notifyChange(this, ChangeRecord.INSERT, i, null, null);
+     }
+   }
+ }
+
+ _list.length = value;
+}
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="reversed">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt;         <strong>reversed</strong> <a class="anchor-link"
+            href="#reversed"
+            title="Permalink to ObservableList&lt;E&gt;.reversed">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns an <code>Iterable</code> of the elements of this <code>List</code> in reverse order.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Iterable&lt;E&gt; get reversed =&gt; new ReversedListIterable(this);
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="single">
+<button class="show-code">Code</button>
+final <a href="../web_ui.observe.list/ObservableList.html">E</a>         <strong>single</strong> <a class="anchor-link"
+            href="#single"
+            title="Permalink to ObservableList&lt;E&gt;.single">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns the single element in <code>this</code>.</p>
+<p>If <code>this</code> is empty or has more than one element throws a <code>StateError</code>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E get single {
+ if (length == 0) throw new StateError("No elements");
+ if (length &gt; 1) throw new StateError("Too many elements");
+ return this[0];
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Operators</h3>
+<div class="method"><h4 id="[]">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.list/ObservableList.html">E</a> <strong>operator []</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> index) <a class="anchor-link" href="#[]"
+              title="Permalink to ObservableList&lt;E&gt;.operator []">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns the element at the given 
+<span class="param">index</span> in the list or throws
+an <code>RangeError</code> if 
+<span class="param">index</span> is out of bounds.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E operator [](int index) {
+ if (observeReads) notifyRead(this, ChangeRecord.INDEX, index);
+ return _list[index];
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="[]=">
+<button class="show-code">Code</button>
+dynamic <strong>operator []=</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> index, <a href="../web_ui.observe.list/ObservableList.html">E</a> value) <a class="anchor-link" href="#[]="
+              title="Permalink to ObservableList&lt;E&gt;.operator []=">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Sets the entry at the given 
+<span class="param">index</span> in the list to 
+<span class="param">value</span>.
+Throws an <code>RangeError</code> if 
+<span class="param">index</span> is out of bounds.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+operator []=(int index, E value) {
+ var oldValue = _list[index];
+ if (hasObservers(this)) {
+   notifyChange(this, ChangeRecord.INDEX, index, oldValue, value);
+ }
+ _list[index] = value;
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="add">
+<button class="show-code">Code</button>
+void <strong>add</strong>(<a href="../web_ui.observe.list/ObservableList.html">E</a> value) <a class="anchor-link" href="#add"
+              title="Permalink to ObservableList&lt;E&gt;.add">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Adds 
+<span class="param">value</span> at the end of the list, extending the length by
+one. Throws an <code>UnsupportedError</code> if the list is not
+extendable.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void add(E value) {
+ int len = _list.length;
+ if (hasObservers(this)) {
+   notifyChange(this, ChangeRecord.FIELD, 'length', len, len + 1);
+   notifyChange(this, ChangeRecord.INSERT, len, null, value);
+ }
+
+ _list.add(value);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="addAll">
+<button class="show-code">Code</button>
+void <strong>addAll</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; iterable) <a class="anchor-link" href="#addAll"
+              title="Permalink to ObservableList&lt;E&gt;.addAll">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Appends all elements of the 
+<span class="param">iterable</span> to the end of this list.
+Extends the length of the list by the number of elements in 
+<span class="param">iterable</span>.
+Throws an <code>UnsupportedError</code> if this list is not extensible.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void addAll(Iterable&lt;E&gt; iterable) {
+ for (E element in iterable) {
+   this[this.length++] = element;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="any">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>any</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#any"
+              title="Permalink to ObservableList&lt;E&gt;.any">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns true if one element of this collection satisfies the
+predicate <code>f</code>. Returns false otherwise.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+bool any(bool test(E element)) {
+ int length = this.length;
+ for (int i = 0; i &lt; length; i++) {
+   if (test(this[i])) return true;
+   if (length != this.length) {
+     throw new ConcurrentModificationError(this);
+   }
+ }
+ return false;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="asMap">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>, <a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; <strong>asMap</strong>() <a class="anchor-link" href="#asMap"
+              title="Permalink to ObservableList&lt;E&gt;.asMap">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns an unmodifiable <code>Map</code> view of <code>this</code>.</p>
+<p>It has the indices of this list as keys, and the corresponding elements
+as values.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Map&lt;int, E&gt; asMap() {
+ return new ListMapView(this);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="clear">
+<button class="show-code">Code</button>
+void <strong>clear</strong>() <a class="anchor-link" href="#clear"
+              title="Permalink to ObservableList&lt;E&gt;.clear">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Removes all elements in the list.</p>
+<p>The length of the list becomes zero.
+Throws an <code>UnsupportedError</code>, and retains all elements, if the
+length of the list cannot be changed.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void clear() { this.length = 0; }
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="contains">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>contains</strong>(<a href="../web_ui.observe.list/ObservableList.html">E</a> element) <a class="anchor-link" href="#contains"
+              title="Permalink to ObservableList&lt;E&gt;.contains">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Check whether the collection contains an element equal to 
+<span class="param">element</span>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+bool contains(E element) {
+ int length = this.length;
+ for (int i = 0; i &lt; length; i++) {
+   if (this[i] == element) return true;
+   if (length != this.length) {
+     throw new ConcurrentModificationError(this);
+   }
+ }
+ return false;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="elementAt">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.list/ObservableList.html">E</a> <strong>elementAt</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> index) <a class="anchor-link" href="#elementAt"
+              title="Permalink to ObservableList&lt;E&gt;.elementAt">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns the 
+<span class="param">index</span>th element.</p>
+<p>If [this] [Iterable] has fewer than 
+<span class="param">index</span> elements throws a
+<code>RangeError</code>.</p>
+<p>Note: if <code>this</code> does not have a deterministic iteration order then the
+function may simply return any element without any iteration if there are
+at least 
+<span class="param">index</span> elements in <code>this</code>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E elementAt(int index) =&gt; this[index];
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="every">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>every</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#every"
+              title="Permalink to ObservableList&lt;E&gt;.every">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns true if every elements of this collection satisify the
+predicate <code>f</code>. Returns false otherwise.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+bool every(bool test(E element)) {
+ int length = this.length;
+ for (int i = 0; i &lt; length; i++) {
+   if (!test(this[i])) return false;
+   if (length != this.length) {
+     throw new ConcurrentModificationError(this);
+   }
+ }
+ return true;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="expand">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> <strong>expand</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> f(E)) <a class="anchor-link" href="#expand"
+              title="Permalink to ObservableList&lt;E&gt;.expand">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Expand each element of this <code>Iterable</code> into zero or more elements.</p>
+<p>The resulting Iterable will run through the elements returned
+by 
+<span class="param">f</span> for each element of this, in order.</p>
+<p>The returned <code>Iterable</code> is lazy, and will call 
+<span class="param">f</span> for each element
+of this every time it's iterated.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Iterable expand(Iterable f(E)) {
+ throw new UnimplementedError();
+ return null;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="fillRange">
+<button class="show-code">Code</button>
+void <strong>fillRange</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html">int</a> end, [<a href="../web_ui.observe.list/ObservableList.html">E</a> fill]) <a class="anchor-link" href="#fillRange"
+              title="Permalink to ObservableList&lt;E&gt;.fillRange">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Sets the elements in the range 
+<span class="param">start</span>..<a href="excluding">end</a> to the given
+<code>fillValue</code>.</p>
+<p>It is an error if 
+<span class="param">start</span>..
+<span class="param">end</span> is not a valid range pointing into the
+<code>this</code>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void fillRange(int start, int end, [E fill]) {
+ _rangeCheck(start, end);
+ for (int i = start; i &lt; end; i++) {
+   this[i] = fill;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="firstWhere">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.list/ObservableList.html">E</a> <strong>firstWhere</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../web_ui.observe.list/ObservableList.html">E</a> element), {<a href="../web_ui.observe.list/ObservableList.html">E</a> orElse()}) <a class="anchor-link" href="#firstWhere"
+              title="Permalink to ObservableList&lt;E&gt;.firstWhere">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns the first element that satisfies the given predicate <code>f</code>.</p>
+<p>If none matches, the result of invoking the 
+<span class="param">orElse</span> function is
+returned. By default, when 
+<span class="param">orElse</span> is <code>null</code>, a <code>StateError</code> is
+thrown.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E firstWhere(bool test(E element), { E orElse() }) {
+ int length = this.length;
+ for (int i = 0; i &lt; length; i++) {
+   E element = this[i];
+   if (test(element)) return element;
+   if (length != this.length) {
+     throw new ConcurrentModificationError(this);
+   }
+ }
+ if (orElse != null) return orElse();
+ throw new StateError("No matching element");
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="fold">
+<button class="show-code">Code</button>
+dynamic <strong>fold</strong>(initialValue, combine(previousValue, <a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#fold"
+              title="Permalink to ObservableList&lt;E&gt;.fold">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Reduces a collection to a single value by iteratively combining each
+element of the collection with an existing value using the provided
+function.</p>
+<p>Use 
+<span class="param">initialValue</span> as the initial value, and the function 
+<span class="param">combine</span> to
+create a new value from the previous one and an element.</p>
+<p>Example of calculating the sum of an iterable:</p>
+<pre><code>iterable.fold(0, (prev, element) =&gt; prev + element);
+</code></pre>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+fold(var initialValue, combine(var previousValue, E element)) {
+ var value = initialValue;
+ int length = this.length;
+ for (int i = 0; i &lt; length; i++) {
+   value = combine(value, this[i]);
+   if (length != this.length) {
+     throw new ConcurrentModificationError(this);
+   }
+ }
+ return value;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="forEach">
+<button class="show-code">Code</button>
+void <strong>forEach</strong>(void action(<a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#forEach"
+              title="Permalink to ObservableList&lt;E&gt;.forEach">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Applies the function <code>f</code> to each element of this collection.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void forEach(void action(E element)) {
+ int length = this.length;
+ for (int i = 0; i &lt; length; i++) {
+   action(this[i]);
+   if (length != this.length) {
+     throw new ConcurrentModificationError(this);
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getRange">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; <strong>getRange</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html">int</a> end) <a class="anchor-link" href="#getRange"
+              title="Permalink to ObservableList&lt;E&gt;.getRange">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns an <code>Iterable</code> that iterators over the elements in the range
+
+<span class="param">start</span> to <a href="exclusive">end</a>. The result of this function is backed by
+<code>this</code>.</p>
+<p>It is an error if 
+<span class="param">end</span> is before 
+<span class="param">start</span>.</p>
+<p>It is an error if the 
+<span class="param">start</span> and 
+<span class="param">end</span> are not valid ranges at the time
+of the call to this method. The returned <code>Iterable</code> behaves similar to
+<code>skip(start).take(end - start)</code>. That is, it will not throw exceptions
+if <code>this</code> changes size.</p>
+<p>Example:</p>
+<pre><code>var list = [1, 2, 3, 4, 5];
+var range = list.getRange(1, 4);
+print(range.join(', '));  // =&gt; 2, 3, 4
+list.length = 3;
+print(range.join(', '));  // =&gt; 2, 3
+</code></pre>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Iterable&lt;E&gt; getRange(int start, int end) {
+ _rangeCheck(start, end);
+ return new SubListIterable(this, start, end);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="indexOf">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>indexOf</strong>(<a href="../web_ui.observe.list/ObservableList.html">E</a> element, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> startIndex = 0]) <a class="anchor-link" href="#indexOf"
+              title="Permalink to ObservableList&lt;E&gt;.indexOf">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns the first index of 
+<span class="param">element</span> in the list.</p>
+<p>Searches the list from index <code>start</code> to the length of the list.
+The first time an element <code>e</code> is encountered so that <code>e == element</code>,
+the index of <code>e</code> is returned.
+Returns -1 if 
+<span class="param">element</span> is not found.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+int indexOf(E element, [int startIndex = 0]) {
+ if (startIndex &gt;= this.length) {
+   return -1;
+ }
+ if (startIndex &lt; 0) {
+   startIndex = 0;
+ }
+ for (int i = startIndex; i &lt; this.length; i++) {
+   if (this[i] == element) {
+     return i;
+   }
+ }
+ return -1;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insert">
+<button class="show-code">Code</button>
+void <strong>insert</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> index, <a href="../web_ui.observe.list/ObservableList.html">E</a> item) <a class="anchor-link" href="#insert"
+              title="Permalink to ObservableList&lt;E&gt;.insert">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Inserts the element at position 
+<span class="param">index</span> in the list.</p>
+<p>This increases the length of the list by one and shifts all later elements
+towards the end of the list.</p>
+<p>It is an error if the 
+<span class="param">index</span> does not point inside the list or at the
+position after the last element.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void insert(int index, E item) =&gt; insertRange(index, 1, item);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="insertAll">
+<button class="show-code">Code</button>
+void <strong>insertAll</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> index, <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; iterable) <a class="anchor-link" href="#insertAll"
+              title="Permalink to ObservableList&lt;E&gt;.insertAll">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Inserts all elements of 
+<span class="param">iterable</span> at position 
+<span class="param">index</span> in the list.</p>
+<p>This increases the length of the list by the length of 
+<span class="param">iterable</span> and
+shifts all later elements towards the end of the list.</p>
+<p>It is an error if the 
+<span class="param">index</span> does not point inside the list or at the
+position after the last element.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void insertAll(int index, Iterable&lt;E&gt; iterable) {
+ if (index &lt; 0 || index &gt; length) {
+   throw new RangeError.range(index, 0, length);
+ }
+ // TODO(floitsch): we can probably detect more cases.
+ if (iterable is! List &amp;&amp; iterable is! Set &amp;&amp; iterable is! SubListIterable) {
+   iterable = iterable.toList();
+ }
+ int insertionLength = iterable.length;
+ // There might be errors after the length change, in which case the list
+ // will end up being modified but the operation not complete. Unless we
+ // always go through a "toList" we can't really avoid that.
+ this.length += insertionLength;
+ setRange(index + insertionLength, this.length, this, index);
+ setAll(index, iterable);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insertRange">
+<button class="show-code">Code</button>
+void <strong>insertRange</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html">int</a> length, [<a href="../web_ui.observe.list/ObservableList.html">E</a> initialValue]) <a class="anchor-link" href="#insertRange"
+              title="Permalink to ObservableList&lt;E&gt;.insertRange">#</a></h4>
+<div class="doc">
+<pre class="source">
+void insertRange(int start, int length, [E initialValue]) {
+ if (length == 0) return;
+ if (length &lt; 0) {
+   throw new ArgumentError("invalid length specified $length");
+ }
+ if (start &lt; 0 || start &gt; this.length) throw new RangeError.value(start);
+
+ if (hasObservers(this)) {
+   for (int i = start; i &lt; length; i++) {
+     notifyChange(this, ChangeRecord.INSERT, i, null, initialValue);
+   }
+ }
+
+ var oldLength = this.length;
+ this.length = oldLength + length;  // Will expand if needed.
+ Arrays.copy(this, start, this, start + length, oldLength - start);
+ for (int i = start; i &lt; start + length; i++) {
+   this[i] = initialValue;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="join">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>join</strong>([<a href="http://api.dartlang.org/dart_core/String.html">String</a> separator = ""]) <a class="anchor-link" href="#join"
+              title="Permalink to ObservableList&lt;E&gt;.join">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Converts each element to a <code>String</code> and concatenates the strings.</p>
+<p>Converts each element to a <code>String</code> by calling <code>Object.toString</code> on it.
+Then concatenates the strings, optionally separated by the 
+<span class="param">separator</span>
+string.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+String join([String separator = ""]) {
+ int length = this.length;
+ if (!separator.isEmpty) {
+   if (length == 0) return "";
+   String first = "${this[0]}";
+   if (length != this.length) {
+     throw new ConcurrentModificationError(this);
+   }
+   StringBuffer buffer = new StringBuffer(first);
+   for (int i = 1; i &lt; length; i++) {
+     buffer.write(separator);
+     buffer.write(this[i]);
+     if (length != this.length) {
+       throw new ConcurrentModificationError(this);
+     }
+   }
+   return buffer.toString();
+ } else {
+   StringBuffer buffer = new StringBuffer();
+   for (int i = 0; i &lt; length; i++) {
+     buffer.write(this[i]);
+     if (length != this.length) {
+       throw new ConcurrentModificationError(this);
+     }
+   }
+   return buffer.toString();
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="lastIndexOf">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>lastIndexOf</strong>(<a href="../web_ui.observe.list/ObservableList.html">E</a> element, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> startIndex]) <a class="anchor-link" href="#lastIndexOf"
+              title="Permalink to ObservableList&lt;E&gt;.lastIndexOf">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<p>Returns the last index in the list <code>a</code> of the given 
+<span class="param">element</span>, starting
+the search at index 
+<span class="param">startIndex</span> to 0.
+Returns -1 if 
+<span class="param">element</span> is not found.</p>
+<pre class="source">
+int lastIndexOf(E element, [int startIndex]) {
+ if (startIndex == null) {
+   startIndex = this.length - 1;
+ } else {
+   if (startIndex &lt; 0) {
+     return -1;
+   }
+   if (startIndex &gt;= this.length) {
+     startIndex = this.length - 1;
+   }
+ }
+ for (int i = startIndex; i &gt;= 0; i--) {
+   if (this[i] == element) {
+     return i;
+   }
+ }
+ return -1;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="lastWhere">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.list/ObservableList.html">E</a> <strong>lastWhere</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../web_ui.observe.list/ObservableList.html">E</a> element), {<a href="../web_ui.observe.list/ObservableList.html">E</a> orElse()}) <a class="anchor-link" href="#lastWhere"
+              title="Permalink to ObservableList&lt;E&gt;.lastWhere">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns the last element that satisfies the given predicate <code>f</code>.</p>
+<p>If none matches, the result of invoking the 
+<span class="param">orElse</span> function is
+returned. By default, when 
+<span class="param">orElse</span> is <code>null</code>, a <code>StateError</code> is
+thrown.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E lastWhere(bool test(E element), { E orElse() }) {
+ int length = this.length;
+ for (int i = length - 1; i &gt;= 0; i--) {
+   E element = this[i];
+   if (test(element)) return element;
+   if (length != this.length) {
+     throw new ConcurrentModificationError(this);
+   }
+ }
+ if (orElse != null) return orElse();
+ throw new StateError("No matching element");
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="map">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> <strong>map</strong>(f(<a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#map"
+              title="Permalink to ObservableList&lt;E&gt;.map">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns a lazy <code>Iterable</code> where each element <code>e</code> of <code>this</code> is replaced
+by the result of <code>f(e)</code>.</p>
+<p>This method returns a view of the mapped elements. As long as the
+returned <code>Iterable</code> is not iterated over, the supplied function 
+<span class="param">f</span> will
+not be invoked. The transformed elements will not be cached. Iterating
+multiple times over the the returned <code>Iterable</code> will invoke the supplied
+function 
+<span class="param">f</span> multiple times on the same element.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Iterable map(f(E element)) =&gt; new MappedListIterable(this, f);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="reduce">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.list/ObservableList.html">E</a> <strong>reduce</strong>(<a href="../web_ui.observe.list/ObservableList.html">E</a> combine(<a href="../web_ui.observe.list/ObservableList.html">E</a> previousValue, <a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#reduce"
+              title="Permalink to ObservableList&lt;E&gt;.reduce">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Reduces a collection to a single value by iteratively combining elements
+of the collection using the provided function.</p>
+<p>Example of calculating the sum of an iterable:</p>
+<pre><code>iterable.reduce((value, element) =&gt; value + element);
+</code></pre>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E reduce(E combine(E previousValue, E element)) {
+ if (length == 0) throw new StateError("No elements");
+ E value = this[0];
+ for (int i = 1; i &lt; length; i++) {
+   value = combine(value, this[i]);
+ }
+ return value;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="remove">
+<button class="show-code">Code</button>
+void <strong>remove</strong>(<a href="http://api.dartlang.org/dart_core/Object.html">Object</a> element) <a class="anchor-link" href="#remove"
+              title="Permalink to ObservableList&lt;E&gt;.remove">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Removes <code>value</code> from the list. Returns true if <code>value</code> was
+in the list. Returns false otherwise. The method has no effect
+if <code>value</code> value was not in the list.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void remove(Object element) {
+ for (int i = 0; i &lt; this.length; i++) {
+   if (this[i] == element) {
+     this.setRange(i, i + this.length - 1, this, i + 1);
+     this.length -= 1;
+     return;
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="removeAt">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.list/ObservableList.html">E</a> <strong>removeAt</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> index) <a class="anchor-link" href="#removeAt"
+              title="Permalink to ObservableList&lt;E&gt;.removeAt">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Removes the element at position 
+<span class="param">index</span> from the list.</p>
+<p>This reduces the length of the list by one and moves all later elements
+down by one position.
+Returns the removed element.
+Throws an <code>ArgumentError</code> if 
+<span class="param">index</span> is not an <code>int</code>.
+Throws an <code>RangeError</code> if the 
+<span class="param">index</span> does not point inside
+the list.
+Throws an <code>UnsupportedError</code>, and doesn't remove the element,
+if the length of the list cannot be changed.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E removeAt(int index) {
+ E result = this[index];
+ removeRange(index, 1);
+ return result;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="removeLast">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.list/ObservableList.html">E</a> <strong>removeLast</strong>() <a class="anchor-link" href="#removeLast"
+              title="Permalink to ObservableList&lt;E&gt;.removeLast">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Pops and returns the last element of the list.
+Throws a <code>UnsupportedError</code> if the length of the
+list cannot be changed.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E removeLast() {
+ if (length == 0) {
+   throw new StateError("No elements");
+ }
+ E result = this[length - 1];
+ length--;
+ return result;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="removeRange">
+<button class="show-code">Code</button>
+void <strong>removeRange</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html">int</a> length) <a class="anchor-link" href="#removeRange"
+              title="Permalink to ObservableList&lt;E&gt;.removeRange">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Removes the elements in the range 
+<span class="param">start</span>..<a href="excluding">end</a>.</p>
+<p>It is an error if 
+<span class="param">start</span>..<code>end</code> is not a valid range pointing into the
+<code>this</code>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void removeRange(int start, int length) {
+ if (length == 0) return;
+
+ Arrays.rangeCheck(this, start, length);
+ if (hasObservers(this)) {
+   for (int i = start; i &lt; length; i++) {
+     notifyChange(this, ChangeRecord.REMOVE, i, this[i], null);
+   }
+ }
+ Arrays.copy(this, start + length, this, start,
+     this.length - length - start);
+
+ this.length = this.length - length;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="removeWhere">
+<button class="show-code">Code</button>
+void <strong>removeWhere</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#removeWhere"
+              title="Permalink to ObservableList&lt;E&gt;.removeWhere">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Removes all elements of this list that satisfy 
+<span class="param">test</span>.</p>
+<p>An elements <code>e</code> satisfies 
+<span class="param">test</span> if <code>test(e)</code> is true.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void removeWhere(bool test(E element)) {
+ _filter(this, test, false);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="replaceRange">
+<button class="show-code">Code</button>
+void <strong>replaceRange</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html">int</a> end, <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; newContents) <a class="anchor-link" href="#replaceRange"
+              title="Permalink to ObservableList&lt;E&gt;.replaceRange">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Removes the elements in the range 
+<span class="param">start</span>..<a href="excluding">end</a> and replaces
+them with the contents of the <code>iterable</code>.</p>
+<p>It is an error if 
+<span class="param">start</span>..
+<span class="param">end</span> is not a valid range pointing into the
+<code>this</code>.</p>
+<p>Example:</p>
+<pre><code>var list = [1, 2, 3, 4, 5];
+list.replaceRange(1, 3, [6, 7, 8, 9]);
+print(list);  // [1, 6, 7, 8, 9, 4, 5]
+</code></pre>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void replaceRange(int start, int end, Iterable&lt;E&gt; newContents) {
+ // TODO(floitsch): Optimize this.
+ removeRange(start, end);
+ insertAll(start, newContents);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="retainWhere">
+<button class="show-code">Code</button>
+void <strong>retainWhere</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#retainWhere"
+              title="Permalink to ObservableList&lt;E&gt;.retainWhere">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Removes all elements of this list that fail to satisfy 
+<span class="param">test</span>.</p>
+<p>An elements <code>e</code> satisfies 
+<span class="param">test</span> if <code>test(e)</code> is true.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void retainWhere(bool test(E element)) {
+ _filter(this, test, true);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="setAll">
+<button class="show-code">Code</button>
+void <strong>setAll</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> index, <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; iterable) <a class="anchor-link" href="#setAll"
+              title="Permalink to ObservableList&lt;E&gt;.setAll">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Overwrites elements of <code>this</code> with the elemenst of 
+<span class="param">iterable</span> starting
+at position 
+<span class="param">index</span> in the list.</p>
+<p>This operation does not increase the length of the list.</p>
+<p>It is an error if the 
+<span class="param">index</span> does not point inside the list or at the
+position after the last element.</p>
+<p>It is an error if the 
+<span class="param">iterable</span> is longer than <a class="crossref" href="../web_ui.observe.list/ObservableList.html#length">length</a> - 
+<span class="param">index</span>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void setAll(int index, Iterable&lt;E&gt; iterable) {
+ if (iterable is List) {
+   setRange(index, index + iterable.length, iterable);
+ } else {
+   for (E element in iterable) {
+     this[index++] = element;
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="setRange">
+<button class="show-code">Code</button>
+void <strong>setRange</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html">int</a> end, <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; iterable, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> skipCount = 0]) <a class="anchor-link" href="#setRange"
+              title="Permalink to ObservableList&lt;E&gt;.setRange">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Copies the elements of 
+<span class="param">iterable</span>, skipping the 
+<span class="param">skipCount</span> first elements
+into the range 
+<span class="param">start</span> - <a href="excluding">end</a> of <code>this</code>.</p>
+<p>If 
+<span class="param">start</span> equals 
+<span class="param">end</span> and represent a legal range, this method has
+no effect.</p>
+<p>It is an error if 
+<span class="param">start</span>..
+<span class="param">end</span> is not a valid range pointing into the
+<code>this</code>.</p>
+<p>It is an error if the 
+<span class="param">iterable</span> does not have enough elements after
+skipping 
+<span class="param">skipCount</span> elements.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void setRange(int start, int end, Iterable&lt;E&gt; iterable, [int skipCount = 0]) {
+ _rangeCheck(start, end);
+ int length = end - start;
+ if (length == 0) return;
+
+ if (skipCount &lt; 0) throw new ArgumentError(skipCount);
+
+ List otherList;
+ int otherStart;
+ // TODO(floitsch): Make this accept more.
+ if (iterable is List) {
+   otherList = iterable;
+   otherStart = skipCount;
+ } else {
+   otherList = iterable.skip(skipCount).toList(growable: false);
+   otherStart = 0;
+ }
+ if (otherStart + length &gt; otherList.length) {
+   throw new StateError("Not enough elements");
+ }
+ if (otherStart &lt; start) {
+   // Copy backwards to ensure correct copy if [from] is this.
+   for (int i = length - 1; i &gt;= 0; i--) {
+     this[start + i] = otherList[otherStart + i];
+   }
+ } else {
+   for (int i = 0; i &lt; length; i++) {
+     this[start + i] = otherList[otherStart + i];
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="singleWhere">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.list/ObservableList.html">E</a> <strong>singleWhere</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#singleWhere"
+              title="Permalink to ObservableList&lt;E&gt;.singleWhere">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns the single element that satisfies <code>f</code>. If no or more than one
+element match then a <code>StateError</code> is thrown.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+E singleWhere(bool test(E element)) {
+ int length = this.length;
+ E match = null;
+ bool matchFound = false;
+ for (int i = 0; i &lt; length; i++) {
+   E element = this[i];
+   if (test(element)) {
+     if (matchFound) {
+       throw new StateError("More than one matching element");
+     }
+     matchFound = true;
+     match = element;
+   }
+   if (length != this.length) {
+     throw new ConcurrentModificationError(this);
+   }
+ }
+ if (matchFound) return match;
+ throw new StateError("No matching element");
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="skip">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; <strong>skip</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> count) <a class="anchor-link" href="#skip"
+              title="Permalink to ObservableList&lt;E&gt;.skip">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns an <code>Iterable</code> that skips the first <code>n</code> elements.</p>
+<p>If <code>this</code> has fewer than <code>n</code> elements, then the resulting <code>Iterable</code> will
+be empty.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Iterable&lt;E&gt; skip(int count) =&gt; new SubListIterable(this, count, null);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="skipWhile">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; <strong>skipWhile</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#skipWhile"
+              title="Permalink to ObservableList&lt;E&gt;.skipWhile">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns an <code>Iterable</code> that skips elements while 
+<span class="param">test</span> is satisfied.</p>
+<p>The filtering happens lazily. Every new <code>Iterator</code> of the returned
+<code>Iterable</code> will iterate over all elements of <code>this</code>.
+As long as the iterator's elements do not satisfy 
+<span class="param">test</span> they are
+discarded. Once an element satisfies the 
+<span class="param">test</span> the iterator stops testing
+and uses every element unconditionally.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Iterable&lt;E&gt; skipWhile(bool test(E element)) {
+ return new SkipWhileIterable&lt;E&gt;(this, test);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="sort">
+<button class="show-code">Code</button>
+void <strong>sort</strong>([<a href="http://api.dartlang.org/dart_core/Comparator.html">Comparator</a> compare]) <a class="anchor-link" href="#sort"
+              title="Permalink to ObservableList&lt;E&gt;.sort">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Sorts the list according to the order specified by the 
+<span class="param">compare</span> function.</p>
+<p>The 
+<span class="param">compare</span> function must act as a <code>Comparator</code>.
+The default <code>List</code> implementations use <code>Comparable.compare</code> if
+
+<span class="param">compare</span> is omitted.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+void sort([Comparator&lt;E&gt; compare]) {
+ Sort.sort(this, compare);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="sublist">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.list/ObservableList.html">ObservableList</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; <strong>sublist</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> end]) <a class="anchor-link" href="#sublist"
+              title="Permalink to ObservableList&lt;E&gt;.sublist">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a new list containing the elements from 
+<span class="param">start</span> to 
+<span class="param">end</span>.</p>
+<p>If 
+<span class="param">end</span> is omitted, the <a class="crossref" href="../web_ui.observe.list/ObservableList.html#length">length</a> of the list is used.</p>
+<p>It is an error if 
+<span class="param">start</span> or 
+<span class="param">end</span> are not list indices for this list,
+or if 
+<span class="param">end</span> is before 
+<span class="param">start</span>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+ObservableList&lt;E&gt; sublist(int start, [int end]) =&gt;
+ new ObservableList&lt;E&gt;.from(super.sublist(start, end));
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="take">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; <strong>take</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> count) <a class="anchor-link" href="#take"
+              title="Permalink to ObservableList&lt;E&gt;.take">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns an <code>Iterable</code> with at most <code>n</code> elements.</p>
+<p>The returned <code>Iterable</code> may contain fewer than <code>n</code> elements, if <code>this</code>
+contains fewer than <code>n</code> elements.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Iterable&lt;E&gt; take(int count) =&gt; new SubListIterable(this, 0, count);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="takeWhile">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; <strong>takeWhile</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#takeWhile"
+              title="Permalink to ObservableList&lt;E&gt;.takeWhile">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns an <code>Iterable</code> that stops once 
+<span class="param">test</span> is not satisfied anymore.</p>
+<p>The filtering happens lazily. Every new <code>Iterator</code> of the returned
+<code>Iterable</code> will start iterating over the elements of <code>this</code>.
+When the iterator encounters an element <code>e</code> that does not satisfy 
+<span class="param">test</span>,
+it discards <code>e</code> and moves into the finished state. That is, it will not
+ask or provide any more elements.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Iterable&lt;E&gt; takeWhile(bool test(E element)) {
+ return new TakeWhileIterable&lt;E&gt;(this, test);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="toList">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; <strong>toList</strong>({<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> growable: true}) <a class="anchor-link" href="#toList"
+              title="Permalink to ObservableList&lt;E&gt;.toList">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Creates a <code>List</code> containing the elements of this <code>Iterable</code>.</p>
+<p>The elements will be in iteration order. The list is fixed-length
+if 
+<span class="param">growable</span> is false.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+List&lt;E&gt; toList({ bool growable: true }) {
+ List&lt;E&gt; result;
+ if (growable) {
+   result = new List&lt;E&gt;()..length = length;
+ } else {
+   result = new List&lt;E&gt;(length);
+ }
+ for (int i = 0; i &lt; length; i++) {
+   result[i] = this[i];
+ }
+ return result;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="toSet">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Set.html">Set</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; <strong>toSet</strong>() <a class="anchor-link" href="#toSet"
+              title="Permalink to ObservableList&lt;E&gt;.toSet">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Creates a <code>Set</code> containing the elements of this <code>Iterable</code>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Set&lt;E&gt; toSet() {
+ Set&lt;E&gt; result = new Set&lt;E&gt;();
+ for (int i = 0; i &lt; length; i++) {
+   result.add(this[i]);
+ }
+ return result;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to ObservableList&lt;E&gt;.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+String toString() {
+ if (observeReads) {
+   for (int i = 0; i &lt; length; i++) {
+     notifyRead(this, ChangeRecord.INDEX, i);
+   }
+ }
+ return _list.toString();
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="where">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; <strong>where</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../web_ui.observe.list/ObservableList.html">E</a> element)) <a class="anchor-link" href="#where"
+              title="Permalink to ObservableList&lt;E&gt;.where">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/ListMixin.html">ListMixin</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns a lazy <code>Iterable</code> with all elements that satisfy the
+predicate <code>f</code>.</p>
+<p>This method returns a view of the mapped elements. As long as the
+returned <code>Iterable</code> is not iterated over, the supplied function <code>f</code> will
+not be invoked. Iterating will not cache results, and thus iterating
+multiple times over the the returned <code>Iterable</code> will invoke the supplied
+function <code>f</code> multiple times on the same element.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../web_ui.observe.list/ObservableList.html">E</a>&gt; </div></div>
+<pre class="source">
+Iterable&lt;E&gt; where(bool test(E element)) =&gt; new WhereIterable&lt;E&gt;(this, test);
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:36.394</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

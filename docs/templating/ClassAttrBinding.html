@@ -1,0 +1,192 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ClassAttrBinding class / templating Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="templating" data-type="ClassAttrBinding">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../templating.html">templating</a> &rsaquo; <a href="../templating/ClassAttrBinding.html">ClassAttrBinding</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ClassAttrBinding</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Represents a binding to a class attribute. </p>
+<pre class="source">
+class ClassAttrBinding extends TemplateItem {
+ final Element elem;
+ final exp;
+ final bool isFinal;
+ ChangeUnobserver stopper;
+
+ ClassAttrBinding(this.elem, this.exp, this.isFinal);
+
+ void insert() {
+   if (isFinal) {
+     updateCssClass(elem, true, exp());
+   } else if (stopper != null) {
+     throw new StateError('class binding already attached');
+   } else {
+     stopper = bindCssClasses(elem, exp);
+   }
+ }
+
+ void remove() {
+   if (!isFinal) {
+     stopper();
+     stopper = null;
+   }
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../templating/TemplateItem.html">TemplateItem</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>ClassAttrBinding</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="ClassAttrBinding">
+<button class="show-code">Code</button>
+new <strong>ClassAttrBinding</strong>(<a href="http://api.dartlang.org/dart_html/Element.html">Element</a> elem, exp, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> isFinal) <a class="anchor-link" href="#ClassAttrBinding"
+              title="Permalink to ClassAttrBinding.ClassAttrBinding">#</a></h4>
+<div class="doc">
+<pre class="source">
+ClassAttrBinding(this.elem, this.exp, this.isFinal);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="elem">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_html/Element.html">Element</a>         <strong>elem</strong> <a class="anchor-link"
+            href="#elem"
+            title="Permalink to ClassAttrBinding.elem">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final Element elem
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="exp">
+<button class="show-code">Code</button>
+final         <strong>exp</strong> <a class="anchor-link"
+            href="#exp"
+            title="Permalink to ClassAttrBinding.exp">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final exp
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="isFinal">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>isFinal</strong> <a class="anchor-link"
+            href="#isFinal"
+            title="Permalink to ClassAttrBinding.isFinal">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final bool isFinal
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="stopper">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.observable/ChangeUnobserver.html">ChangeUnobserver</a>         <strong>stopper</strong> <a class="anchor-link"
+            href="#stopper"
+            title="Permalink to ClassAttrBinding.stopper">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+ChangeUnobserver stopper
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method inherited"><h4 id="create">
+<button class="show-code">Code</button>
+void <strong>create</strong>() <a class="anchor-link" href="#create"
+              title="Permalink to ClassAttrBinding.create">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/TemplateItem.html">TemplateItem</a> </div><div class="doc">
+<p>Invoked when the template contents are created. </p>
+<pre class="source">
+void create() {}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insert">
+<button class="show-code">Code</button>
+void <strong>insert</strong>() <a class="anchor-link" href="#insert"
+              title="Permalink to ClassAttrBinding.insert">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Invoked when the template contents are inserted to the document. </p>
+<div class="docs-inherited-from">docs inherited from <a href="../templating/TemplateItem.html">TemplateItem</a> </div></div>
+<pre class="source">
+void insert() {
+ if (isFinal) {
+   updateCssClass(elem, true, exp());
+ } else if (stopper != null) {
+   throw new StateError('class binding already attached');
+ } else {
+   stopper = bindCssClasses(elem, exp);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="remove">
+<button class="show-code">Code</button>
+void <strong>remove</strong>() <a class="anchor-link" href="#remove"
+              title="Permalink to ClassAttrBinding.remove">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Invoked when the template is removed (undoes created and inserted). </p>
+<div class="docs-inherited-from">docs inherited from <a href="../templating/TemplateItem.html">TemplateItem</a> </div></div>
+<pre class="source">
+void remove() {
+ if (!isFinal) {
+   stopper();
+   stopper = null;
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:36.068</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

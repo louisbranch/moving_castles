@@ -1,0 +1,348 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Castle class / castle Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="castle" data-type="Castle">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../castle.html">castle</a> &rsaquo; <a href="../castle/Castle.html">Castle</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Castle</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class Castle {
+ String name, tileset;
+ Map&lt;Tile, Building&gt; map = new Map();
+ List _grid;
+
+ /**
+  * Create a castle with an empty tiles map equals to
+  * its square size
+  */
+ Castle(this.name, size, [this.tileset]) {
+   for (int x = 0; x &lt; size; x++) {
+     for (int y = 0; y &lt; size; y++) {
+       var tile = new Tile(x, y);
+       map[tile] = null;
+     }
+   }
+ }
+
+ /** Create a castle from a json representation */
+ Castle.fromJson(String castle) {
+   Map data = json.parse(castle);
+   name = data['name'];
+   data['map'].forEach((t) {
+     var tile = new Tile.fromMap(t);
+     map[tile] = null;
+   });
+   tileset = data['tileset'];
+ }
+
+ /// Returns a list of all tiles
+ List&lt;Tile&gt; get tiles =&gt; map.keys.toList();
+
+ /// Returns a list of all buildings
+ List&lt;Building&gt; get buildings =&gt; map.values.toList();
+
+ /// Returns a cached 2d list of tiles and buildings
+ /// as a map {'tile': &lt;Tile&gt;, 'building': &lt;Building&gt;}
+ List&lt;List&gt; get grid {
+   if (_grid == null) {
+     _grid = _createGrid();
+   }
+   return _grid;
+ }
+
+ /// Returns a tile that matches a coordinate
+ /// or else returns null
+ Tile findTile(int x, int y) =&gt; tiles.firstWhere((t) =&gt; t.x == x &amp;&amp; t.y == y
+                                , orElse: () =&gt; null);
+
+ //// Coordinates for surrounding tiles
+ final List _coordinates = [
+   [-1, -1], [-1, 0], [-1, 1],
+   [0, -1],           [1, 0],
+   [1, -1],  [0, 1],  [1, 1]
+ ];
+
+ /// Returns 8 surrounding tiles from a coordinate
+ List&lt;Tile&gt; surroundingTiles(Tile tile) {
+   List tiles = [];
+
+   _coordinates.forEach((coord) {
+     int x = tile.x + coord[0];
+     int y = tile.y + coord[1];
+
+     Tile surrounding = findTile(x, y);
+
+     if (surrounding != null) {
+       tiles.add(surrounding);
+     }
+
+   });
+
+   return tiles;
+ }
+
+ /// Create a 2 dimensional tile/building list using
+ /// tiles coordinates
+ List _createGrid() {
+   int size = math.sqrt(map.length).toInt();
+   List grid = new List(size);
+
+   map.forEach((tile, building) {
+     if (grid[tile.x] == null) { grid[tile.x] = new List(size); }
+     grid[tile.x][tile.y] = { 'tile' : tile, 'building' : building };
+   });
+
+   return grid;
+ }
+
+ void select(Tile tile) {
+   print(tile);
+ }
+
+ bool build(Building building, Tile tile) {
+   if (map[tile] == null &amp;&amp; tile.powered) {
+     map[tile] = building;
+     building.powerOn(this, tile);
+     return true;
+   } else {
+     return false;
+   }
+ }
+
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="Castle">
+<button class="show-code">Code</button>
+new <strong>Castle</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, size, [<a href="http://api.dartlang.org/dart_core/String.html">String</a> tileset]) <a class="anchor-link" href="#Castle"
+              title="Permalink to Castle.Castle">#</a></h4>
+<div class="doc">
+<p>Create a castle with an empty tiles map equals to
+its square size</p>
+<pre class="source">
+Castle(this.name, size, [this.tileset]) {
+ for (int x = 0; x &lt; size; x++) {
+   for (int y = 0; y &lt; size; y++) {
+     var tile = new Tile(x, y);
+     map[tile] = null;
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="Castle.fromJson">
+<button class="show-code">Code</button>
+new <strong>Castle.fromJson</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> castle) <a class="anchor-link" href="#Castle.fromJson"
+              title="Permalink to Castle.Castle.fromJson">#</a></h4>
+<div class="doc">
+<p>Create a castle from a json representation </p>
+<pre class="source">
+Castle.fromJson(String castle) {
+ Map data = json.parse(castle);
+ name = data['name'];
+ data['map'].forEach((t) {
+   var tile = new Tile.fromMap(t);
+   map[tile] = null;
+ });
+ tileset = data['tileset'];
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="buildings">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../building/Building.html">Building</a>&gt;         <strong>buildings</strong> <a class="anchor-link"
+            href="#buildings"
+            title="Permalink to Castle.buildings">#</a>
+        </h4>
+        <div class="doc">
+<p>Returns a list of all buildings</p>
+<pre class="source">
+List&lt;Building&gt; get buildings =&gt; map.values.toList();
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="grid">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html">List</a>&gt;         <strong>grid</strong> <a class="anchor-link"
+            href="#grid"
+            title="Permalink to Castle.grid">#</a>
+        </h4>
+        <div class="doc">
+<p>Returns a cached 2d list of tiles and buildings
+as a map {'tile': &lt;Tile>, 'building': &lt;Building>}</p>
+<pre class="source">
+List&lt;List&gt; get grid {
+ if (_grid == null) {
+   _grid = _createGrid();
+ }
+ return _grid;
+}
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="map">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../castle/Tile.html">Tile</a>, <a href="../building/Building.html">Building</a>&gt;         <strong>map</strong> <a class="anchor-link"
+            href="#map"
+            title="Permalink to Castle.map">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Map&lt;Tile, Building&gt; map = new Map()
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="name">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>name</strong> <a class="anchor-link"
+            href="#name"
+            title="Permalink to Castle.name">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String name
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="tiles">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../castle/Tile.html">Tile</a>&gt;         <strong>tiles</strong> <a class="anchor-link"
+            href="#tiles"
+            title="Permalink to Castle.tiles">#</a>
+        </h4>
+        <div class="doc">
+<p>Returns a list of all tiles</p>
+<pre class="source">
+List&lt;Tile&gt; get tiles =&gt; map.keys.toList();
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="tileset">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>tileset</strong> <a class="anchor-link"
+            href="#tileset"
+            title="Permalink to Castle.tileset">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String name, tileset
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="build">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>build</strong>(<a href="../building/Building.html">Building</a> building, <a href="../castle/Tile.html">Tile</a> tile) <a class="anchor-link" href="#build"
+              title="Permalink to Castle.build">#</a></h4>
+<div class="doc">
+<pre class="source">
+bool build(Building building, Tile tile) {
+ if (map[tile] == null &amp;&amp; tile.powered) {
+   map[tile] = building;
+   building.powerOn(this, tile);
+   return true;
+ } else {
+   return false;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="findTile">
+<button class="show-code">Code</button>
+<a href="../castle/Tile.html">Tile</a> <strong>findTile</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> x, <a href="http://api.dartlang.org/dart_core/int.html">int</a> y) <a class="anchor-link" href="#findTile"
+              title="Permalink to Castle.findTile">#</a></h4>
+<div class="doc">
+<p>Returns a tile that matches a coordinate
+or else returns null</p>
+<pre class="source">
+Tile findTile(int x, int y) =&gt; tiles.firstWhere((t) =&gt; t.x == x &amp;&amp; t.y == y
+                              , orElse: () =&gt; null);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="select">
+<button class="show-code">Code</button>
+void <strong>select</strong>(<a href="../castle/Tile.html">Tile</a> tile) <a class="anchor-link" href="#select"
+              title="Permalink to Castle.select">#</a></h4>
+<div class="doc">
+<pre class="source">
+void select(Tile tile) {
+ print(tile);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="surroundingTiles">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../castle/Tile.html">Tile</a>&gt; <strong>surroundingTiles</strong>(<a href="../castle/Tile.html">Tile</a> tile) <a class="anchor-link" href="#surroundingTiles"
+              title="Permalink to Castle.surroundingTiles">#</a></h4>
+<div class="doc">
+<p>Returns 8 surrounding tiles from a coordinate</p>
+<pre class="source">
+List&lt;Tile&gt; surroundingTiles(Tile tile) {
+ List tiles = [];
+
+ _coordinates.forEach((coord) {
+   int x = tile.x + coord[0];
+   int y = tile.y + coord[1];
+
+   Tile surrounding = findTile(x, y);
+
+   if (surrounding != null) {
+     tiles.add(surrounding);
+   }
+
+ });
+
+ return tiles;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:35.041</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

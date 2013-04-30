@@ -1,0 +1,414 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ConditionalTemplate class / templating Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="templating" data-type="ConditionalTemplate">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../templating.html">templating</a> &rsaquo; <a href="../templating/ConditionalTemplate.html">ConditionalTemplate</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ConditionalTemplate</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A template conditional like <code>&lt;template instantiate="if test"&gt;</code> or
+<code>&lt;td template instantiate="if test"&gt;</code>.</p>
+<pre class="source">
+class ConditionalTemplate extends PlaceholderTemplate {
+ bool isVisible = false;
+ final ConditionalBodySetup bodySetup;
+
+ ConditionalTemplate(Node reference, exp, this.bodySetup)
+     : super(reference, exp);
+
+ void insert() {
+   stopper = watchAndInvoke(exp, (e) {
+     if (!isVisible &amp;&amp; e.newValue) {
+       // only create children when they'll be visible
+       bodySetup(this);
+       super.insert();
+       isVisible = true;
+     } else if (isVisible &amp;&amp; !e.newValue) {
+       super.remove();
+       isVisible = false;
+     }
+   }, 'conditional-binding');
+ }
+
+ void remove() {
+   super.remove();
+   stopper();
+   stopper = null;
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../templating/TemplateItem.html">TemplateItem</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../templating/Template.html">Template</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../templating/PlaceholderTemplate.html">PlaceholderTemplate</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>ConditionalTemplate</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="ConditionalTemplate">
+<button class="show-code">Code</button>
+new <strong>ConditionalTemplate</strong>(<a href="http://api.dartlang.org/dart_html/Node.html">Node</a> reference, exp, <a href="../templating/ConditionalBodySetup.html">ConditionalBodySetup</a> bodySetup) <a class="anchor-link" href="#ConditionalTemplate"
+              title="Permalink to ConditionalTemplate.ConditionalTemplate">#</a></h4>
+<div class="doc">
+<pre class="source">
+ConditionalTemplate(Node reference, exp, this.bodySetup)
+   : super(reference, exp);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="bodySetup">
+<button class="show-code">Code</button>
+final <a href="../templating/ConditionalBodySetup.html">ConditionalBodySetup</a>         <strong>bodySetup</strong> <a class="anchor-link"
+            href="#bodySetup"
+            title="Permalink to ConditionalTemplate.bodySetup">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final ConditionalBodySetup bodySetup
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="children">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../templating/TemplateItem.html">TemplateItem</a>&gt;         <strong>children</strong> <a class="anchor-link"
+            href="#children"
+            title="Permalink to ConditionalTemplate.children">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Children template items. </p>
+<pre class="source">
+final List&lt;TemplateItem&gt; children = []
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="exp">
+<button class="show-code">Code</button>
+final         <strong>exp</strong> <a class="anchor-link"
+            href="#exp"
+            title="Permalink to ConditionalTemplate.exp">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../templating/PlaceholderTemplate.html">PlaceholderTemplate</a> </div><div class="doc">
+<p>Expression watch by this template (condition or loop expression). </p>
+<pre class="source">
+final exp
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="isVisible">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>isVisible</strong> <a class="anchor-link"
+            href="#isVisible"
+            title="Permalink to ConditionalTemplate.isVisible">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+bool isVisible = false
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="node">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_html/Node.html">Node</a>         <strong>node</strong> <a class="anchor-link"
+            href="#node"
+            title="Permalink to ConditionalTemplate.node">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Root of the template. </p>
+<pre class="source">
+final Node node
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="nodes">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_html/Node.html">Node</a>&gt;         <strong>nodes</strong> <a class="anchor-link"
+            href="#nodes"
+            title="Permalink to ConditionalTemplate.nodes">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Nodes that this template will insert/remove programatically. </p>
+<pre class="source">
+final List&lt;Node&gt; nodes = []
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="stopper">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.observable/ChangeUnobserver.html">ChangeUnobserver</a>         <strong>stopper</strong> <a class="anchor-link"
+            href="#stopper"
+            title="Permalink to ConditionalTemplate.stopper">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../templating/PlaceholderTemplate.html">PlaceholderTemplate</a> </div><div class="doc">
+<pre class="source">
+ChangeUnobserver stopper
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method inherited"><h4 id="add">
+<button class="show-code">Code</button>
+void <strong>add</strong>(<a href="http://api.dartlang.org/dart_html/Node.html">Node</a> n) <a class="anchor-link" href="#add"
+              title="Permalink to ConditionalTemplate.add">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Ensure 
+<span class="param">n</span> is inserted in the tree when this template gets inserted. </p>
+<pre class="source">
+void add(Node n) =&gt; nodes.add(n);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="addAll">
+<button class="show-code">Code</button>
+void <strong>addAll</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_html/Node.html">Node</a>&gt; list) <a class="anchor-link" href="#addAll"
+              title="Permalink to ConditionalTemplate.addAll">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Inserts every node in 
+<span class="param">list</span> when this template gets inserted. </p>
+<pre class="source">
+void addAll(List&lt;Node&gt; list) =&gt; nodes.addAll(list);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="bind">
+<button class="show-code">Code</button>
+void <strong>bind</strong>(exp, <a href="../web_ui.observe.observable/ChangeObserver.html">ChangeObserver</a> action, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> isFinal) <a class="anchor-link" href="#bind"
+              title="Permalink to ConditionalTemplate.bind">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Run 
+<span class="param">action</span> when 
+<span class="param">exp</span> changes (while this template is visible).  </p>
+<pre class="source">
+void bind(exp, ChangeObserver action, bool isFinal) {
+ children.add(new Binding(exp, action, isFinal));
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="bindClass">
+<button class="show-code">Code</button>
+void <strong>bindClass</strong>(elem, exp, isFinal) <a class="anchor-link" href="#bindClass"
+              title="Permalink to ConditionalTemplate.bindClass">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Bind 
+<span class="param">exp</span> to <code>elem.class</code> while this template is visible.  </p>
+<pre class="source">
+void bindClass(elem, exp, isFinal) {
+ children.add(new ClassAttrBinding(elem, exp, isFinal));
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="bindStyle">
+<button class="show-code">Code</button>
+void <strong>bindStyle</strong>(elem, exp, isFinal) <a class="anchor-link" href="#bindStyle"
+              title="Permalink to ConditionalTemplate.bindStyle">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Bind 
+<span class="param">exp</span> to <code>elem.style</code> while this template is visible.  </p>
+<pre class="source">
+void bindStyle(elem, exp, isFinal) {
+ children.add(new StyleAttrBinding(elem, exp, isFinal));
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="component">
+<button class="show-code">Code</button>
+void <strong>component</strong>(<a href="../web_ui/WebComponent.html">WebComponent</a> component) <a class="anchor-link" href="#component"
+              title="Permalink to ConditionalTemplate.component">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Bind the lifecycle of the component with this template's lifecycle. </p>
+<pre class="source">
+void component(WebComponent component) {
+ children.add(new ComponentItem(component));
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="conditional">
+<button class="show-code">Code</button>
+void <strong>conditional</strong>(<a href="http://api.dartlang.org/dart_html/Node.html">Node</a> template, exp, bodySetup) <a class="anchor-link" href="#conditional"
+              title="Permalink to ConditionalTemplate.conditional">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Watch 
+<span class="param">exp</span> and render a conditional while this template is visible. </p>
+<pre class="source">
+void conditional(Node template, exp, bodySetup) {
+ children.add(new ConditionalTemplate(template, exp, bodySetup));
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="contentBind">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_html/Node.html">Node</a> <strong>contentBind</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> exp, isFinal) <a class="anchor-link" href="#contentBind"
+              title="Permalink to ConditionalTemplate.contentBind">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Create and bind a <code>Node</code> to 
+<span class="param">exp</span> while this template is visible. </p>
+<pre class="source">
+Node contentBind(Function exp, isFinal) {
+ var bindNode = new Text('');
+ children.add(new Binding(() =&gt; '${exp()}', (e) {
+   bindNode = updateBinding(exp(), bindNode, e.newValue);
+ }, isFinal));
+ return bindNode;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="create">
+<button class="show-code">Code</button>
+void <strong>create</strong>() <a class="anchor-link" href="#create"
+              title="Permalink to ConditionalTemplate.create">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/PlaceholderTemplate.html">PlaceholderTemplate</a> </div><div class="doc">
+<div class="inherited">
+<p>Create this template and its children (templates are <a class="crossref" href="../templating/TemplateItem.html">TemplateItem</a>s). </p>
+<div class="docs-inherited-from">docs inherited from <a href="../templating/Template.html">Template</a> </div></div>
+<pre class="source">
+void create() {}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insert">
+<button class="show-code">Code</button>
+void <strong>insert</strong>() <a class="anchor-link" href="#insert"
+              title="Permalink to ConditionalTemplate.insert">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Insert this template and its children. </p>
+<div class="docs-inherited-from">docs inherited from <a href="../templating/Template.html">Template</a> </div></div>
+<pre class="source">
+void insert() {
+ stopper = watchAndInvoke(exp, (e) {
+   if (!isVisible &amp;&amp; e.newValue) {
+     // only create children when they'll be visible
+     bodySetup(this);
+     super.insert();
+     isVisible = true;
+   } else if (isVisible &amp;&amp; !e.newValue) {
+     super.remove();
+     isVisible = false;
+   }
+ }, 'conditional-binding');
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="listen">
+<button class="show-code">Code</button>
+void <strong>listen</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="http://api.dartlang.org/dart_html/Event.html">Event</a>&gt; stream, <a href="http://api.dartlang.org/dart_html/EventListener.html">EventListener</a> listener) <a class="anchor-link" href="#listen"
+              title="Permalink to ConditionalTemplate.listen">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Associate the event listener while this template is visible.  </p>
+<pre class="source">
+void listen(Stream&lt;Event&gt; stream, EventListener listener) {
+ children.add(new Listener(stream, (e) { listener(e); dispatch(); }));
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="loop">
+<button class="show-code">Code</button>
+void <strong>loop</strong>(<a href="http://api.dartlang.org/dart_html/Node.html">Node</a> template, exp, iterSetup) <a class="anchor-link" href="#loop"
+              title="Permalink to ConditionalTemplate.loop">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Watch 
+<span class="param">exp</span> and render a loop while this template is visible.
+This is used by all "iterate" and "repeat" attributes, except those that
+require <code>loopIterateAttr</code>.</p>
+<pre class="source">
+void loop(Node template, exp, iterSetup) {
+ children.add(new LoopTemplate(template, exp, iterSetup));
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="loopIterateAttr">
+<button class="show-code">Code</button>
+void <strong>loopIterateAttr</strong>(<a href="http://api.dartlang.org/dart_html/Node.html">Node</a> template, exp, iterSetup) <a class="anchor-link" href="#loopIterateAttr"
+              title="Permalink to ConditionalTemplate.loopIterateAttr">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Watch 
+<span class="param">exp</span> and render a loop while this template is visible.
+This is used by:</p>
+<pre><code>&lt;td template iterate="x in list"&gt;
+</code></pre>
+<pre class="source">
+void loopIterateAttr(Node template, exp, iterSetup) {
+ children.add(new LoopTemplateInAttribute(template, exp, iterSetup));
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="oneWayBind">
+<button class="show-code">Code</button>
+void <strong>oneWayBind</strong>(exp, setter, isFinal, [isUrl = false]) <a class="anchor-link" href="#oneWayBind"
+              title="Permalink to ConditionalTemplate.oneWayBind">#</a></h4>
+<div class="inherited-from">inherited from <a href="../templating/Template.html">Template</a> </div><div class="doc">
+<p>Bind 
+<span class="param">exp</span> to 
+<span class="param">setter</span> while this template is visible.  </p>
+<pre class="source">
+void oneWayBind(exp, setter, isFinal, [isUrl = false]) {
+ children.add(new DomPropertyBinding(exp, setter, isUrl, isFinal));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="remove">
+<button class="show-code">Code</button>
+void <strong>remove</strong>() <a class="anchor-link" href="#remove"
+              title="Permalink to ConditionalTemplate.remove">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Remove this template and its children. </p>
+<div class="docs-inherited-from">docs inherited from <a href="../templating/Template.html">Template</a> </div></div>
+<pre class="source">
+void remove() {
+ super.remove();
+ stopper();
+ stopper = null;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:35.995</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

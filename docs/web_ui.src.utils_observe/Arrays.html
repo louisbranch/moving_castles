@@ -1,0 +1,128 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Arrays class / web_ui.src.utils_observe Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="web_ui.src.utils_observe" data-type="Arrays">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../web_ui.src.utils_observe.html">web_ui.src.utils_observe</a> &rsaquo; <a href="../web_ui.src.utils_observe/Arrays.html">Arrays</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Arrays</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class Arrays {
+ static void copy(List src, int srcStart,
+                  List dst, int dstStart, int count) {
+   if (srcStart == null) srcStart = 0;
+   if (dstStart == null) dstStart = 0;
+
+   if (srcStart &lt; dstStart) {
+     for (int i = srcStart + count - 1, j = dstStart + count - 1;
+          i &gt;= srcStart; i--, j--) {
+       dst[j] = src[i];
+     }
+   } else {
+     for (int i = srcStart, j = dstStart; i &lt; srcStart + count; i++, j++) {
+       dst[j] = src[i];
+     }
+   }
+ }
+
+ static void rangeCheck(List a, int start, int length) {
+   if (length &lt; 0) {
+     throw new ArgumentError("negative length $length");
+   }
+   if (start &lt; 0 ) {
+     String message = "$start must be greater than or equal to 0";
+     throw new RangeError(message);
+   }
+   if (start + length &gt; a.length) {
+     String message = "$start + $length must be in the range [0..${a.length})";
+     throw new RangeError(message);
+   }
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Static Methods</h3>
+<div class="method"><h4 id="copy">
+<button class="show-code">Code</button>
+void <strong>copy</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a> src, <a href="http://api.dartlang.org/dart_core/int.html">int</a> srcStart, <a href="http://api.dartlang.org/dart_core/List.html">List</a> dst, <a href="http://api.dartlang.org/dart_core/int.html">int</a> dstStart, <a href="http://api.dartlang.org/dart_core/int.html">int</a> count) <a class="anchor-link" href="#copy"
+              title="Permalink to Arrays.copy">#</a></h4>
+<div class="doc">
+<pre class="source">
+static void copy(List src, int srcStart,
+                List dst, int dstStart, int count) {
+ if (srcStart == null) srcStart = 0;
+ if (dstStart == null) dstStart = 0;
+
+ if (srcStart &lt; dstStart) {
+   for (int i = srcStart + count - 1, j = dstStart + count - 1;
+        i &gt;= srcStart; i--, j--) {
+     dst[j] = src[i];
+   }
+ } else {
+   for (int i = srcStart, j = dstStart; i &lt; srcStart + count; i++, j++) {
+     dst[j] = src[i];
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="rangeCheck">
+<button class="show-code">Code</button>
+void <strong>rangeCheck</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a> a, <a href="http://api.dartlang.org/dart_core/int.html">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html">int</a> length) <a class="anchor-link" href="#rangeCheck"
+              title="Permalink to Arrays.rangeCheck">#</a></h4>
+<div class="doc">
+<pre class="source">
+static void rangeCheck(List a, int start, int length) {
+ if (length &lt; 0) {
+   throw new ArgumentError("negative length $length");
+ }
+ if (start &lt; 0 ) {
+   String message = "$start must be greater than or equal to 0";
+   throw new RangeError(message);
+ }
+ if (start + length &gt; a.length) {
+   String message = "$start + $length must be in the range [0..${a.length})";
+   throw new RangeError(message);
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:36.683</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

@@ -1,0 +1,89 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>TemplateItem abstract class / templating Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="templating" data-type="TemplateItem">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../templating.html">templating</a> &rsaquo; <a href="../templating/TemplateItem.html">TemplateItem</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>TemplateItem</strong>
+          abstract class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>An item that is part of a template and hence will have the same lifetime as
+other elements in the template.</p>
+<pre class="source">
+abstract class TemplateItem {
+ /** Invoked when the template contents are created. */
+ void create() {}
+
+ /** Invoked when the template contents are inserted to the document. */
+ void insert();
+
+ /** Invoked when the template is removed (undoes created and inserted). */
+ void remove();
+}
+</pre>
+</div>
+<h3>Subclasses</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../templating/Binding.html">Binding</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../templating/ClassAttrBinding.html">ClassAttrBinding</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../templating/ComponentItem.html">ComponentItem</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../templating/DomPropertyBinding.html">DomPropertyBinding</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../templating/Listener.html">Listener</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../templating/StyleAttrBinding.html">StyleAttrBinding</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../templating/Template.html">Template</a></span></p>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="create">
+<button class="show-code">Code</button>
+void <strong>create</strong>() <a class="anchor-link" href="#create"
+              title="Permalink to TemplateItem.create">#</a></h4>
+<div class="doc">
+<p>Invoked when the template contents are created. </p>
+<pre class="source">
+void create() {}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insert">
+abstract void <strong>insert</strong>() <a class="anchor-link" href="#insert"
+              title="Permalink to TemplateItem.insert">#</a></h4>
+<div class="doc">
+<p>Invoked when the template contents are inserted to the document. </p>
+</div>
+</div>
+<div class="method"><h4 id="remove">
+abstract void <strong>remove</strong>() <a class="anchor-link" href="#remove"
+              title="Permalink to TemplateItem.remove">#</a></h4>
+<div class="doc">
+<p>Invoked when the template is removed (undoes created and inserted). </p>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:36.100</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

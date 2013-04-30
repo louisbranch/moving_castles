@@ -1,0 +1,175 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ObservableReference&lt;T&gt; class / web_ui.observe.reference Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="web_ui.observe.reference" data-type="ObservableReference&amp;lt;T&amp;gt;">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../web_ui.observe.reference.html">web_ui.observe.reference</a> &rsaquo; <a href="../web_ui.observe.reference/ObservableReference.html">ObservableReference&lt;T&gt;</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ObservableReference&lt;T&gt;</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>An observable reference to an value. Use this if you want to store a single
+value. NOTE: it is generally better to use the <code>@observable</code> annotation on
+your observable class. This class is provided for demonstration purposes, or
+if you happen to need a single unnamed observable reference.</p>
+<pre class="source">
+class ObservableReference&lt;T&gt; extends Observable {
+ T _value;
+
+ ObservableReference([T initialValue]) : _value = initialValue;
+
+ T get value {
+   if (observeReads) notifyRead(this, ChangeRecord.FIELD, 'value');
+   return _value;
+ }
+
+ void set value(T newValue) {
+   if (hasObservers(this)) {
+     notifyChange(this, ChangeRecord.FIELD, 'value', _value, newValue);
+   }
+   _value = newValue;
+ }
+
+ String toString() =&gt; '#&lt;$runtimeType value: $value&gt;';
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../web_ui.observe.observable/Observable.html">Observable</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>ObservableReference&lt;T&gt;</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="ObservableReference">
+<button class="show-code">Code</button>
+new <strong>ObservableReference</strong>([<a href="../web_ui.observe.reference/ObservableReference.html">T</a> initialValue]) <a class="anchor-link" href="#ObservableReference"
+              title="Permalink to ObservableReference&lt;T&gt;.ObservableReference">#</a></h4>
+<div class="doc">
+<pre class="source">
+ObservableReference([T initialValue]) : _value = initialValue;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="$_changes">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../web_ui.observe.observable/ChangeRecord.html">ChangeRecord</a>&gt;         <strong>$_changes</strong> <a class="anchor-link"
+            href="#$_changes"
+            title="Permalink to ObservableReference&lt;T&gt;.$_changes">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../web_ui.observe.observable/Observable.html">Observable</a> </div><div class="doc">
+<p>Changes to this object since last batch was delivered. </p>
+<pre class="source">
+List&lt;ChangeRecord&gt; $_changes
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="$_observers">
+<button class="show-code">Code</button>
+var         <strong>$_observers</strong> <a class="anchor-link"
+            href="#$_observers"
+            title="Permalink to ObservableReference&lt;T&gt;.$_observers">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../web_ui.observe.observable/Observable.html">Observable</a> </div><div class="doc">
+<p>Observers for this object. Uses a linked-list for fast removal. </p>
+<pre class="source">
+var $_observers
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="hashCode">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to ObservableReference&lt;T&gt;.hashCode">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../web_ui.observe.observable/Observable.html">Observable</a> </div><div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <code>hashCode</code> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+final int hashCode = ++Observable
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="value">
+<button class="show-code">Code</button>
+<a href="../web_ui.observe.reference/ObservableReference.html">T</a>         <strong>value</strong> <a class="anchor-link"
+            href="#value"
+            title="Permalink to ObservableReference&lt;T&gt;.value">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+T get value {
+ if (observeReads) notifyRead(this, ChangeRecord.FIELD, 'value');
+ return _value;
+}
+</pre>
+<pre class="source">
+void set value(T newValue) {
+ if (hasObservers(this)) {
+   notifyChange(this, ChangeRecord.FIELD, 'value', _value, newValue);
+ }
+ _value = newValue;
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to ObservableReference&lt;T&gt;.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+String toString() =&gt; '#&lt;$runtimeType value: $value&gt;';
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-04-29 09:20:36.532</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
