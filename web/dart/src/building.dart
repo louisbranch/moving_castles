@@ -2,11 +2,13 @@ part of building;
 
 abstract class Building {
   String name;
-  final bool needPower = true;
+  bool _needPower = true;
   //int cost;
   //int build_time;
 
   String toString() => name;
+
+  bool get needPower => _needPower;
 
   /**
     * Triggered when building is built or
@@ -23,8 +25,8 @@ abstract class Building {
 }
 
 class ManaSource extends Building {
-  final String name = 'Mana Source';
-  //final bool needPower = false;
+  String name = 'Mana Source';
+  bool _needPower = false;
 
   /** Power tile built on and all surrounding tiles */
   void powerOn(Castle castle, Tile tile) {

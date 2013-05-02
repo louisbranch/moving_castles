@@ -4,7 +4,9 @@ import '../web/dart/castle.dart';
 import '../web/dart/building.dart';
 import 'fixtures.dart' as fixtures;
 
-class MockBuilding extends Mock implements Building {}
+class MockBuilding extends Mock implements Building {
+  bool get needPower => true;
+}
 
 void main() {
 
@@ -33,7 +35,7 @@ void main() {
 
     var castle = new Castle('Baldurs Gate', 0);
     var tile = new Tile(0, 0);
-    var building = new ManaSource();
+    var building = new MockBuilding();
     castle.map[tile] = building;
 
     test('has a list of tiles', () => expect(castle.tiles, contains(tile)));
@@ -88,14 +90,21 @@ void main() {
   });
 
   group('[building]', () {
+    var castle, building, tile, result;
+
+    setUp(() {
+      castle = new Castle('Baldurs Gate', 0);
+      building = new MockBuilding();
+      tile = new Tile(0, 0);
+    });
 
     group('[when tile is empty and powered]', () {
-      var castle = new Castle('Baldurs Gate', 0);
-      var building = new MockBuilding();
-      var tile = new Tile(0, 0);
-      tile.powered = true;
-      castle.map[tile] = null;
-      bool result = castle.build(building, tile);
+
+      setUp(() {
+        tile.powered = true;
+        castle.map[tile] = null;
+        result = castle.build(building, tile);
+      });
 
       test('errors is empty', () => expect(castle.errors, isEmpty));
       test('assigns building to tile', () => expect(castle.map[tile], building));
@@ -106,25 +115,41 @@ void main() {
     });
 
     group('[when tile has a building]', () {
-      var castle = new Castle('Baldurs Gate', 0);
-      var building = new ManaSource();
-      var tile = new Tile(0, 0);
-      castle.map[tile] = building;
-      bool result = castle.build(building, tile);
+
+      setUp(() {
+        castle.map[tile] = building;
+        result = castle.build(building, tile);
+      });
 
       test('errors has message', () => expect(castle.errors, contains('Tile already has a building')));
       test('returns false', () => expect(result, isFalse));
     });
 
     group('[when tile is not powered]', () {
-      var castle = new Castle('Baldurs Gate', 0);
-      var building = new ManaSource();
-      var tile = new Tile(0, 0);
-      tile.powered = false;
-      bool result = castle.build(building, tile);
 
-      test('errors has message', () => expect(castle.errors, contains('Not mana powered')));
-      test('returns false', () => expect(result, isFalse));
+      group('[and building needs power]', () {
+
+        setUp(() {
+          tile.powered = false;
+          result = castle.build(building, tile);
+        });
+
+        test('errors has message', () => expect(castle.errors, contains('Not mana powered')));
+        test('returns false', () => expect(result, isFalse));
+      });
+
+      group('[and building does not need power]', () {
+
+        setUp(() {
+          tile.powered = false;
+          building = new ManaSource();
+          result = castle.build(building, tile);
+        });
+
+        test('errors is empty', () => expect(castle.errors, isEmpty));
+        test('returns true', () => expect(result, isTrue));
+      });
+
     });
 
   });

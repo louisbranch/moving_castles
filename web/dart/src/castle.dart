@@ -104,6 +104,7 @@ class Castle {
 
   /**
     * Check if [tile] is empty and is powered
+    * or if the building needs power
     * Add errors to error list if it isn't
     * If no errors, assign the [building] to the [tile]
     * and call powerOn on [building] passing the [castle]
