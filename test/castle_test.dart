@@ -89,7 +89,8 @@ void main() {
 
   });
 
-  group('[building]', () {
+  group('[valid placement]', () {
+
     var castle, building, tile, result;
 
     setUp(() {
@@ -98,19 +99,15 @@ void main() {
       tile = new Tile(0, 0);
     });
 
-    group('[when tile is empty and powered]', () {
+    group('[when everything is valid]', () {
 
       setUp(() {
         tile.powered = true;
         castle.map[tile] = null;
-        result = castle.build(building, tile);
+        result = castle.validPlacement(building, tile);
       });
 
       test('errors is empty', () => expect(castle.errors, isEmpty));
-      test('assigns building to tile', () => expect(castle.map[tile], building));
-      test('building call powerOn with castle and tile', () {
-        building.getLogs(callsTo('powerOn', castle, tile)).verify(happenedOnce);
-      });
       test('returns true', () => expect(result, isTrue));
     });
 
@@ -118,7 +115,7 @@ void main() {
 
       setUp(() {
         castle.map[tile] = building;
-        result = castle.build(building, tile);
+        result = castle.validPlacement(building, tile);
       });
 
       test('errors has message', () => expect(castle.errors, contains('Tile already has a building')));
@@ -131,7 +128,7 @@ void main() {
 
         setUp(() {
           tile.powered = false;
-          result = castle.build(building, tile);
+          result = castle.validPlacement(building, tile);
         });
 
         test('errors has message', () => expect(castle.errors, contains('Not mana powered')));
@@ -143,11 +140,50 @@ void main() {
         setUp(() {
           tile.powered = false;
           building = new ManaSource();
-          result = castle.build(building, tile);
+          result = castle.validPlacement(building, tile);
         });
 
         test('errors is empty', () => expect(castle.errors, isEmpty));
         test('returns true', () => expect(result, isTrue));
+      });
+
+    });
+
+  });
+
+  group('[building]', () {
+    var castle, building, tile, result;
+
+    setUp(() {
+      castle = new Castle('Baldurs Gate', 0);
+      building = new MockBuilding();
+      tile = new Tile(0, 0);
+    });
+
+    group('[when placement is valid]', () {
+
+      setUp(() {
+        tile.powered = true;
+        result = castle.build(building, tile);
+      });
+
+      test('assigns building to tile', () => expect(castle.map[tile], building));
+      test('building call powerOn with castle and tile', () {
+        building.getLogs(callsTo('powerOn', castle, tile)).verify(happenedOnce);
+      });
+
+    });
+
+    group('[when placement is invalid]', () {
+
+      setUp(() {
+        tile.powered = false;
+        result = castle.build(building, tile);
+      });
+
+      test('does not assign building to tile', () => expect(castle.map[tile], isNull));
+      test('building call powerOn with castle and tile', () {
+        building.getLogs(callsTo('powerOn', castle, tile)).verify(neverHappened);
       });
 
     });

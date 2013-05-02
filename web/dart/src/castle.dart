@@ -103,25 +103,27 @@ class Castle {
   }
 
   /**
-    * Check if [tile] is empty and is powered
-    * or if the building needs power
-    * Add errors to error list if it isn't
-    * If no errors, assign the [building] to the [tile]
+    * If placement is valid, assign the [building] to the [tile]
     * and call powerOn on [building] passing the [castle]
     * and the [tile]
     */
-  bool build(Building building, Tile tile) {
+  void build(Building building, Tile tile) {
+    if (validPlacement(building, tile)) {
+      map[tile] = building;
+      building.powerOn(this, tile);
+    }
+  }
+
+  /**
+    * Check if [tile] is empty
+    * If the [building] needs power, check if [tile] is powered
+    * Add each error to [errors] list
+    */
+  bool validPlacement(Building building, Tile tile) {
     errors.clear();
     if (map[tile] != null) { errors.add('Tile already has a building'); }
     if (!tile.powered && building.needPower) { errors.add('Not mana powered'); }
-
-    if (errors.isEmpty) {
-      map[tile] = building;
-      building.powerOn(this, tile);
-      return true;
-    } else {
-      return false;
-    }
+    return errors.isEmpty;
   }
 
 }
