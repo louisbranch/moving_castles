@@ -112,7 +112,7 @@ class Castle {
   bool build(Building building, Tile tile) {
     errors.clear();
     if (map[tile] != null) { errors.add('Tile already has a building'); }
-    if (!tile.powered) { errors.add('Not mana powered'); }
+    if (!tile.powered && building.needPower) { errors.add('Not mana powered'); }
 
     if (errors.isEmpty) {
       map[tile] = building;

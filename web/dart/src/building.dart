@@ -2,15 +2,29 @@ part of building;
 
 abstract class Building {
   String name;
+  final bool needPower = true;
   //int cost;
   //int build_time;
 
   String toString() => name;
 
+  /**
+    * Triggered when building is built or
+    * receives power
+    */
+  void powerOn(Castle castle, Tile tile);
+
+  /**
+    * Triggered when building is rased or
+    * loses power
+    */
+  void powerOff(Castle castle, Tile tile);
+
 }
 
 class ManaSource extends Building {
-  String name = 'Mana Source';
+  final String name = 'Mana Source';
+  //final bool needPower = false;
 
   /** Power tile built on and all surrounding tiles */
   void powerOn(Castle castle, Tile tile) {
@@ -33,3 +47,5 @@ class ManaSource extends Building {
   }
 
 }
+
+class SummoningCircle extends Building {}
