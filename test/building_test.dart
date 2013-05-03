@@ -5,37 +5,22 @@ import '../web/dart/castle.dart';
 void main() {
 
   group('[mana source]', () {
+    var castle, tile, building;
 
-    var building = new ManaSource();
+    setUp(() {
+      castle = new Castle('Baldurs Gate', 3);
+      tile = castle.tiles.first;
+      building = new ManaSource();
+    });
 
-    group('[power on]', () {
-      var castle = new Castle('Baldurs Gate', 3);
-      var tile = castle.tiles.first;
-      tile.powered = false;
-
-      building.powerOn(castle, tile);
-
-      test('powers tile built', () => expect(tile.powered, isTrue));
-      test('powers all surrounding tiles', () {
-        var surrounding = castle.surroundingTiles(tile);
-        var allPowered = surrounding.every((t) => t.powered);
-        expect(allPowered, isTrue);
-      });
+    group('[on]', () {
+      setUp(() => building.on(castle));
+      test('adds mana to castle', () => expect(castle.mana, 5));
     });
 
     group('[power off]', () {
-      var castle = new Castle('Baldurs Gate', 3);
-      var tile = castle.tiles.first;
-
-      building.powerOn(castle, tile);
-      building.powerOff(castle, tile);
-
-      test('unpowers tile built', () => expect(tile.powered, isFalse));
-      test('unpowers all surrounding tiles', () {
-        var surrounding = castle.surroundingTiles(tile);
-        var nonePowered = surrounding.every((t) => !t.powered);
-        expect(nonePowered, isTrue);
-      });
+      setUp(() => building.off(castle));
+      test('removes mana from castle', () => expect(castle.mana, -5));
     });
 
   });

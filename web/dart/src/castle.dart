@@ -4,6 +4,7 @@ class Castle {
   String name, tileset;
   Map<Tile, Building> map = new Map();
   List _grid;
+  int _mana = 0;
 
   /** List errors during validations */
   List<String> errors = [];
@@ -32,6 +33,10 @@ class Castle {
     tileset = data['tileset'];
   }
 
+  int get mana => _mana;
+  void addMana(int num) => _mana = _mana + num;
+  void removeMana(int num) => _mana = _mana - num;
+
   /** Returns a list of all [tiles] */
   List<Tile> get tiles => map.keys.toList();
 
@@ -57,13 +62,9 @@ class Castle {
                                  , orElse: () => null);
 
   /** Coordinates for surrounding [tiles] */
-  final List _coordinates = [
-    [-1, -1], [-1, 0], [-1, 1],
-    [0, -1],           [1, 0],
-    [1, -1],  [0, 1],  [1, 1]
-  ];
+  final List _coordinates = [[-1, 0], [0, -1], [1, 0], [0, 1]];
 
-  /** Returns 8 surrounding [tiles] from a coordinate */
+  /** Returns 4 surrounding [tiles] from a coordinate */
   List<Tile> surroundingTiles(Tile tile) {
     List tiles = [];
 
@@ -73,7 +74,7 @@ class Castle {
 
       Tile surrounding = findTile(x, y);
 
-      if (surrounding != null) {
+      if (surrounding is Tile) {
         tiles.add(surrounding);
       }
 
@@ -98,31 +99,28 @@ class Castle {
     return grid;
   }
 
-  void select(Tile tile) {
-    print(tile);
-  }
+  void select(Tile tile) => print(tile);
 
   /**
     * If placement is valid, assign the [building] to the [tile]
-    * and call powerOn on [building] passing the [castle]
-    * and the [tile]
+    * and call on [building] method passing the [castle]
     */
   void build(Building building, Tile tile) {
     if (validPlacement(building, tile)) {
       map[tile] = building;
-      building.powerOn(this, tile);
+      building.on(this);
     }
   }
 
   /**
-    * Check if [tile] is empty
-    * If the [building] needs power, check if [tile] is powered
+    * Check if [tile] is empty and is directly connected to
+    * another [building]
     * Add each error to [errors] list
     */
   bool validPlacement(Building building, Tile tile) {
     errors.clear();
-    if (map[tile] != null) { errors.add('Tile already has a building'); }
-    if (!tile.powered && building.needPower) { errors.add('Not mana powered'); }
+    if (map[tile] is Building) { errors.add('Tile already has a building'); }
+    // TODO: find surronding tiles and check if they have a building
     return errors.isEmpty;
   }
 
