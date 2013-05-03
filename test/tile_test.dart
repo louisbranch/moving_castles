@@ -9,11 +9,6 @@ void main() {
     test('has y coordinates', () => expect(tile.y, 1));
   });
 
-  group('[powered]', () {
-    tile.powered = true;
-    test('can be powered', () => expect(tile.powered, isTrue));
-  });
-
   group('[to string]', () {
     test('returns its coordinates representation', () => expect(tile.toString(), '0:1'));
   });

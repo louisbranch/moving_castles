@@ -4,9 +4,7 @@ import '../web/dart/castle.dart';
 import '../web/dart/building.dart';
 import 'fixtures.dart' as fixtures;
 
-class MockBuilding extends Mock implements Building {
-  bool get needPower => true;
-}
+class MockBuilding extends Mock implements Building {}
 
 void main() {
 

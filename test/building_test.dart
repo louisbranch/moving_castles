@@ -18,7 +18,7 @@ void main() {
       test('adds mana to castle', () => expect(castle.mana, 5));
     });
 
-    group('[power off]', () {
+    group('[off]', () {
       setUp(() => building.off(castle));
       test('removes mana from castle', () => expect(castle.mana, -5));
     });

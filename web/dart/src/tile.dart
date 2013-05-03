@@ -2,7 +2,6 @@ part of castle;
 
 class Tile {
   int x, y;
-  bool powered = false;
 
   Tile(this.x, this.y);
 
