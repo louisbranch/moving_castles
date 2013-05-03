@@ -12,33 +12,21 @@ abstract class Building {
 
   int get mana => _mana_required;
 
-  /**
-    * Triggered when building is built or
-    * receives mana
-    */
-  void on(Castle castle);
+  /** Triggered when building is built or gains mana */
+  dynamic on(Castle castle);
 
-  /**
-    * Triggered when building is rased or
-    * loses mana
-    */
-  void off(Castle castle);
+  /** Triggered when building is rased or loses mana */
+  dynamic off(Castle castle);
 
 }
 
 class ManaSource extends Building {
   String _name = 'Mana Source';
 
-  /** Increase mana pool in X */
-  void on(Castle castle) {
-    castle.addMana(5);
-  }
+  /** Increase mana pool */
+  int on(Castle castle) => castle.addMana(5);
 
   /** Decrease mana pool */
-  void off(Castle castle) {
-    castle.removeMana(5);
-  }
+  int off(Castle castle) => castle.removeMana(5);
 
 }
-
-class SummoningCircle extends Building {}
