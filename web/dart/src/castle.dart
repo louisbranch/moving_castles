@@ -34,8 +34,8 @@ class Castle {
   }
 
   int get mana => _mana;
-  void addMana(int num) => _mana = _mana + num;
-  void removeMana(int num) => _mana = _mana - num;
+  int addMana(int num) => _mana = _mana + num;
+  int removeMana(int num) => _mana = _mana - num;
 
   /** Returns a list of all [tiles] */
   List<Tile> get tiles => map.keys.toList();
