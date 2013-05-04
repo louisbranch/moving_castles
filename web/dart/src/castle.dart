@@ -107,17 +107,6 @@ class Castle {
   void select(Tile tile) => print(tile);
 
   /**
-    * If placement is valid, assign the [building] to the [tile]
-    * and call on [building] method passing the [castle]
-    */
-  void build(Building building, Tile tile) {
-    if (validPlacement(building, tile)) {
-      map[tile] = building;
-      building.on(this);
-    }
-  }
-
-  /**
     * Check if [tile] is empty and is directly connected to
     * another [building]
     * Add each error to [errors] list
@@ -140,16 +129,20 @@ class Castle {
     int mana = building.manaRequired;
 
     if (mana <= manaPool) {
-      building.on(this, mana);
       removeMana(mana);
+      building.on(this);
     }
+
   }
 
-  bool _hasBuilding(Building building) {
-    if (buildings.contains(building)) {
-      return true;
-    } else {
-      throw 'Castle doesnt have this building'
+  /**
+    * If placement is valid, assign the [building] to the [tile]
+    * and call on [building] method passing the [castle]
+    */
+  void build(Building building, Tile tile) {
+    if (validPlacement(building, tile)) {
+      map[tile] = building;
+      powerBuilding(building);
     }
   }
 
