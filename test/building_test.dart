@@ -15,12 +15,12 @@ void main() {
 
     group('[on]', () {
       setUp(() => building.on(castle));
-      test('adds mana to castle', () => expect(castle.mana, 5));
+      test('adds mana to castle', () => expect(castle.manaPool, 5));
     });
 
     group('[off]', () {
       setUp(() => building.off(castle));
-      test('removes mana from castle', () => expect(castle.mana, -5));
+      test('removes mana from castle', () => expect(castle.manaPool, -5));
     });
 
   });

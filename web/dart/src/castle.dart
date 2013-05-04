@@ -4,7 +4,7 @@ class Castle {
   String name, tileset;
   Map<Tile, Building> map = new Map();
   List _grid;
-  int _mana = 0;
+  int manaPool = 0;
 
   /** List errors during validations */
   List<String> errors = [];
@@ -33,9 +33,8 @@ class Castle {
     tileset = data['tileset'];
   }
 
-  int get mana => _mana;
-  int addMana(int num) => _mana = _mana + num;
-  int removeMana(int num) => _mana = _mana - num;
+  int addMana(int num) => manaPool = manaPool + num;
+  int removeMana(int num) => manaPool = manaPool - num;
 
   /** Returns a list of all [tiles] */
   List<Tile> get tiles => map.keys.toList();
@@ -134,6 +133,24 @@ class Castle {
     }
 
     return errors.isEmpty;
+  }
+
+  /* Add mana to a building if enough mana is available */
+  void powerBuilding(Building building) {
+    int mana = building.manaRequired;
+
+    if (mana <= manaPool) {
+      building.on(this, mana);
+      removeMana(mana);
+    }
+  }
+
+  bool _hasBuilding(Building building) {
+    if (buildings.contains(building)) {
+      return true;
+    } else {
+      throw 'Castle doesnt have this building'
+    }
   }
 
 }

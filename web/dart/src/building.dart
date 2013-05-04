@@ -2,15 +2,13 @@ part of building;
 
 abstract class Building {
   String _name;
-  int _mana_required = 0;
-  int _mana_using = 0;
+  int manaRequired = 0;
+  int manaUsing = 0;
   //int _cost;
   //int _build_time;
   //int _cooldown;
 
   String toString() => _name;
-
-  int get mana => _mana_required;
 
   /** Triggered when building is built or gains mana */
   dynamic on(Castle castle);

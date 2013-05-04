@@ -4,7 +4,9 @@ import '../web/dart/castle.dart';
 import '../web/dart/building.dart';
 import 'fixtures.dart' as fixtures;
 
-class MockBuilding extends Mock implements Building {}
+class MockBuilding extends Mock implements Building {
+  int manaRequired = 0;
+}
 
 void main() {
 
@@ -190,7 +192,7 @@ void main() {
       });
 
       test('assigns building to tile', () => expect(castle.map[tile], building));
-      test('building call on with castle and tile', () {
+      test('building call on with castle', () {
         building.getLogs(callsTo('on', castle)).verify(happenedOnce);
       });
 
@@ -206,7 +208,44 @@ void main() {
       });
 
       test('does not assign building to tile', () => expect(castle.map[tile], isNot(building)));
+      test('building call on with castle', () {
+        building.getLogs(callsTo('on', castle)).verify(neverHappened);
+      });
+
+    });
+
+  });
+
+  group('[powering a building]', () {
+    var castle, building, tile, result;
+
+    setUp(() {
+      castle = new Castle('Baldurs Gate', 0);
+      building = new MockBuilding();
+      building.manaRequired = 1;
+      tile = new Tile(0, 0);
+    });
+
+    group('[when the is enough mana]', () {
+
+      setUp(() {
+        castle.addMana(1);
+        castle.powerBuilding(building);
+      });
+
+      test('decrease the castle mana pool', () => expect(castle.manaPool, 0));
       test('building call on with castle and tile', () {
+        building.getLogs(callsTo('on', castle)).verify(happenedOnce);
+      });
+
+    });
+
+    group('[when there is not enough mana]', () {
+
+      setUp(() => castle.powerBuilding(building));
+
+      test('maintains the castle mana pool', () => expect(castle.manaPool, 0));
+      test('building not receive call on', () {
         building.getLogs(callsTo('on', castle)).verify(neverHappened);
       });
 
