@@ -101,6 +101,8 @@ void main() {
 
       setUp(() {
         castle.map[tile] = null;
+        var next_tile = new Tile(1, 0);
+        castle.map[next_tile] = building;
         result = castle.validPlacement(building, tile);
       });
 
@@ -121,12 +123,25 @@ void main() {
 
     group('[when tile is not next to another building]', () {
 
-      setUp(() {
-        result = castle.validPlacement(building, tile);
+      group('[when is the first tile]', () {
+        setUp(() => result = castle.validPlacement(building, tile));
+        test('errors is empty', () => expect(castle.errors, isEmpty));
+        test('returns true', () => expect(result, isTrue));
       });
 
-      //test('errors has message', () => expect(castle.errors, contains('Building needs to be next to another building')));
-      //test('returns false', () => expect(result, isFalse));
+      group('[when is not the first tile]', () {
+
+        setUp(() {
+          var next_tile = new Tile(2, 2);
+          castle.map[next_tile] = building;
+          result = castle.validPlacement(building, tile);
+        });
+
+        test('errors has message', () => expect(castle.errors,
+            contains('Building needs to be next to another building')));
+        test('returns false', () => expect(result, isFalse));
+
+      });
 
     });
 

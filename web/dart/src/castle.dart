@@ -125,8 +125,14 @@ class Castle {
     */
   bool validPlacement(Building building, Tile tile) {
     errors.clear();
-    if (map[tile] is Building) { errors.add('Tile already has a building'); }
-    // TODO: find surronding tiles and check if they have a building
+    if (map[tile] is Building) {
+      errors.add('Tile already has a building');
+    }
+
+    if (buildings.length >= 1 && !hasBuildingNext(tile)) {
+      errors.add('Building needs to be next to another building');
+    }
+
     return errors.isEmpty;
   }
 
