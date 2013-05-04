@@ -1,6 +1,6 @@
 part of building;
 
-abstract Arcane extends Building {
+abstract class Arcane extends Building {
   String _name, _color, _school;
   int _level, _max_level;
 

@@ -55,7 +55,7 @@ void main() {
   group('[surrounding tiles]', () {
 
     var castle = new Castle('Baldurs Gate', 3);
-    Tile tile = castle.findTile(1,1);
+    var tile = castle.findTile(1,1);
 
     test('returns 4 surrounding tiles', () => expect(castle.surroundingTiles(tile), hasLength(4)));
     test('does not return the central title', () => expect(castle.surroundingTiles(tile), isNot(contains(tile))));
@@ -119,7 +119,45 @@ void main() {
       test('returns false', () => expect(result, isFalse));
     });
 
+    group('[when tile is not next to another building]', () {
+
+      setUp(() {
+        result = castle.validPlacement(building, tile);
+      });
+
+      //test('errors has message', () => expect(castle.errors, contains('Building needs to be next to another building')));
+      //test('returns false', () => expect(result, isFalse));
+
+    });
+
   });
+
+  group('[has building next]', () {
+    var castle, tile, other_tile, building;
+
+    setUp(() {
+      castle = new Castle('Baldurs Gate', 3);
+      tile = castle.findTile(0,0);
+      building = new MockBuilding();
+    });
+
+    group('[when a surrounding tile has a building', () {
+
+      setUp(() {
+        other_tile = castle.findTile(0,1);
+        castle.map[other_tile] = building;
+      });
+
+      test('returns true', () => expect(castle.hasBuildingNext(tile), isTrue));
+
+    });
+
+    group('[when a surrounding tile does not have a building', () {
+      test('returns false', () => expect(castle.hasBuildingNext(tile), isFalse));
+    });
+
+  });
+
 
   group('[building]', () {
     var castle, building, tile, result;

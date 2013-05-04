@@ -83,6 +83,12 @@ class Castle {
     return tiles;
   }
 
+  /** Find if any surrounding [tiles] has already a [building] */
+  bool hasBuildingNext(Tile tile) {
+    List tiles = surroundingTiles(tile);
+    return tiles.any((t) => map[t] is Building);
+  }
+
   /**
     * Create a 2 dimensional [tile] : [building] list using
     * [tiles] coordinates
