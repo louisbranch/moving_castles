@@ -11,10 +11,10 @@ abstract class Building {
   String toString() => _name;
 
   /** Triggered when building is built or gains mana */
-  dynamic on(Castle castle);
+  void on(Id castle_id);
 
   /** Triggered when building is rased or loses mana */
-  dynamic off(Castle castle);
+  void off(Id castle_id);
 
 }
 
@@ -22,7 +22,7 @@ class ManaSource extends Building {
   String _name = 'Mana Source';
 
   /** Increase mana pool */
-  int on(Castle castle) => castle.addMana(5);
+  void on(Castle castle) => castle.addMana(5);
 
   /** Decrease mana pool */
   int off(Castle castle) => castle.removeMana(5);
