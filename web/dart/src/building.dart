@@ -1,6 +1,7 @@
 part of building;
 
-abstract class Building {
+abstract class Building implements EventListener {
+  Pid pid;
   String _name;
   int manaRequired = 0;
   int manaUsing = 0;

@@ -1,6 +1,7 @@
 import 'package:unittest/unittest.dart';
 import 'package:unittest/mock.dart';
 import '../web/dart/castle.dart';
+import '../web/dart/event.dart';
 import '../web/dart/building.dart';
 import 'fixtures.dart' as fixtures;
 
@@ -216,39 +217,17 @@ void main() {
 
   });
 
-  group('[powering a building]', () {
-    var castle, building, tile, result;
+  group('[receiving message]', () {
+    var castle;
 
     setUp(() {
       castle = new Castle('Baldurs Gate', 0);
-      building = new MockBuilding();
-      building.manaRequired = 1;
-      tile = new Tile(0, 0);
+      Event.register(castle);
     });
 
-    group('[when the is enough mana]', () {
-
-      setUp(() {
-        castle.addMana(1);
-        castle.powerBuilding(building);
-      });
-
-      test('decrease the castle mana pool', () => expect(castle.manaPool, 0));
-      test('building call on with castle and tile', () {
-        building.getLogs(callsTo('on', castle)).verify(happenedOnce);
-      });
-
-    });
-
-    group('[when there is not enough mana]', () {
-
-      setUp(() => castle.powerBuilding(building));
-
-      test('maintains the castle mana pool', () => expect(castle.manaPool, 0));
-      test('building not receive call on', () {
-        building.getLogs(callsTo('on', castle)).verify(neverHappened);
-      });
-
+    group('[change mana]', () {
+      setUp(() => new Event(castle.pid, {'type' : 'mana:change', 'mana' : -5}));
+      test('modifies castle mana', () => expect(castle.mana, -5));
     });
 
   });

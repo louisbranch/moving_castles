@@ -2,9 +2,9 @@ import 'package:unittest/unittest.dart';
 import 'package:unittest/mock.dart';
 import '../web/dart/event.dart';
 
-class MockObject extends Mock {
+class MockObject extends Mock implements EventListener{
 
-  void listener (Map message, Pid pid) {
+  void send (Map message, Pid pid) {
     if (message.containsKey('mana:change')) {
       print('mana:change ' + message['mana:change'].toString());
     } else {
@@ -51,8 +51,8 @@ void main() {
       new Event(pid, message);
     });
 
-    test('calls process listener method with data message', () {
-      mock.getLogs(callsTo('listener', message)).verify(happenedOnce);
+    test('calls process send method with data message', () {
+      mock.getLogs(callsTo('send', message)).verify(happenedOnce);
     });
 
   });

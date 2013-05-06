@@ -1,10 +1,11 @@
 part of castle;
 
-class Castle {
+class Castle implements EventListener {
+  Pid pid;
   String name, tileset;
   Map<Tile, Building> map = new Map();
   List _grid;
-  int manaPool = 0;
+  int _mana = 0;
 
   /** List errors during validations */
   List<String> errors = [];
@@ -33,8 +34,10 @@ class Castle {
     tileset = data['tileset'];
   }
 
-  int addMana(int num) => manaPool = manaPool + num;
-  int removeMana(int num) => manaPool = manaPool - num;
+  int get mana => _mana;
+  void set mana(int n) {
+    _mana = _mana + n;
+  }
 
   /** Returns a list of all [tiles] */
   List<Tile> get tiles => map.keys.toList();
@@ -124,12 +127,21 @@ class Castle {
     return errors.isEmpty;
   }
 
+  void send (Map message, [Pid sender_pid]) {
+    switch (message['type']) {
+      case 'mana:change':
+        mana = message['mana'];
+        break;
+      default:
+        throw 'Message unknown';
+    }
+  }
+
   /* Add mana to a building if enough mana is available */
   void powerBuilding(Building building) {
     int mana = building.manaRequired;
 
-    if (mana <= manaPool) {
-      removeMana(mana);
+    if (mana <= _mana) {
       building.on(this);
     }
 

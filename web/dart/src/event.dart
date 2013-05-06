@@ -2,27 +2,30 @@ part of event;
 
 class Pid { }
 
-//interface EventListener;
+class EventListener {
+  String pid;
+  void send (Map message, Pid sender_pid);
+}
 
 class Event {
 
-  static Map _processes = new Map();
+  static Map _listeners = new Map();
 
-  static Pid register(Object process, [Pid pid]) {
+  static Pid register(EventListener listener, [Pid pid]) {
     if (pid == null) {
       pid = new Pid();
     }
-    _processes[pid] = process;
+
+    _listeners[pid] = listener;
+    listener.pid = pid;
     return pid;
   }
 
-  static Object find (pid) => _processes[pid];
+  static EventListener find (pid) => _listeners[pid];
 
   Event(Pid pid, Map message, [Pid sender_pid]) {
-    Object process = Event.find(pid);
-    process.listener(message);
+    EventListener listeners = Event.find(pid);
+    listeners.send(message);
   }
 
 }
-
-//new Event(pid, {'mana:change' : 5});

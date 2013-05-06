@@ -13,15 +13,6 @@ void main() {
       building = new ManaSource();
     });
 
-    group('[on]', () {
-      setUp(() => building.on(castle));
-      test('adds mana to castle', () => expect(castle.manaPool, 5));
-    });
-
-    group('[off]', () {
-      setUp(() => building.off(castle));
-      test('removes mana from castle', () => expect(castle.manaPool, -5));
-    });
 
   });
 
