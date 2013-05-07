@@ -3,7 +3,6 @@ part of event;
 class Pid { }
 
 class EventListener {
-  String pid;
   void send (Map message, Pid sender_pid);
 }
 
@@ -15,9 +14,7 @@ class Event {
     if (pid == null) {
       pid = new Pid();
     }
-
     _listeners[pid] = listener;
-    listener.pid = pid;
     return pid;
   }
 

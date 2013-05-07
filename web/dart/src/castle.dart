@@ -21,6 +21,7 @@ class Castle implements EventListener {
         map[tile] = null;
       }
     }
+    this.pid = Event.register(this);
   }
 
   /** Create a [castle] from a [json] representation */
@@ -127,10 +128,17 @@ class Castle implements EventListener {
     return errors.isEmpty;
   }
 
+  /* EventListener message looping */
   void send (Map message, [Pid sender_pid]) {
     switch (message['type']) {
       case 'mana:change':
         mana = message['mana'];
+        break;
+      case 'building:build':
+        _build(message['building'], message['tile']);
+        break;
+      case 'building:activate':
+        _activate(message['building']);
         break;
       default:
         throw 'Message unknown';
@@ -138,11 +146,12 @@ class Castle implements EventListener {
   }
 
   /* Add mana to a building if enough mana is available */
-  void powerBuilding(Building building) {
-    int mana = building.manaRequired;
+  void _activate(Building building) {
+    int mana_required = building.manaRequired;
 
-    if (mana <= _mana) {
-      building.on(this);
+    if (mana_required <= mana) {
+      new Event(this.pid, {'type': 'mana:change', 'mana': -mana_required});
+      new Event(building.pid, {'type': 'activate'});
     }
 
   }
@@ -151,10 +160,9 @@ class Castle implements EventListener {
     * If placement is valid, assign the [building] to the [tile]
     * and call on [building] method passing the [castle]
     */
-  void build(Building building, Tile tile) {
+  void _build(Building building, Tile tile) {
     if (validPlacement(building, tile)) {
       map[tile] = building;
-      powerBuilding(building);
     }
   }
 

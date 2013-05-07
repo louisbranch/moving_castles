@@ -177,57 +177,23 @@ void main() {
   });
 
 
-  group('[building]', () {
-    var castle, building, tile, result;
-
-    setUp(() {
-      castle = new Castle('Baldurs Gate', 0);
-      building = new MockBuilding();
-      tile = new Tile(0, 0);
-    });
-
-    group('[when placement is valid]', () {
-
-      setUp(() {
-        result = castle.build(building, tile);
-      });
-
-      test('assigns building to tile', () => expect(castle.map[tile], building));
-      test('building call on with castle', () {
-        building.getLogs(callsTo('on', castle)).verify(happenedOnce);
-      });
-
-    });
-
-    group('[when placement is invalid]', () {
-      var other_building;
-
-      setUp(() {
-        other_building = new MockBuilding();
-        castle.map[tile] = other_building;
-        result = castle.build(building, tile);
-      });
-
-      test('does not assign building to tile', () => expect(castle.map[tile], isNot(building)));
-      test('building call on with castle', () {
-        building.getLogs(callsTo('on', castle)).verify(neverHappened);
-      });
-
-    });
-
-  });
-
   group('[receiving message]', () {
     var castle;
+    setUp(() => castle = new Castle('Baldurs Gate', 0));
 
-    setUp(() {
-      castle = new Castle('Baldurs Gate', 0);
-      Event.register(castle);
-    });
-
-    group('[change mana]', () {
+    group('[changing mana]', () {
       setUp(() => new Event(castle.pid, {'type' : 'mana:change', 'mana' : -5}));
       test('modifies castle mana', () => expect(castle.mana, -5));
+    });
+
+    group('[building build]', () {
+      var building, tile;
+      setUp(() {
+        building = new MockBuilding();
+        tile = new Tile(0, 0);
+        new Event(castle.pid, {'type': 'building:build', 'building': building, 'tile': tile});
+      });
+      test('assigns building to tile', () => expect(castle.map[tile], building));
     });
 
   });

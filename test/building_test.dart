@@ -13,7 +13,6 @@ void main() {
       building = new ManaSource();
     });
 
-
   });
 
 }
